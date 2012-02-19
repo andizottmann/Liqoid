@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="instances_prompt">Choose an instance</string>
+    <string-array name="instances_headlines_array">
+        <item>Piraten Bund</item>
+        <item>Testinstanz</item>
+
+    </string-array>
+
+   
+       
+</resources>

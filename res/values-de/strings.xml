@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Liqoid</string>
+    <string name="tab_upcoming">Kommend</string>
+    <string name="tab_recent">Historie</string>
+    <string name="tab_inis">Themen</string>
+    <string name="tab_areas">Themengeb.</string>
+    <string name="menu_refresh">Aktualisieren</string>
+     <string name="downloading">Lade vom LQFB Server...</string>
+     <string name="download_ok">Download ok</string>
+    <string name="download_error">Fehler beim Download.\n Probiere es später nocheinmal..</string>
+    <string name="open_browser">Im Browser öffnen</string>
+
+</resources>
