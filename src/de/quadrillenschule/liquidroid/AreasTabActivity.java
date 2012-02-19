@@ -50,6 +50,7 @@ public class AreasTabActivity extends Activity implements OnItemSelectedListener
 
     public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
         LiqoidMainActivity.lqfbInstances.setSelectedInstance((int) arg3);
+        areasListAdapter=null;
         refreshAreasList(false);
     }
 

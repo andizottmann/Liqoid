@@ -3,8 +3,8 @@
     <string name="instances_prompt">Choose an instance</string>
     <string-array name="instances_headlines_array">
         <item>Piraten Bund</item>
-        <item>Testinstanz</item>
-
+        <item>Testinstanz (valid URL)</item>
+        <item>Testinstanz (invalid URL)</item>
     </string-array>
 
    

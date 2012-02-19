@@ -4,8 +4,6 @@
  */
 package de.quadrillenschule.liquidroid.model;
 
-import de.quadrillenschule.liquidroid.LiqoidMainActivity;
-import java.util.ArrayList;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
