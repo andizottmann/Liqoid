@@ -53,6 +53,10 @@ public class LQFBInstance {
         areas = areaParser.areas;
     }
 
+    @Override
+    public String toString(){
+        return name;
+    }
     public String toXML() {
         String retval = "<lqfbinstance>";
         retval += "<iname>" + name + "</iname>";

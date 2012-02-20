@@ -8,6 +8,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.database.DataSetObserver;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.ContextMenu;
@@ -16,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -23,14 +25,19 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 import de.quadrillenschule.liquidroid.model.AreasListAdapter;
+import de.quadrillenschule.liquidroid.model.LQFBInstance;
+import de.quadrillenschule.liquidroid.model.LQFBInstancesListAdapter;
 
 /**
  *
  * @author andi
  */
 public class AreasTabActivity extends Activity implements OnItemSelectedListener {
+
+    ArrayAdapter adapter;
 
     /** Called when the activity is first created. */
     @Override
@@ -39,18 +46,20 @@ public class AreasTabActivity extends Activity implements OnItemSelectedListener
 
         setContentView(R.layout.areastab);
         final Spinner instanceSpinner = (Spinner) findViewById(R.id.instanceSelector);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
-                this, R.array.instances_headlines_array, android.R.layout.simple_spinner_item);
+
+       adapter= new LQFBInstancesListAdapter(this, LiqoidMainActivity.lqfbInstances,android.R.layout.simple_spinner_item, this);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         instanceSpinner.setAdapter(adapter);
         instanceSpinner.setOnItemSelectedListener(this);
-        refreshAreasList(false);
+
     }
+
+   
 
     public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
         LiqoidMainActivity.lqfbInstances.setSelectedInstance((int) arg3);
-        areasListAdapter=null;
+        areasListAdapter = null;
         refreshAreasList(false);
     }
 
@@ -120,24 +129,25 @@ public class AreasTabActivity extends Activity implements OnItemSelectedListener
             if (force || (LiqoidMainActivity.lqfbInstances.getSelectedInstance().areas.size() == 0)) {
 
                 Context context = getApplicationContext();
-            /*
+                /*
                 ProgressDialog dialog = ProgressDialog.show(context, "",
-                        getApplicationContext().getString(R.string.downloading));
-*/
+                getApplicationContext().getString(R.string.downloading));
+                 */
 
                 if (LiqoidMainActivity.lqfbInstances.getSelectedInstance().downloadAreas() >= 0) {
-  //                  dialog.cancel();
+                    //                  dialog.cancel();
 
                     Toast toast = Toast.makeText(context, R.string.download_ok, Toast.LENGTH_SHORT);
                     toast.show();
 
                 } else {
-    //                dialog.cancel();
+                    //                dialog.cancel();
                     Toast toast = Toast.makeText(context, R.string.download_error, Toast.LENGTH_LONG);
                     toast.show();
                 }
 
             }
+
         }
         areasListAdapter = new AreasListAdapter(this, LiqoidMainActivity.lqfbInstances.getSelectedInstance().areas, R.id.areasList, this);
 

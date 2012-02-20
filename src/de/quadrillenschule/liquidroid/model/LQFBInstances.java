@@ -31,7 +31,12 @@ public class LQFBInstances extends ArrayList<LQFBInstance> {
                     "https://lqfb.piratenpartei.de/pp/api/",
                     "https://lqfb.piratenpartei.de/pp/",
                     "6Bw8HGL8Bp2z4wK6L3Zw", "1.x", true));
-              this.add(new LQFBInstance(
+             this.add(new LQFBInstance(
+                    "Piraten Sachsen-Anhalt",
+                    "http://lqfb.piraten-lsa.de/lsa/api/",
+                    "http://lqfb.piraten-lsa.de/lsa/",
+                    "jXKWm5rFLQXQ8f6LMf92", "1.x", true));
+            this.add(new LQFBInstance(
                     "Testinstanz (valid URL)",
                     "http://dev.liquidfeedback.org/test/api/",
                     "http://dev.liquidfeedback.org/test/",
