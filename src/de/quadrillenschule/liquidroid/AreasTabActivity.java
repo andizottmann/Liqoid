@@ -7,8 +7,6 @@ package de.quadrillenschule.liquidroid;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.gesture.GestureLibraries;
-import android.gesture.GestureLibrary;
 import android.gesture.GestureOverlayView;
 import android.net.Uri;
 import android.os.Bundle;
@@ -20,22 +18,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
-import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.Toast;
 import de.quadrillenschule.liquidroid.model.AreasListAdapter;
-import de.quadrillenschule.liquidroid.model.LQFBInstancesListAdapter;
 
 /**
  *
  * @author andi
  */
-public class AreasTabActivity extends Activity implements OnItemSelectedListener {
-
-    ArrayAdapter adapter;
+public class AreasTabActivity extends Activity implements LQFBInstanceChangeListener{
 
     /** Called when the activity is first created. */
     @Override
@@ -48,19 +40,12 @@ public class AreasTabActivity extends Activity implements OnItemSelectedListener
         gestures.setGestureVisible(false);
         gestures.addOnGesturePerformedListener((LiqoidMainActivity) getParent());
 
-        final Spinner instanceSpinner = (Spinner) findViewById(R.id.instanceSelector);
-        adapter = new LQFBInstancesListAdapter(this, LiqoidMainActivity.lqfbInstances, android.R.layout.simple_spinner_item, this);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        instanceSpinner.setAdapter(adapter);
-        instanceSpinner.setOnItemSelectedListener(this);
+        ((LiqoidMainActivity) getParent()).addLQFBInstancesChangeListener(this);
+        
 
     }
 
-    public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-        LiqoidMainActivity.lqfbInstances.setSelectedInstance((int) arg3);
-        areasListAdapter = null;
-        refreshAreasList(false);
-    }
+
 
     public void onNothingSelected(AdapterView<?> arg0) {
         //do nothing
@@ -153,5 +138,10 @@ public class AreasTabActivity extends Activity implements OnItemSelectedListener
         final ListView listview = (ListView) findViewById(R.id.areasList);
         listview.setAdapter(areasListAdapter);
 
+    }
+
+    public void lqfbInstanceChanged() {
+         areasListAdapter = null;
+        refreshAreasList(false);
     }
 }

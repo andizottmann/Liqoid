@@ -7,6 +7,7 @@ package de.quadrillenschule.liquidroid.model;
 import android.app.Activity;
 import android.content.Context;
 import android.widget.Toast;
+import de.quadrillenschule.liquidroid.LiqoidMainActivity;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
@@ -20,9 +21,9 @@ import javax.xml.parsers.SAXParserFactory;
 public class LQFBInstances extends ArrayList<LQFBInstance> {
 
     ArrayList<LQFBInstance> instances;
-    Activity mainActivity;
+    private LiqoidMainActivity mainActivity;
 
-    public LQFBInstances(Activity mainActivity) {
+    public LQFBInstances(LiqoidMainActivity mainActivity) {
         this.mainActivity = mainActivity;
         this.load();
         if (size() <= 0) {
@@ -77,12 +78,12 @@ public class LQFBInstances extends ArrayList<LQFBInstance> {
 
 
         try {
-            FileOutputStream fos = mainActivity.openFileOutput("instanc.xml", Context.MODE_WORLD_WRITEABLE);
+            FileOutputStream fos = getMainActivity().openFileOutput("instanc.xml", Context.MODE_WORLD_WRITEABLE);
             fos.write(toXML().getBytes());
             fos.close();
 
         } catch (Exception e) {
-            Toast toast = Toast.makeText(mainActivity.getApplicationContext(), "", Toast.LENGTH_LONG);
+            Toast toast = Toast.makeText(getMainActivity().getApplicationContext(), "", Toast.LENGTH_LONG);
 
             toast.setText("Saving not ok :(");
             toast.show();
@@ -92,7 +93,7 @@ public class LQFBInstances extends ArrayList<LQFBInstance> {
 
     public void load() {
         try {
-            FileInputStream fis = mainActivity.openFileInput("instanc.xml");
+            FileInputStream fis = getMainActivity().openFileInput("instanc.xml");
             SAXParserFactory factory = SAXParserFactory.newInstance();
             SAXParser saxparser;
             LQFBInstancesFromFileParser parser = new LQFBInstancesFromFileParser(this);
@@ -107,5 +108,12 @@ public class LQFBInstances extends ArrayList<LQFBInstance> {
 //        toast.setText(this.size());
 //        toast.show();
         //return 0;
+    }
+
+    /**
+     * @return the mainActivity
+     */
+    public LiqoidMainActivity getMainActivity() {
+        return mainActivity;
     }
 }
