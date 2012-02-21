@@ -5,10 +5,11 @@
 package de.quadrillenschule.liquidroid;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.database.DataSetObserver;
+import android.gesture.GestureLibraries;
+import android.gesture.GestureLibrary;
+import android.gesture.GestureOverlayView;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.ContextMenu;
@@ -17,7 +18,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -25,10 +25,8 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 import de.quadrillenschule.liquidroid.model.AreasListAdapter;
-import de.quadrillenschule.liquidroid.model.LQFBInstance;
 import de.quadrillenschule.liquidroid.model.LQFBInstancesListAdapter;
 
 /**
@@ -45,17 +43,18 @@ public class AreasTabActivity extends Activity implements OnItemSelectedListener
         super.onCreate(icicle);
 
         setContentView(R.layout.areastab);
+
+        GestureOverlayView gestures = (GestureOverlayView) findViewById(R.id.gestures);
+        gestures.setGestureVisible(false);
+        gestures.addOnGesturePerformedListener((LiqoidMainActivity) getParent());
+
         final Spinner instanceSpinner = (Spinner) findViewById(R.id.instanceSelector);
-
-       adapter= new LQFBInstancesListAdapter(this, LiqoidMainActivity.lqfbInstances,android.R.layout.simple_spinner_item, this);
+        adapter = new LQFBInstancesListAdapter(this, LiqoidMainActivity.lqfbInstances, android.R.layout.simple_spinner_item, this);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
         instanceSpinner.setAdapter(adapter);
         instanceSpinner.setOnItemSelectedListener(this);
 
     }
-
-   
 
     public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
         LiqoidMainActivity.lqfbInstances.setSelectedInstance((int) arg3);

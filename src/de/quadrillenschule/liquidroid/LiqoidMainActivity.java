@@ -3,21 +3,34 @@ package de.quadrillenschule.liquidroid;
 import android.app.TabActivity;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.gesture.Gesture;
+import android.gesture.GestureLibraries;
+import android.gesture.GestureLibrary;
+import android.gesture.GestureOverlayView;
+import android.gesture.Prediction;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.TabHost;
 import de.quadrillenschule.liquidroid.model.LQFBInstances;
+import java.util.ArrayList;
 
-public class LiqoidMainActivity extends TabActivity implements TabHost.OnTabChangeListener {
+public class LiqoidMainActivity extends TabActivity implements TabHost.OnTabChangeListener, GestureOverlayView.OnGesturePerformedListener {
 
-public static LQFBInstances lqfbInstances;
-TabHost tabHost;
+    public static LQFBInstances lqfbInstances;
+    TabHost tabHost;
+    GestureLibrary gestureLibrary;
+
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (lqfbInstances==null){
-        lqfbInstances=new LQFBInstances(this);
+
+        gestureLibrary = GestureLibraries.fromRawResource(this, R.raw.gestures);
+        if (!gestureLibrary.load()) {
+            finish();
+        }
+        if (lqfbInstances == null) {
+            lqfbInstances = new LQFBInstances(this);
         }
 
         setContentView(R.layout.main);
@@ -55,7 +68,7 @@ TabHost tabHost;
     }
 
     @Override
-    public void onPause(){
+    public void onPause() {
         lqfbInstances.save();
         super.onPause();
     }
@@ -63,12 +76,41 @@ TabHost tabHost;
     public static void setTabColor(TabHost tabhost) {
         for (int i = 0; i < tabhost.getTabWidget().getChildCount(); i++) {
             tabhost.getTabWidget().getChildAt(i).setBackgroundColor(Color.parseColor("#303030")); //unselected
-       
+
         }
         tabhost.getTabWidget().getChildAt(tabhost.getCurrentTab()).setBackgroundColor(Color.parseColor("#000000")); // selected
     }
 
     public void onTabChanged(String arg0) {
-       setTabColor(tabHost);
+        setTabColor(tabHost);
+    }
+
+    public void onGesturePerformed(GestureOverlayView overlay, Gesture gesture) {
+        ArrayList<Prediction> predictions = gestureLibrary.recognize(gesture);
+
+        // We want at least one prediction
+        if (predictions.size() > 0) {
+            Prediction prediction = predictions.get(0);
+            // We want at least some confidence in the result
+            if (prediction.score > 1.0) {
+                // Show the spell
+                if (prediction.name.equals("right")) {
+                    int base = tabHost.getCurrentTab();
+                    if (base <= 0) {
+                        return;
+                    }
+                    tabHost.setCurrentTab(base - 1);
+                }
+                if (prediction.name.equals("left")) {
+                    int base = tabHost.getCurrentTab();
+                    if (base >= tabHost.getChildCount()) {
+                        return;
+                    }
+                    tabHost.setCurrentTab(base + 1);
+
+                }
+
+            }
+        }
     }
 }
