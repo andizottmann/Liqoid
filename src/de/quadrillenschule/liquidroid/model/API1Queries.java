@@ -27,6 +27,7 @@ public class API1Queries {
  public static InputStream queryOutputStream(String api, String parameters, String apiUrl, String developerkey) throws IOException {
         String url = apiUrl + api + ".html?key=" + developerkey + parameters;
         DefaultHttpClient httpClient;
+        
         if (url.startsWith("https")) {
             HostnameVerifier hostnameVerifier = org.apache.http.conn.ssl.SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER;
             DefaultHttpClient client = new DefaultHttpClient();
