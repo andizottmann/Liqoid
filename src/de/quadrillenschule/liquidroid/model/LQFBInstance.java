@@ -77,7 +77,7 @@ public class LQFBInstance {
         areaParser = new AreaFromAPIParser(areas);
         try {
             saxparser = factory.newSAXParser();
-            saxparser.parse(queryOutputStream("area", ""), areaParser);
+            saxparser.parse(API1Queries.queryOutputStream("area", "",apiUrl,developerkey), areaParser);
         } catch (Exception e) {
             //  temp=null;
             areas = areaParser.areas;
@@ -88,28 +88,7 @@ public class LQFBInstance {
         return 0;
     }
 
-    public InputStream queryOutputStream(String api, String parameters) throws IOException {
-        String url = apiUrl + api + ".html?key=" + developerkey + parameters;
-        DefaultHttpClient httpClient;
-        if (url.startsWith("https")) {
-            HostnameVerifier hostnameVerifier = org.apache.http.conn.ssl.SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER;
-            DefaultHttpClient client = new DefaultHttpClient();
-            SchemeRegistry registry = new SchemeRegistry();
-            SSLSocketFactory socketFactory = SSLSocketFactory.getSocketFactory();
-            socketFactory.setHostnameVerifier((X509HostnameVerifier) hostnameVerifier);
-            registry.register(new Scheme("https", socketFactory, 443));
-            SingleClientConnManager mgr = new SingleClientConnManager(client.getParams(), registry);
-            httpClient = new DefaultHttpClient(mgr, client.getParams());
-            HttpsURLConnection.setDefaultHostnameVerifier(hostnameVerifier);
-        } else {
-            httpClient = new DefaultHttpClient();
-        }
-        HttpPost httpPost = new HttpPost(url);
-        String responseString = "";
-        HttpResponse response = (HttpResponse) httpClient.execute(httpPost);
-        return response.getEntity().getContent();
-    }
-
+   
     /**
      * @return the name
      */

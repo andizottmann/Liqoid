@@ -35,12 +35,11 @@ public class LiqoidMainActivity extends TabActivity implements TabHost.OnTabChan
 
         setContentView(R.layout.main);
 
-
         Resources res = getResources(); // Resource object to get Drawables
         tabHost = getTabHost();  // The activity TabHost
         TabHost.TabSpec spec;  // Resusable TabSpec for each tab
-        Intent intent;  // Reusable Intent for each tab
 
+        Intent intent;  // Reusable Intent for each tab
         intent = new Intent().setClass(this, UpcomingTabActivity.class);
         spec = tabHost.newTabSpec("upcoming").setIndicator(res.getString(R.string.tab_upcoming),
                 res.getDrawable(R.drawable.ic_tab_upcoming)).setContent(intent);
