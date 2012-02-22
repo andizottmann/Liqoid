@@ -73,28 +73,28 @@ public class LQFBInstancesFromFileParser extends DefaultHandler {
         if (qName.equals("area")) {
             currentInstance.areas.add(currentArea);
         }
-        if (qName.equals("id")) {
+        if (qName.equals("area_id")) {
             currentArea.setId(Integer.parseInt(charBuff.toString()));
         }
-        if (qName.equals("name")) {
+        if (qName.equals("area_name")) {
             currentArea.setName(charBuff.toString());
         }
-        if (qName.equals("selected")) {
+        if (qName.equals("area_selected")) {
             currentArea.setSelected(Boolean.parseBoolean(charBuff.toString()));
         }
-        if (qName.equals("description")) {
+        if (qName.equals("area_description")) {
             currentArea.setDescription(charBuff.toString());
         }
-        if (qName.equals("direct_member_count")) {
+        if (qName.equals("area_direct_member_count")) {
             currentArea.setDirect_member_count(Integer.parseInt(charBuff.toString()));
         }
-        if (qName.equals("member_weight")) {
+        if (qName.equals("area_member_weight")) {
             currentArea.setMember_weight(Integer.parseInt(charBuff.toString()));
         }
-        if (qName.equals("autoreject_weight")) {
+        if (qName.equals("area_autoreject_weight")) {
             currentArea.setAutoreject_weight(Integer.parseInt(charBuff.toString()));
         }
-        if (qName.equals("active")) {
+        if (qName.equals("area_active")) {
             currentArea.setActive(Boolean.parseBoolean(charBuff.toString()));
         }
 

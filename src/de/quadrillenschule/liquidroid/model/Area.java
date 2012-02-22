@@ -20,21 +20,23 @@ package de.quadrillenschule.liquidroid.model;
         private int member_weight = -1;
         private int autoreject_weight = -1;
         private boolean active = false;
+        private Initiativen initiativen;
 
         public Area() {
+            initiativen=new Initiativen();
         }
 
     
         String toXML() {
             String retval = "<area>";
-            retval += "<id>" + id + "</id>";
-            retval += "<name>" + name + "</name>";
-            retval += "<selected>" + selected + "</selected>";
-            retval += "<description>" + description + "</description>";
-            retval += "<direct_member_count>" + direct_member_count + "</direct_member_count>";
-            retval += "<member_weight>" + member_weight + "</member_weight>";
-            retval += "<autoreject_weight>" + autoreject_weight + "</autoreject_weight>";
-            retval += "<active>" + active + "</active>";
+            retval += "<area_id>" + id + "</area_id>";
+            retval += "<area_name>" + name + "</area_name>";
+            retval += "<area_selected>" + selected + "</area_selected>";
+            retval += "<area_description>" + description + "</area_description>";
+            retval += "<area_direct_member_count>" + direct_member_count + "</area_direct_member_count>";
+            retval += "<area_member_weight>" + member_weight + "</area_member_weight>";
+            retval += "<area_autoreject_weight>" + autoreject_weight + "</area_autoreject_weight>";
+            retval += "<area_active>" + active + "</area_active>";
             retval += "</area>";
             return retval;
         }
@@ -150,4 +152,18 @@ package de.quadrillenschule.liquidroid.model;
         public void setActive(boolean active) {
             this.active = active;
         }
+
+    /**
+     * @return the initiativen
+     */
+    public Initiativen getInitiativen() {
+        return initiativen;
+    }
+
+    /**
+     * @param initiativen the initiativen to set
+     */
+    public void setInitiativen(Initiativen initiativen) {
+        this.initiativen = initiativen;
+    }
     }

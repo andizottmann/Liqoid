@@ -33,8 +33,7 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-
-        setContentView(R.layout.areastab);
+       setContentView(R.layout.areastab);
 
         GestureOverlayView gestures = (GestureOverlayView) findViewById(R.id.gestures);
         gestures.setGestureVisible(false);

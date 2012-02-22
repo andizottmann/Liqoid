@@ -17,6 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TabHost;
+import android.widget.Toast;
 import de.quadrillenschule.liquidroid.model.LQFBInstances;
 import de.quadrillenschule.liquidroid.model.LQFBInstancesListAdapter;
 import java.util.ArrayList;
@@ -134,22 +135,23 @@ public class LiqoidMainActivity extends TabActivity implements TabHost.OnTabChan
             Prediction prediction = predictions.get(0);
             // We want at least some confidence in the result
             if (prediction.score > 1.0) {
+                     int base = tabHost.getCurrentTab();
+
                 // Show the spell
                 if (prediction.name.equals("right")) {
-                    int base = tabHost.getCurrentTab();
                     if (base <= 0) {
                         return;
                     }
                     tabHost.setCurrentTab(base - 1);
                 }
                 if (prediction.name.equals("left")) {
-                    int base = tabHost.getCurrentTab();
-                    if (base >= tabHost.getChildCount()) {
+                     if (base > 2) {
                         return;
                     }
                     tabHost.setCurrentTab(base + 1);
 
                 }
+                   
 
             }
         }

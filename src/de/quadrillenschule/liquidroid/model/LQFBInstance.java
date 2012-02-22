@@ -31,8 +31,9 @@ public class LQFBInstance {
     private String developerkey = "";
     private boolean selected = false;
     public Areas areas;
-    private String apiversion = "";
+     private String apiversion = "";
     private AreaFromAPIParser areaParser;
+    private InitiativenFromAPIParser iniParser;
     public static final String AREA_API = "area";
 
     public LQFBInstance(String name, String apiUrl, String webUrl, String developerkey, String apiversion, boolean selected) {
@@ -43,13 +44,14 @@ public class LQFBInstance {
         this.webUrl = webUrl;
         this.developerkey = developerkey;
         areaParser = new AreaFromAPIParser(null);
-        areas = areaParser.areas;
+         areas = areaParser.areas;
         this.selected = selected;
         this.apiversion = apiversion;
     }
 
     public LQFBInstance() {
         areaParser = new AreaFromAPIParser(null);
+  
         areas = areaParser.areas;
     }
 
@@ -88,6 +90,22 @@ public class LQFBInstance {
         return 0;
     }
 
+     public int downloadInitiativen(Area area) {
+        SAXParserFactory factory = SAXParserFactory.newInstance();
+        SAXParser saxparser;
+     iniParser=new InitiativenFromAPIParser(area);
+         try {
+            saxparser = factory.newSAXParser();
+            saxparser.parse(API1Queries.queryOutputStream("initiative", "&area_id="+area.getId(),apiUrl,developerkey), iniParser);
+        } catch (Exception e) {
+            //  temp=null;
+          area.setInitiativen(iniParser.inis);
+            return -1;
+        }
+        area.setInitiativen(iniParser.inis);
+           // areaParser=temp;
+        return 0;
+    }
    
     /**
      * @return the name
