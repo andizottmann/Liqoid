@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TabHost;
 import de.quadrillenschule.liquidroid.model.LQFBInstances;
@@ -83,6 +84,8 @@ public class LiqoidMainActivity extends TabActivity implements TabHost.OnTabChan
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         instanceSpinner.setAdapter(adapter);
         instanceSpinner.setOnItemSelectedListener(this);
+
+
 
     }
 
