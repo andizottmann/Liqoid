@@ -11,19 +11,18 @@ import java.util.Date;
  *
  * @author andi
  */
-public class Initiative implements Comparable<Initiative>{
+public class Initiative implements Comparable<Initiative> {
 
-    public int id;
-    public int rank;
-    public int area_id;
-    public String name;
-    public String state;
-    public int issue_id;
-    public long issue_discussion_time;
-    public long issue_admission_time;
-    public long issue_verification_time;
-    public long issue_voting_time;
-    public int supporter_count,issue_voter_count=-1,positive_votes=-1,negative_voters=-1;
+    public int id=0;
+    public int area_id=0;
+    public String name="";
+    public String state="";
+    public int issue_id=0;
+    public long issue_discussion_time=0;
+    public long issue_admission_time=0;
+    public long issue_verification_time=0;
+    public long issue_voting_time=0;
+    public int supporter_count=0;//,issue_voter_count=-1,positive_votes=-1,negative_voters=-1;
     public Date revoked;
     public Date created;
     public Date issue_created;
@@ -32,8 +31,34 @@ public class Initiative implements Comparable<Initiative>{
     public Date issue_fully_frozen;
     public Date issue_closed;
     public Date current_draft_created;
+    private boolean selected = false;
 
-    private boolean selected;
+  
+    public String toXML() {
+        String retval = "<initiative>";
+        retval += "<ini_id>" + id + "</ini_id>";
+        retval += "<ini_selected>" + selected + "</ini_selected>";
+        retval += "<ini_name>" + name + "</ini_name>";
+        retval += "<ini_state>" + state + "</ini_state>";
+        retval += "<ini_created>" + created + "</ini_created>";
+        retval += "<ini_issue_created>" + issue_created + "</ini_issue_created>";
+        retval += "<ini_issue_id>" + issue_id + "</ini_issue_id>";
+        retval += "<ini_issue_discussion_time>" + issue_discussion_time + "</ini_issue_discussion_time>";
+        retval += "<ini_issue_admission_time>" + issue_admission_time + "</ini_issue_admission_time>";
+        retval += "<ini_issue_verification_time>" + issue_verification_time + "</ini_issue_verification_time>";
+        retval += "<ini_issue_voting_time>" + issue_voting_time + "</ini_issue_voting_time>";
+        try {
+            retval += "<ini_supporter_count>" + supporter_count + "</ini_supporter_count>";
+            retval += "<ini_issue_accepted>" + issue_accepted + "</ini_issue_accepted>";
+            retval += "<ini_issue_half_frozen>" + issue_half_frozen + "</ini_issue_half_frozen>";
+            retval += "<ini_issue_fully_frozen>" + issue_fully_frozen + "</ini_issue_fully_frozen>";
+            retval += "<ini_issue_closed>" + issue_closed + "</ini_issue_closed>";
+        } catch (Exception e) {
+        }
+
+        return retval + "</initiative>";
+    }
+
     public Date getDateForStartVoting() {
         Calendar cal = Calendar.getInstance();
         cal.setTime(issue_created);
@@ -41,7 +66,7 @@ public class Initiative implements Comparable<Initiative>{
 
         return retval;
     }
-    public static final String lastVotingEnded = "Abstimmung beendet",  lastVotingStarted = "Abstimmungsbeginn",  lastFrozen = "Eingefroren",  lastClosed = "Beendet",  lastRevoked = "Zurückgezogen",  lastNeuerEntwurf = "Neuer Entwurf",  lastErzeugt = "Neue Initiative";
+    public static final String lastVotingEnded = "Abstimmung beendet", lastVotingStarted = "Abstimmungsbeginn", lastFrozen = "Eingefroren", lastClosed = "Beendet", lastRevoked = "Zurückgezogen", lastNeuerEntwurf = "Neuer Entwurf", lastErzeugt = "Neue Initiative";
 
     public String lastEvent() {
         if (revoked != null) {
@@ -91,7 +116,7 @@ public class Initiative implements Comparable<Initiative>{
         ;
         return current_draft_created;
     }
-    public static String nextEingefroren = "->Eingefroren",  nextAbstimmung = "->Abstimmung",  nextAbstimmungsende = "->Abstimmungsende",  nextAkzeptiert = "->Akzeptiert";
+    public static String nextEingefroren = "->Eingefroren", nextAbstimmung = "->Abstimmung", nextAbstimmungsende = "->Abstimmungsende", nextAkzeptiert = "->Akzeptiert";
 
     public String nextEvent() {
         if (state.equals("new")) {
@@ -133,7 +158,6 @@ public class Initiative implements Comparable<Initiative>{
         return retval;
     }
 
-
     /**
      * @return the selected
      */
@@ -149,8 +173,6 @@ public class Initiative implements Comparable<Initiative>{
     }
 
     public int compareTo(Initiative arg0) {
-        return ((Integer)this.issue_id).compareTo((Integer)arg0.issue_id);
+        return ((Integer) this.issue_id).compareTo((Integer) arg0.issue_id);
     }
-
-
 }

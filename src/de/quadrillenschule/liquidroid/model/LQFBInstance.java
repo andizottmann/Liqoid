@@ -31,7 +31,7 @@ public class LQFBInstance {
     private String developerkey = "";
     private boolean selected = false;
     public Areas areas;
-     private String apiversion = "";
+    private String apiversion = "";
     private AreaFromAPIParser areaParser;
     private InitiativenFromAPIParser iniParser;
     public static final String AREA_API = "area";
@@ -44,21 +44,22 @@ public class LQFBInstance {
         this.webUrl = webUrl;
         this.developerkey = developerkey;
         areaParser = new AreaFromAPIParser(null);
-         areas = areaParser.areas;
+        areas = areaParser.areas;
         this.selected = selected;
         this.apiversion = apiversion;
     }
 
     public LQFBInstance() {
         areaParser = new AreaFromAPIParser(null);
-  
+
         areas = areaParser.areas;
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return name;
     }
+
     public String toXML() {
         String retval = "<lqfbinstance>";
         retval += "<iname>" + name + "</iname>";
@@ -79,7 +80,7 @@ public class LQFBInstance {
         areaParser = new AreaFromAPIParser(areas);
         try {
             saxparser = factory.newSAXParser();
-            saxparser.parse(API1Queries.queryOutputStream("area", "",apiUrl,developerkey), areaParser);
+            saxparser.parse(API1Queries.queryOutputStream("area", "", apiUrl, developerkey), areaParser);
         } catch (Exception e) {
             //  temp=null;
             areas = areaParser.areas;
@@ -90,23 +91,27 @@ public class LQFBInstance {
         return 0;
     }
 
-     public int downloadInitiativen(Area area) {
+    public int downloadInitiativen(Area area) {
         SAXParserFactory factory = SAXParserFactory.newInstance();
         SAXParser saxparser;
-     iniParser=new InitiativenFromAPIParser(area);
-         try {
-            saxparser = factory.newSAXParser();
-            saxparser.parse(API1Queries.queryOutputStream("initiative", "&area_id="+area.getId(),apiUrl,developerkey), iniParser);
-        } catch (Exception e) {
-            //  temp=null;
-          area.setInitiativen(iniParser.inis);
-            return -1;
+        iniParser = new InitiativenFromAPIParser(area);
+        area.setInitiativen(new Initiativen());
+        String[] states = {"new", "accepted", "frozen", "voting"};
+        for (String state : states) {
+            try {
+                saxparser = factory.newSAXParser();
+                saxparser.parse(API1Queries.queryOutputStream("initiative", "&area_id=" + area.getId() + "&state=" + state, apiUrl, developerkey), iniParser);
+            } catch (Exception e) {
+                //  temp=null;
+            }
+            for (Initiative i : iniParser.inis) {
+                area.getInitiativen().add(i);
+            }
         }
-        area.setInitiativen(iniParser.inis);
-           // areaParser=temp;
+        // areaParser=temp;
         return 0;
     }
-   
+
     /**
      * @return the name
      */

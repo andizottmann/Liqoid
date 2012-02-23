@@ -13,6 +13,40 @@ import java.util.Collections;
  */
 public class Initiativen extends ArrayList<Initiative> {
 
+    private ArrayList<Integer> existingIssueIds = new ArrayList<Integer>();
+
+    @Override
+    public boolean add(Initiative ini) {
+        if (!existingIssueIds.contains((Integer) ini.issue_id)) {
+            existingIssueIds.add((Integer) ini.issue_id);
+            return super.add(ini);
+        }
+        return false;
+    }
+
+    @Override
+    public void clear(){
+        existingIssueIds.clear();
+        super.clear();
+
+    }
+
+    @Override
+    public Initiative remove(int i){
+        existingIssueIds.remove((Integer)get(i).issue_id);
+        return super.remove(i);
+    }
+
+
+    public String toXML() {
+        String retval = "<initiatives>";
+        for (Initiative i : this) {
+            retval += i.toXML();
+        }
+        return retval + "</initiatives>";
+
+    }
+
     public Initiativen findByIssueID(int find) {
         Initiativen retval = new Initiativen();
         for (Initiative i : this) {
@@ -22,7 +56,8 @@ public class Initiativen extends ArrayList<Initiative> {
         }
         return retval;
     }
-     public Initiativen findByName(String name) {
+
+    public Initiativen findByName(String name) {
         Initiativen retval = new Initiativen();
         for (Initiative i : this) {
             if (i.name == name) {
@@ -31,7 +66,8 @@ public class Initiativen extends ArrayList<Initiative> {
         }
         return retval;
     }
-     public void sortById(){
-       Collections.reverse(this);
-     }
+
+    public void sortById() {
+        Collections.reverse(this);
+    }
 }

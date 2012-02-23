@@ -37,6 +37,7 @@ package de.quadrillenschule.liquidroid.model;
             retval += "<area_member_weight>" + member_weight + "</area_member_weight>";
             retval += "<area_autoreject_weight>" + autoreject_weight + "</area_autoreject_weight>";
             retval += "<area_active>" + active + "</area_active>";
+            retval += initiativen.toXML();
             retval += "</area>";
             return retval;
         }

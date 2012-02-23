@@ -119,23 +119,7 @@ public class InitiativenFromAPIParser extends DefaultHandler {
         if (qName.equals("supporter_count")) {
             currentInitiative.supporter_count = Integer.parseInt(charBuff.toString());
         }
-        try {
-            if (qName.equals("issue_voter_count")) {
-                currentInitiative.issue_voter_count = Integer.parseInt(charBuff.toString());
-            }
-            if (qName.equals("positive_votes")) {
-                currentInitiative.positive_votes = Integer.parseInt(charBuff.toString());
-            }
-            if (qName.equals("negative_votes")) {
-                currentInitiative.negative_voters = Integer.parseInt(charBuff.toString());
-            }
-            if (qName.equals("rank")) {
-                currentInitiative.rank = Integer.parseInt(charBuff.toString());
-            }
-
-        } catch (Exception e) {
-        }
-
+     
         if (qName.equals("issue_verification_time")) {
             currentInitiative.issue_verification_time = myTimeParser(charBuff.toString());
             //   System.out.println(currentInitiative.issue_verification_time);

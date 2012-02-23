@@ -8,6 +8,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.widget.Toast;
 import de.quadrillenschule.liquidroid.LiqoidMainActivity;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
@@ -32,7 +33,7 @@ public class LQFBInstances extends ArrayList<LQFBInstance> {
                     "https://lqfb.piratenpartei.de/pp/api/",
                     "https://lqfb.piratenpartei.de/pp/",
                     "6Bw8HGL8Bp2z4wK6L3Zw", "1.x", true));
-             this.add(new LQFBInstance(
+            this.add(new LQFBInstance(
                     "Piraten Sachsen-Anhalt",
                     "http://lqfb.piraten-lsa.de/lsa/api/",
                     "http://lqfb.piraten-lsa.de/lsa/",
@@ -78,7 +79,9 @@ public class LQFBInstances extends ArrayList<LQFBInstance> {
 
 
         try {
-            FileOutputStream fos = getMainActivity().openFileOutput("instanc.xml", Context.MODE_WORLD_WRITEABLE);
+            //    FileOutputStream fos  = getMainActivity().openFileOutput("instanc.xml", Context.MODE_WORLD_WRITEABLE);
+            File file = new File(getMainActivity().getExternalFilesDir(null), "liqoid.xml");
+            FileOutputStream fos = new FileOutputStream(file);
             fos.write(toXML().getBytes());
             fos.close();
 
@@ -93,7 +96,10 @@ public class LQFBInstances extends ArrayList<LQFBInstance> {
 
     public void load() {
         try {
-            FileInputStream fis = getMainActivity().openFileInput("instanc.xml");
+            File file = new File(getMainActivity().getExternalFilesDir(null), "liqoid.xml");
+
+            //      FileInputStream fis = getMainActivity().openFileInput("instanc.xml");
+            FileInputStream fis = new FileInputStream(file);
             SAXParserFactory factory = SAXParserFactory.newInstance();
             SAXParser saxparser;
             LQFBInstancesFromFileParser parser = new LQFBInstancesFromFileParser(this);
