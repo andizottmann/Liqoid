@@ -12,7 +12,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 import de.quadrillenschule.liquidroid.model.AllInitiativenListAdapter;
 import de.quadrillenschule.liquidroid.model.Area;
@@ -47,45 +46,37 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
     public void refreshInisList(boolean force) {
 
         if (force || inisListAdapter == null) {
-    allInis.clear();
 
+            allInis.clear();
             Context context = getApplicationContext();
-            /*
-            ProgressDialog dialog = ProgressDialog.show(context, "",
-            getApplicationContext().getString(R.string.downloading));
-             */
             for (Area a : LiqoidMainActivity.lqfbInstances.getSelectedInstance().areas) {
-
                 if (a.isSelected()) {
-                    if (LiqoidMainActivity.lqfbInstances.getSelectedInstance().downloadInitiativen(a) >= 0) {
-                        //                  dialog.cancel();
 
-                        Toast toast = Toast.makeText(context, R.string.download_ok, Toast.LENGTH_SHORT);
-                        toast.show();
+                    if (force) {
+                        if (LiqoidMainActivity.lqfbInstances.getSelectedInstance().downloadInitiativen(a) >= 0) {
+                            Toast toast = Toast.makeText(context, R.string.download_ok, Toast.LENGTH_SHORT);
+                            toast.show();
 
-                    } else {
-                        //                dialog.cancel();
-                        Toast toast = Toast.makeText(context, R.string.download_error, Toast.LENGTH_LONG);
-                        toast.show();
+                        } else {
+                            Toast toast = Toast.makeText(context, R.string.download_error, Toast.LENGTH_LONG);
+                            toast.show();
+                        }
                     }
-                for (Initiative i : a.getInitiativen()) {
-                    allInis.add(i);
+                    for (Initiative i : a.getInitiativen()) {
+                        allInis.add(i);
+                    }
                 }
-                }
-              
-           
             }
-
-
         }
+
         allInis.sortById();
         inisListAdapter = new AllInitiativenListAdapter(this, allInis, R.id.initiativenList, this);
-
         final ListView listview = (ListView) findViewById(R.id.initiativenList);
         listview.setAdapter(inisListAdapter);
 
     }
-  @Override
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.inislist_options, menu);
@@ -105,8 +96,9 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
                 return super.onOptionsItemSelected(item);
         }
     }
-    public void lqfbInstanceChanged() {
 
+    public void lqfbInstanceChanged() {
+        inisListAdapter = null;
         refreshInisList(false);
     }
 }

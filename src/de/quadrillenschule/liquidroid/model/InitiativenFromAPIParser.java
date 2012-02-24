@@ -22,11 +22,11 @@ public class InitiativenFromAPIParser extends DefaultHandler {
     StringBuffer charBuff;
     Area area;
 
-    public InitiativenFromAPIParser( Area area) {
+    public InitiativenFromAPIParser(Area area) {
         super();
         this.area = area;
-         charBuff = new StringBuffer();
-        inis=new Initiativen();
+        charBuff = new StringBuffer();
+        inis = new Initiativen();
     }
 
     @Override
@@ -50,7 +50,7 @@ public class InitiativenFromAPIParser extends DefaultHandler {
 
     }
 
-    long myTimeParser(String str) {
+    static long myTimeParser(String str) {
 
         if (str.contains("days")) {
             String numberstr = str.substring(0, str.indexOf("days") - 1);
@@ -64,14 +64,23 @@ public class InitiativenFromAPIParser extends DefaultHandler {
         return 0;
     }
 
-    Date myDateParser(String str) {
+    static Date myDateParser(String str) {
         DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
         try {
             return (Date) formatter.parse(str);
         } catch (Exception ex) {
             // Logger.getLogger(InitiativenParser.class.getName()).log(Level.SEVERE, null, ex);
             return null;
         }
+    }
+
+    static String dateToStringFormatter(Date date) {
+        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+
+        return formatter.format(date);
+
     }
 
     @Override
@@ -84,8 +93,12 @@ public class InitiativenFromAPIParser extends DefaultHandler {
 
         if (qName.equals("initiative")) {
             if (currentInitiative != null) {
-            if (inis.findByIssueID(currentInitiative.issue_id).size()==0)
-                inis.add(currentInitiative);
+                if (area.getInitiativen().findByIssueID(currentInitiative.issue_id).size()>0){
+                currentInitiative.setSelected(area.getInitiativen().findByIssueID(currentInitiative.issue_id).get(1).isSelected());
+                }
+               // if (inis.findByIssueID(currentInitiative.issue_id).size() == 0) {
+                    inis.add(currentInitiative);
+                //}
 
             }
 
@@ -103,7 +116,7 @@ public class InitiativenFromAPIParser extends DefaultHandler {
         if (qName.equals("area_id")) {
             currentInitiative.area_id = Integer.parseInt(charBuff.toString());
         }
-      
+
         if (qName.equals("issue_admission_time")) {
             currentInitiative.issue_admission_time = myTimeParser(charBuff.toString());
             //   System.out.println(currentInitiative.issue_admission_time);
@@ -119,7 +132,7 @@ public class InitiativenFromAPIParser extends DefaultHandler {
         if (qName.equals("supporter_count")) {
             currentInitiative.supporter_count = Integer.parseInt(charBuff.toString());
         }
-     
+
         if (qName.equals("issue_verification_time")) {
             currentInitiative.issue_verification_time = myTimeParser(charBuff.toString());
             //   System.out.println(currentInitiative.issue_verification_time);

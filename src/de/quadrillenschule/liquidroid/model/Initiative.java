@@ -40,8 +40,8 @@ public class Initiative implements Comparable<Initiative> {
         retval += "<ini_selected>" + selected + "</ini_selected>";
         retval += "<ini_name>" + name + "</ini_name>";
         retval += "<ini_state>" + state + "</ini_state>";
-        retval += "<ini_created>" + created + "</ini_created>";
-        retval += "<ini_issue_created>" + issue_created + "</ini_issue_created>";
+        retval += "<ini_created>" + InitiativenFromAPIParser.dateToStringFormatter(created) + "</ini_created>";
+        retval += "<ini_issue_created>" + InitiativenFromAPIParser.dateToStringFormatter(issue_created) + "</ini_issue_created>";
         retval += "<ini_issue_id>" + issue_id + "</ini_issue_id>";
         retval += "<ini_issue_discussion_time>" + issue_discussion_time + "</ini_issue_discussion_time>";
         retval += "<ini_issue_admission_time>" + issue_admission_time + "</ini_issue_admission_time>";

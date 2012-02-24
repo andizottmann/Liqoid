@@ -18,6 +18,7 @@ public class LQFBInstancesFromFileParser extends DefaultHandler {
     LQFBInstances lqfbInstances;
     LQFBInstance currentInstance;
     Area currentArea;
+    Initiative currentInitiative;
 
     public LQFBInstancesFromFileParser(LQFBInstances lqfbInstances) {
         charBuff = new StringBuffer();
@@ -36,8 +37,11 @@ public class LQFBInstancesFromFileParser extends DefaultHandler {
         }
 
         if (qName.equals("area")) {
-
             currentArea = new Area();
+        }
+
+        if (qName.equals("initiative")) {
+            currentInitiative = new Initiative();
         }
 
         charBuff = new StringBuffer();
@@ -97,7 +101,58 @@ public class LQFBInstancesFromFileParser extends DefaultHandler {
         if (qName.equals("area_active")) {
             currentArea.setActive(Boolean.parseBoolean(charBuff.toString()));
         }
-
+//Initiatives
+        if (qName.equals("initiative")) {
+            currentArea.getInitiativen().add(currentInitiative);
+        }
+        if (qName.equals("ini_id")) {
+            currentInitiative.id = (Integer.parseInt(charBuff.toString()));
+        }
+        if (qName.equals("ini_selected")) {
+            currentInitiative.setSelected(Boolean.parseBoolean(charBuff.toString()));
+        }
+        if (qName.equals("ini_name")) {
+            currentInitiative.name = (charBuff.toString());
+        }
+        if (qName.equals("ini_state")) {
+            currentInitiative.state = (charBuff.toString());
+        }
+        if (qName.equals("ini_created")) {
+            currentInitiative.created = InitiativenFromAPIParser.myDateParser(charBuff.toString());
+        }
+        if (qName.equals("ini_issue_created")) {
+            currentInitiative.issue_created = InitiativenFromAPIParser.myDateParser(charBuff.toString());
+        }
+        if (qName.equals("ini_issue_id")) {
+            currentInitiative.issue_id = (Integer.parseInt(charBuff.toString()));
+        }
+        if (qName.equals("ini_issue_discussion_time")) {
+            currentInitiative.issue_discussion_time = (Long.parseLong(charBuff.toString()));
+        }
+        if (qName.equals("ini_issue_admission_time")) {
+            currentInitiative.issue_admission_time = (Long.parseLong(charBuff.toString()));
+        }
+        if (qName.equals("ini_issue_verification_time")) {
+            currentInitiative.issue_verification_time = (Long.parseLong(charBuff.toString()));
+        }
+         if (qName.equals("ini_issue_voting_time")) {
+            currentInitiative.issue_voting_time = (Long.parseLong(charBuff.toString()));
+        }
+        if (qName.equals("ini_supporter_count")) {
+            currentInitiative.supporter_count = (Integer.parseInt(charBuff.toString()));
+        }
+          if (qName.equals("ini_issue_accepted")) {
+            currentInitiative.issue_accepted = InitiativenFromAPIParser.myDateParser(charBuff.toString());
+        }
+          if (qName.equals("ini_issue_half_frozen")) {
+            currentInitiative.issue_half_frozen = InitiativenFromAPIParser.myDateParser(charBuff.toString());
+        }
+          if (qName.equals("ini_issue_fully_frozen")) {
+            currentInitiative.issue_fully_frozen = InitiativenFromAPIParser.myDateParser(charBuff.toString());
+        }
+          if (qName.equals("ini_issue_closed")) {
+            currentInitiative.issue_closed = InitiativenFromAPIParser.myDateParser(charBuff.toString());
+        }
     }
 
     @Override
