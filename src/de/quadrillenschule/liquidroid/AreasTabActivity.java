@@ -68,8 +68,8 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
             case R.id.open_browser:
                 try {
                     String areaname = ((CheckBox) contextMenuView).getText().toString();
-                    int areaid = LiqoidMainActivity.lqfbInstances.getSelectedInstance().areas.getByName(areaname).getId();
-                    String url = LiqoidMainActivity.lqfbInstances.getSelectedInstance().getWebUrl() + "area/show/" + areaid + ".html";
+                    int areaid = ((LiqoidApplication)getApplication()).lqfbInstances.getSelectedInstance().areas.getByName(areaname).getId();
+                    String url = ((LiqoidApplication)getApplication()).lqfbInstances.getSelectedInstance().getWebUrl() + "area/show/" + areaid + ".html";
                     Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                     myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
 
@@ -109,7 +109,7 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
     public void refreshAreasList(boolean force) {
 
         if (force || areasListAdapter == null) {
-            if (force || (LiqoidMainActivity.lqfbInstances.getSelectedInstance().areas.size() == 0)) {
+            if (force || (((LiqoidApplication)getApplication()).lqfbInstances.getSelectedInstance().areas.size() == 0)) {
 
                 Context context = getApplicationContext();
                 /*
@@ -117,7 +117,7 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
                 getApplicationContext().getString(R.string.downloading));
                  */
 
-                if (LiqoidMainActivity.lqfbInstances.getSelectedInstance().downloadAreas() >= 0) {
+                if (((LiqoidApplication)getApplication()).lqfbInstances.getSelectedInstance().downloadAreas() >= 0) {
                     //                  dialog.cancel();
 
                     Toast toast = Toast.makeText(context, R.string.download_ok, Toast.LENGTH_SHORT);
@@ -132,7 +132,7 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
             }
 
         }
-        areasListAdapter = new AreasListAdapter(this, LiqoidMainActivity.lqfbInstances.getSelectedInstance().areas, R.id.areasList, this);
+        areasListAdapter = new AreasListAdapter(this, ((LiqoidApplication)getApplication()).lqfbInstances.getSelectedInstance().areas, R.id.areasList, this);
 
         final ListView listview = (ListView) findViewById(R.id.areasList);
         listview.setAdapter(areasListAdapter);

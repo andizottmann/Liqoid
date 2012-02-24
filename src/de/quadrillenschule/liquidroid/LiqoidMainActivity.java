@@ -14,17 +14,14 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TabHost;
-import android.widget.Toast;
-import de.quadrillenschule.liquidroid.model.LQFBInstances;
 import de.quadrillenschule.liquidroid.model.LQFBInstancesListAdapter;
 import java.util.ArrayList;
 
 public class LiqoidMainActivity extends TabActivity implements TabHost.OnTabChangeListener, GestureOverlayView.OnGesturePerformedListener, OnItemSelectedListener {
 
-    public static LQFBInstances lqfbInstances;
+   
     TabHost tabHost;
     GestureLibrary gestureLibrary;
     ArrayList<LQFBInstanceChangeListener> lqfbInstanceChangeListeners;
@@ -36,9 +33,7 @@ public class LiqoidMainActivity extends TabActivity implements TabHost.OnTabChan
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-          if (lqfbInstances == null) {
-            lqfbInstances = new LQFBInstances(this);
-        }
+       
 
         lqfbInstanceChangeListeners=new ArrayList<LQFBInstanceChangeListener>();
 
@@ -81,7 +76,7 @@ public class LiqoidMainActivity extends TabActivity implements TabHost.OnTabChan
         tabHost.setCurrentTab(3);
 
           final Spinner instanceSpinner = (Spinner) findViewById(R.id.instanceSelector);
-        adapter = new LQFBInstancesListAdapter(this, LiqoidMainActivity.lqfbInstances, android.R.layout.simple_spinner_item, this);
+        adapter = new LQFBInstancesListAdapter(this, ((LiqoidApplication)getApplication()).lqfbInstances, android.R.layout.simple_spinner_item, this);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         instanceSpinner.setAdapter(adapter);
         instanceSpinner.setOnItemSelectedListener(this);
@@ -92,7 +87,7 @@ public class LiqoidMainActivity extends TabActivity implements TabHost.OnTabChan
 
     @Override
     public void onPause() {
-        lqfbInstances.save();
+        ((LiqoidApplication)getApplication()).lqfbInstances.save(((LiqoidApplication)getApplication()).getApplicationFile());
         super.onPause();
     }
 
@@ -113,7 +108,7 @@ public class LiqoidMainActivity extends TabActivity implements TabHost.OnTabChan
     }
     //Instances Spinner item selected
     public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-        LiqoidMainActivity.lqfbInstances.setSelectedInstance((int) arg3);
+        ((LiqoidApplication)getApplication()).lqfbInstances.setSelectedInstance((int) arg3);
         fireLQFBInstanceChangedEvent();
     }
 

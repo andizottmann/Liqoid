@@ -49,11 +49,11 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
 
             allInis.clear();
             Context context = getApplicationContext();
-            for (Area a : LiqoidMainActivity.lqfbInstances.getSelectedInstance().areas) {
+            for (Area a : ((LiqoidApplication)getApplication()).lqfbInstances.getSelectedInstance().areas) {
                 if (a.isSelected()) {
 
                     if (force) {
-                        if (LiqoidMainActivity.lqfbInstances.getSelectedInstance().downloadInitiativen(a) >= 0) {
+                        if (((LiqoidApplication)getApplication()).lqfbInstances.getSelectedInstance().downloadInitiativen(a) >= 0) {
                             Toast toast = Toast.makeText(context, R.string.download_ok, Toast.LENGTH_SHORT);
                             toast.show();
 

@@ -22,11 +22,13 @@ import javax.xml.parsers.SAXParserFactory;
 public class LQFBInstances extends ArrayList<LQFBInstance> {
 
     ArrayList<LQFBInstance> instances;
-    private LiqoidMainActivity mainActivity;
+ 
+    public LQFBInstances() {
+  
+    }
 
-    public LQFBInstances(LiqoidMainActivity mainActivity) {
-        this.mainActivity = mainActivity;
-        this.load();
+    public void initFromFileOrDefaults(File file){
+        this.load(file);
         if (size() <= 0) {
             this.add(new LQFBInstance(
                     "Piraten Bund",
@@ -75,28 +77,25 @@ public class LQFBInstances extends ArrayList<LQFBInstance> {
         return retval + "</lqfbinstances>";
     }
 
-    public void save() {
+    public int save(File file) {
 
 
         try {
             //    FileOutputStream fos  = getMainActivity().openFileOutput("instanc.xml", Context.MODE_WORLD_WRITEABLE);
-            File file = new File(getMainActivity().getExternalFilesDir(null), "liqoid.xml");
+         //   File file = new File(MainActivity().getExternalFilesDir(null), "liqoid.xml");
             FileOutputStream fos = new FileOutputStream(file);
             fos.write(toXML().getBytes());
             fos.close();
 
         } catch (Exception e) {
-            Toast toast = Toast.makeText(getMainActivity().getApplicationContext(), "", Toast.LENGTH_LONG);
-
-            toast.setText("Saving not ok :(");
-            toast.show();
+         return -1;
         }
-
+return 0;
     }
 
-    public void load() {
+    public int load(File file) {
         try {
-            File file = new File(getMainActivity().getExternalFilesDir(null), "liqoid.xml");
+         //   File file = new File(getMainActivity().getExternalFilesDir(null), "liqoid.xml");
 
             //      FileInputStream fis = getMainActivity().openFileInput("instanc.xml");
             FileInputStream fis = new FileInputStream(file);
@@ -106,6 +105,7 @@ public class LQFBInstances extends ArrayList<LQFBInstance> {
             saxparser = factory.newSAXParser();
             saxparser.parse(fis, parser);
         } catch (Exception e) {
+            return -1;
         }
 
 
@@ -113,13 +113,8 @@ public class LQFBInstances extends ArrayList<LQFBInstance> {
 //
 //        toast.setText(this.size());
 //        toast.show();
-        //return 0;
+        return 0;
     }
 
-    /**
-     * @return the mainActivity
-     */
-    public LiqoidMainActivity getMainActivity() {
-        return mainActivity;
-    }
+  
 }
