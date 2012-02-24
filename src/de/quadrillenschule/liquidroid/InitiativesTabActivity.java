@@ -39,7 +39,7 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
         gestures.setGestureVisible(false);
         gestures.addOnGesturePerformedListener((LiqoidMainActivity) getParent());
 
-        ((LiqoidMainActivity) getParent()).addLQFBInstancesChangeListener(this);
+        ((LiqoidApplication)getApplication()).addLQFBInstancesChangeListener(this);
 
     }
 

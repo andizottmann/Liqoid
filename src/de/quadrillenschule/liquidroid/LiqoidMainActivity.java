@@ -24,7 +24,6 @@ public class LiqoidMainActivity extends TabActivity implements TabHost.OnTabChan
    
     TabHost tabHost;
     GestureLibrary gestureLibrary;
-    ArrayList<LQFBInstanceChangeListener> lqfbInstanceChangeListeners;
     ArrayAdapter adapter;
 
 
@@ -32,12 +31,7 @@ public class LiqoidMainActivity extends TabActivity implements TabHost.OnTabChan
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-       
-
-        lqfbInstanceChangeListeners=new ArrayList<LQFBInstanceChangeListener>();
-
-      
+     
         gestureLibrary = GestureLibraries.fromRawResource(this, R.raw.gestures);
         if (!gestureLibrary.load()) {
             finish();
@@ -99,24 +93,12 @@ public class LiqoidMainActivity extends TabActivity implements TabHost.OnTabChan
         tabhost.getTabWidget().getChildAt(tabhost.getCurrentTab()).setBackgroundColor(Color.parseColor("#000000")); // selected
     }
 
-    public void addLQFBInstancesChangeListener(LQFBInstanceChangeListener l){
-    lqfbInstanceChangeListeners.add(l);
-    }
-
-    public void removeLQFBInstancesChangeListener(LQFBInstanceChangeListener l){
-    lqfbInstanceChangeListeners.remove(l);
-    }
     //Instances Spinner item selected
     public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
         ((LiqoidApplication)getApplication()).lqfbInstances.setSelectedInstance((int) arg3);
-        fireLQFBInstanceChangedEvent();
+       ((LiqoidApplication)getApplication()).fireLQFBInstanceChangedEvent();
     }
 
-    void fireLQFBInstanceChangedEvent() {
-        for (LQFBInstanceChangeListener l : lqfbInstanceChangeListeners) {
-            l.lqfbInstanceChanged();
-        }
-    }
 
     public void onTabChanged(String arg0) {
         setTabColor(tabHost);

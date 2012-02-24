@@ -39,7 +39,7 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
         gestures.setGestureVisible(false);
         gestures.addOnGesturePerformedListener((LiqoidMainActivity) getParent());
 
-        ((LiqoidMainActivity) getParent()).addLQFBInstancesChangeListener(this);
+        ((LiqoidApplication)getApplication()).addLQFBInstancesChangeListener(this);
         
 
     }

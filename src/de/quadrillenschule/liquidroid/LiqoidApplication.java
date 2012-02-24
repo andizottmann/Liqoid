@@ -7,6 +7,7 @@ package de.quadrillenschule.liquidroid;
 import android.app.Application;
 import de.quadrillenschule.liquidroid.model.LQFBInstances;
 import java.io.File;
+import java.util.ArrayList;
 
 /**
  *
@@ -15,6 +16,8 @@ import java.io.File;
 public class LiqoidApplication extends Application {
 
     public LQFBInstances lqfbInstances;
+      ArrayList<LQFBInstanceChangeListener> lqfbInstanceChangeListeners;
+
 
     public LiqoidApplication() {
         super();
@@ -25,9 +28,28 @@ public class LiqoidApplication extends Application {
     public void onCreate(){
         lqfbInstances = new LQFBInstances();
         lqfbInstances.initFromFileOrDefaults(new File(getExternalFilesDir(null), "liqoid.xml"));
+           lqfbInstanceChangeListeners=new ArrayList<LQFBInstanceChangeListener>();
+
 
     }
     public File getApplicationFile() {
         return new File(getExternalFilesDir(null), "liqoid.xml");
     }
+
+
+    public void addLQFBInstancesChangeListener(LQFBInstanceChangeListener l){
+    lqfbInstanceChangeListeners.add(l);
+    }
+
+    public void removeLQFBInstancesChangeListener(LQFBInstanceChangeListener l){
+    lqfbInstanceChangeListeners.remove(l);
+    }
+
+
+    void fireLQFBInstanceChangedEvent() {
+        for (LQFBInstanceChangeListener l : lqfbInstanceChangeListeners) {
+            l.lqfbInstanceChanged();
+        }
+    }
+
 }

@@ -39,7 +39,9 @@ public class AllInitiativenListAdapter extends ArrayAdapter<Initiative> {
 
             public void onClick(View arg0) {
               try {
-                initiativen.findByName(((CheckBox) arg0).getText().toString()).get(0).setSelected(initiativen.findByName(((CheckBox) arg0).getText().toString()).get(0).isSelected());
+
+
+                initiativen.findByName(((CheckBox) arg0).getText().toString()).get(0).setSelected(!initiativen.findByName(((CheckBox) arg0).getText().toString()).get(0).isSelected());
                 } catch (Exception e){
                 }
             }

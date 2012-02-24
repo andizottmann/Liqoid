@@ -4,20 +4,8 @@
  */
 package de.quadrillenschule.liquidroid.model;
 
-import java.io.IOException;
-import java.io.InputStream;
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.HttpsURLConnection;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.conn.scheme.Scheme;
-import org.apache.http.conn.scheme.SchemeRegistry;
-import org.apache.http.conn.ssl.SSLSocketFactory;
-import org.apache.http.conn.ssl.X509HostnameVerifier;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.impl.conn.SingleClientConnManager;
 
 /**
  *
@@ -94,7 +82,7 @@ public class LQFBInstance {
     public int downloadInitiativen(Area area) {
         SAXParserFactory factory = SAXParserFactory.newInstance();
         SAXParser saxparser;
-        iniParser = new InitiativenFromAPIParser(area);
+        iniParser = new InitiativenFromAPIParser(area,area.getInitiativen());
         area.setInitiativen(new Initiativen());
         String[] states = {"new", "accepted", "frozen", "voting"};
         for (String state : states) {
@@ -102,14 +90,12 @@ public class LQFBInstance {
                 saxparser = factory.newSAXParser();
                 saxparser.parse(API1Queries.queryOutputStream("initiative", "&area_id=" + area.getId() + "&state=" + state, apiUrl, developerkey), iniParser);
             } catch (Exception e) {
-                //  temp=null;
             }
             for (Initiative i : iniParser.inis) {
                 area.getInitiativen().add(i);
             }
         }
-        // areaParser=temp;
-        return 0;
+         return 0;
     }
 
     /**

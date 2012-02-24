@@ -17,14 +17,15 @@ import org.xml.sax.helpers.DefaultHandler;
  */
 public class InitiativenFromAPIParser extends DefaultHandler {
 
-    public Initiativen inis;
+    public Initiativen inis,oldInis;
     Initiative currentInitiative;
     StringBuffer charBuff;
     Area area;
 
-    public InitiativenFromAPIParser(Area area) {
+    public InitiativenFromAPIParser(Area area, Initiativen oldInis) {
         super();
         this.area = area;
+        this.oldInis=oldInis;
         charBuff = new StringBuffer();
         inis = new Initiativen();
     }
@@ -167,5 +168,16 @@ public class InitiativenFromAPIParser extends DefaultHandler {
             currentInitiative.revoked = myDateParser(charBuff.toString());
         }
 
+    }
+      @Override
+    public void endDocument() {
+        //Reconstruct selected inis
+        if (oldInis != null) {
+            for (Initiative newIni: inis) {
+                if (oldInis.findByIssueID(newIni.issue_id).size()>0){
+                newIni.setSelected(oldInis.findByIssueID(newIni.issue_id).get(0).isSelected());
+                }
+            }
+        }
     }
 }
