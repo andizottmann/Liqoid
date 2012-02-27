@@ -52,6 +52,7 @@ public class LiqoidApplication extends Application {
     void fireLQFBInstanceChangedEvent() {
         for (LQFBInstanceChangeListener l : lqfbInstanceChangeListeners) {
             l.lqfbInstanceChanged();
+            
         }
     }
 

@@ -6,7 +6,7 @@
     <string name="tab_inis">Inis</string>
     <string name="tab_areas">Areas</string>
     <string name="menu_refresh">Refresh</string>
-    <string name="downloading">Downloading...</string>
+    <string name="downloading">Downloading from LQFB server</string>
     <string name="download_ok">Download successfull</string>
     <string name="download_error">Error when trying to download.\n Retry later.</string>
     <string name="open_browser">Open in Browser</string>

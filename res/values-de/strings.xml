@@ -6,7 +6,7 @@
     <string name="tab_inis">Themen</string>
     <string name="tab_areas">Gebiete</string>
     <string name="menu_refresh">Aktualisieren</string>
-     <string name="downloading">Lade vom LQFB Server...</string>
+     <string name="downloading">Lade vom LQFB Server</string>
      <string name="download_ok">Download ok</string>
     <string name="download_error">Fehler beim Download.\n Probiere es später nocheinmal..</string>
     <string name="open_browser">Im Browser öffnen</string>
