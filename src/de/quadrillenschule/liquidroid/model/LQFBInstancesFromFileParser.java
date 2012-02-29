@@ -4,6 +4,7 @@
  */
 package de.quadrillenschule.liquidroid.model;
 
+import java.util.ArrayList;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -15,12 +16,12 @@ import org.xml.sax.helpers.DefaultHandler;
 public class LQFBInstancesFromFileParser extends DefaultHandler {
 
     StringBuffer charBuff;
-    LQFBInstances lqfbInstances;
+    ArrayList<LQFBInstance> lqfbInstances;
     LQFBInstance currentInstance;
     Area currentArea;
     Initiative currentInitiative;
 
-    public LQFBInstancesFromFileParser(LQFBInstances lqfbInstances) {
+    public LQFBInstancesFromFileParser(ArrayList<LQFBInstance> lqfbInstances) {
         charBuff = new StringBuffer();
         this.lqfbInstances = lqfbInstances;
     }

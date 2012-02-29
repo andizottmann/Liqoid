@@ -30,13 +30,15 @@ public class LiqoidMainActivity extends TabActivity implements TabHost.OnTabChan
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
      
+        super.onCreate(savedInstanceState);
+
         gestureLibrary = GestureLibraries.fromRawResource(this, R.raw.gestures);
         if (!gestureLibrary.load()) {
             finish();
         }
-      
+
+        ((LiqoidApplication)getApplication()).lqfbInstances.load();
 
         setContentView(R.layout.main);
 
@@ -79,9 +81,12 @@ public class LiqoidMainActivity extends TabActivity implements TabHost.OnTabChan
 
     }
 
+
+   
+
     @Override
     public void onPause() {
-        ((LiqoidApplication)getApplication()).lqfbInstances.save(((LiqoidApplication)getApplication()).getApplicationFile());
+        ((LiqoidApplication)getApplication()).lqfbInstances.save();
         super.onPause();
     }
 

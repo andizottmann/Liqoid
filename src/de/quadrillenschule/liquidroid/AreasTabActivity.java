@@ -114,7 +114,7 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
     public void refreshAreasList(boolean force) {
 
         progressDialog = ProgressDialog.show(AreasTabActivity.this, "",
-                getApplicationContext().getString(R.string.downloading)+"\n"+((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance().getName()+"...", true);
+                getApplicationContext().getString(R.string.downloading) + "\n" + ((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance().getName() + "...", true);
         RefreshAreasListThread ralt = new RefreshAreasListThread(force, this);
         ralt.start();
     }
@@ -132,31 +132,31 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
         @Override
         public void run() {
 
-            if (force || areasListAdapter == null) {
+            if (force || ((LiqoidApplication) getApplication()).lqfbInstances.load() < 0) {
 
-                if (force || (((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance().areas.size() == 0)) {
 
-                    Context context = getApplicationContext();
-                      if (((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance().downloadAreas() >= 0) {
-                        areasListAdapter = new AreasListAdapter(parent, ((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance().areas, R.id.areasList, parent);
-                    } else {
-                        if (areasListAdapter == null) {
-                            areasListAdapter = new AreasListAdapter(parent, ((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance().areas, R.id.areasList, parent);
-                        }
-                        handler.sendEmptyMessage(-1);
-                        try {
-                            this.sleep(3000);
-                        } catch (InterruptedException ex) {
-                            Logger.getLogger(AreasTabActivity.class.getName()).log(Level.SEVERE, null, ex);
-                        }
+                Context context = getApplicationContext();
+                if (((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance().downloadAreas() >= 0) {
+                    areasListAdapter = new AreasListAdapter(parent, ((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance().areas, R.id.areasList);
+                } else {
+                    if (areasListAdapter == null) {
+                        areasListAdapter = new AreasListAdapter(parent, ((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance().areas, R.id.areasList);
                     }
-
-
-                    handler.sendEmptyMessage(0);
-
+                    handler.sendEmptyMessage(-1);
+                    try {
+                        this.sleep(3000);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(AreasTabActivity.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
-            }
 
+
+
+
+            }
+            areasListAdapter = new AreasListAdapter(parent, ((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance().areas, R.id.areasList);
+
+            handler.sendEmptyMessage(0);
 
 
         }

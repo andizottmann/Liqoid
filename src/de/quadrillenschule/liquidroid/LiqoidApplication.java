@@ -29,8 +29,8 @@ public class LiqoidApplication extends Application {
     public void onCreate(){
         Thread.setDefaultUncaughtExceptionHandler(new CrashLog(new File(getExternalFilesDir(null), "liqoid.log")));
 
-        lqfbInstances = new LQFBInstances();
-        lqfbInstances.initFromFileOrDefaults(new File(getExternalFilesDir(null), "liqoid.xml"));
+        lqfbInstances = new LQFBInstances(this);
+        lqfbInstances.initFromFileOrDefaults();
            lqfbInstanceChangeListeners=new ArrayList<LQFBInstanceChangeListener>();
 
 

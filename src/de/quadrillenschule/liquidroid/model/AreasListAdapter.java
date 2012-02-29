@@ -11,24 +11,26 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import de.quadrillenschule.liquidroid.AreasTabActivity;
+import de.quadrillenschule.liquidroid.LiqoidApplication;
 
 public class AreasListAdapter extends ArrayAdapter<Area> {
 
-    private Context context;
     private Areas areas;
     private int viewId;
-    private Activity activity;
+    private AreasTabActivity activity;
 
-    public AreasListAdapter(Context pcontext, Areas values, int viewId, Activity activity) {
-        super(pcontext, NO_SELECTION, values);
-        this.context = pcontext;
+    public AreasListAdapter(AreasTabActivity activity, Areas values, int viewId) {
+        super(activity, NO_SELECTION, values);
+        //  this.context = pcontext;
         this.areas = values;
         this.activity = activity;
+
     }
 
     @Override
     public View getView(int position, View convertview, ViewGroup parent) {
-        CheckBox retval = new CheckBox(context);
+        CheckBox retval = new CheckBox(activity);
 
         retval.setTextColor(Color.BLACK);
         retval.setBackgroundColor(Color.argb(255, 245, 245, 245));
@@ -38,12 +40,12 @@ public class AreasListAdapter extends ArrayAdapter<Area> {
         retval.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View arg0) {
-              
-                areas.getByName(((CheckBox) arg0).getText().toString()).setSelected(!areas.getByName(((CheckBox) arg0).getText().toString()).isSelected());
 
+                areas.getByName(((CheckBox) arg0).getText().toString()).setSelected(!areas.getByName(((CheckBox) arg0).getText().toString()).isSelected());
+                ((LiqoidApplication) activity.getApplication()).lqfbInstances.save();
             }
         });
-        
+
         activity.registerForContextMenu(retval);
 
 

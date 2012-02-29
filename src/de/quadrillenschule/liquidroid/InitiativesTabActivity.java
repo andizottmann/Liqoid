@@ -46,7 +46,8 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
         gestures.addOnGesturePerformedListener((LiqoidMainActivity) getParent());
 
         ((LiqoidApplication) getApplication()).addLQFBInstancesChangeListener(this);
-        lqfbInstanceChanged();
+     //   lqfbInstanceChanged();
+        refreshInisList(false);
 
     }
 
@@ -72,10 +73,8 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
 
         @Override
         public void run() {
-            if (force || inisListAdapter == null) {
-
-                allInis.clear();
-                Context context = getApplicationContext();
+       
+            if (force ||  ((LiqoidApplication) getApplication()).lqfbInstances.load()<0) {
                 for (Area a : ((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance().areas) {
                     if (a.isSelected()) {
 
@@ -93,29 +92,37 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
                                 }
                             }
                         }
-                        for (Initiative i : a.getInitiativen()) {
-                            allInis.add(i);
-                        }
-
-
                     }
                 }
             }
+            allInis.clear();
+            for (Area a : ((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance().areas) {
+                if (a.isSelected()) {
+
+                    for (Initiative i : a.getInitiativen()) {
+                        allInis.add(i);
+                    }
+                }
+            }
+            allInis.sortById();
+              inisListAdapter = new AllInitiativenListAdapter(parent, allInis, R.id.initiativenList);
             handler.sendEmptyMessage(0);
 
-            allInis.sortById();
-            inisListAdapter = new AllInitiativenListAdapter(parent, allInis, R.id.initiativenList, parent);
         }
     }
     private Handler handler = new Handler() {
 
         @Override
         public void handleMessage(Message msg) {
-            if (msg.what == 0) {
-                progressDialog.dismiss();
-                final ListView listview = (ListView) findViewById(R.id.initiativenList);
-                listview.setAdapter(inisListAdapter);
 
+            if (msg.what == 0) {
+
+                if (progressDialog.isShowing()) {
+                    progressDialog.dismiss();
+                }
+               final ListView listview = (ListView) findViewById(R.id.initiativenList);
+                listview.setAdapter(inisListAdapter);
+ 
             }
             if (msg.what == -1) {
                 progressDialog.setMessage(getApplicationContext().getString(R.string.download_error));
@@ -125,6 +132,7 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
                 progressDialog.setMessage(getApplicationContext().getString(R.string.downloading) + "\n" + ((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance().getName() + "\n" + currentlyDownloadedArea + "...");
 
             }
+
 
         }
     };
@@ -151,7 +159,6 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
     }
 
     public void lqfbInstanceChanged() {
-        inisListAdapter = null;
-        refreshInisList(false);
+         refreshInisList(false);
     }
 }

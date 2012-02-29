@@ -16,13 +16,13 @@
         <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content">
-         <LinearLayout
+            <LinearLayout
         android:orientation="horizontal"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:padding="0dp"
         >
-            <Button
+                <Button
 
                 android:id="@+id/aboutbutton"
                 android:text="  "
@@ -31,15 +31,14 @@
         	android:layout_height="wrap_content"
 
                                />
-            <Spinner
+                <Spinner
 	 android:id="@+id/instanceSelector"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
          android:prompt="@string/instances_prompt"
           android:padding="4dp"
-          android:hapticFeedbackEnabled="true"
-	 />
-         </LinearLayout>
+          android:hapticFeedbackEnabled="true" />
+            </LinearLayout>
         </RelativeLayout>
         <TabWidget
             android:id="@android:id/tabs"
