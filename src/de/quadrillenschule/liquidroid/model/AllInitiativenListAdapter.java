@@ -42,7 +42,7 @@ public class AllInitiativenListAdapter extends ArrayAdapter<Initiative> {
 
 
                 initiativen.findByName(((CheckBox) arg0).getText().toString()).get(0).setSelected(!initiativen.findByName(((CheckBox) arg0).getText().toString()).get(0).isSelected());
-              ((LiqoidApplication)activity.getApplication()).lqfbInstances.save();
+          //    ((LiqoidApplication)activity.getApplication()).lqfbInstances.save();
               } catch (Exception e){
                 }
             }

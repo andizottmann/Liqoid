@@ -82,14 +82,22 @@ public class LQFBInstances extends ArrayList<LQFBInstance> {
         }
         return retval + "</lqfbinstances>";
     }
+    boolean saving = false;
 
     public int save() {
-        try {
-            FileOutputStream fos = new FileOutputStream(liqoidApplication.getApplicationFile());
-            fos.write(toXML().getBytes());
-            fos.close();
+        if (!saving) {
+            saving = true;
 
-        } catch (Exception e) {
+            try {
+                FileOutputStream fos = new FileOutputStream(liqoidApplication.getApplicationFile());
+                fos.write(toXML().getBytes());
+                fos.close();
+                saving = false;
+            } catch (Exception e) {
+                saving = false;
+                return -1;
+            }
+        } else {
             return -1;
         }
         return 0;
@@ -123,7 +131,9 @@ public class LQFBInstances extends ArrayList<LQFBInstance> {
             }
             retval = -1;
         }
-        setSelectedInstance(selectedInstance);
+        if (selectedInstance >= 0) {
+            setSelectedInstance(selectedInstance);
+        }
         return retval;
     }
 }

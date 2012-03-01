@@ -36,6 +36,10 @@ public class LiqoidApplication extends Application {
 
 
     }
+  
+    public void onPause() {
+           lqfbInstances.save();     
+    }
 
     public File getApplicationFile() {
         return new File(getExternalFilesDir(null), "liqoid.xml");

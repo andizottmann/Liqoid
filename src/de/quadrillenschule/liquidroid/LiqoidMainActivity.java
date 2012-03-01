@@ -18,6 +18,7 @@ import android.widget.Spinner;
 import android.widget.TabHost;
 import android.widget.TextView;
 import de.quadrillenschule.liquidroid.model.LQFBInstance;
+import de.quadrillenschule.liquidroid.model.LQFBInstances;
 import de.quadrillenschule.liquidroid.model.LQFBInstancesListAdapter;
 import java.util.ArrayList;
 
@@ -80,7 +81,7 @@ public class LiqoidMainActivity extends TabActivity implements TabHost.OnTabChan
 
     @Override
     public void onPause() {
-        ((LiqoidApplication) getApplication()).lqfbInstances.save();
+        ((LiqoidApplication) getApplication()).onPause();
         super.onPause();
     }
 
@@ -94,9 +95,11 @@ public class LiqoidMainActivity extends TabActivity implements TabHost.OnTabChan
 
     //Instances Spinner item selected
     public void onItemSelected(AdapterView<?> arg0, View arg1, int i, long arg3) {
-        ((LiqoidApplication) getApplication()).lqfbInstances.setSelectedInstance(i);
-        ((LiqoidApplication) getApplication()).toast(this,i+":"+arg3);
-        ((LiqoidApplication) getApplication()).fireLQFBInstanceChangedEvent();
+        LQFBInstances ls = ((LiqoidApplication) getApplication()).lqfbInstances;
+        if (ls.indexOf(ls.getSelectedInstance()) != i) {
+            ((LiqoidApplication) getApplication()).lqfbInstances.setSelectedInstance(i);
+            ((LiqoidApplication) getApplication()).fireLQFBInstanceChangedEvent();
+        }
     }
 
     public void onTabChanged(String arg0) {

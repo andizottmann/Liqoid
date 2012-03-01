@@ -49,6 +49,7 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
 
     }
 
+  
     public void refreshInisList(boolean force) {
 
         progressDialog = ProgressDialog.show(InitiativesTabActivity.this, "",
@@ -104,6 +105,7 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
             }
             allInis.sortById();
             inisListAdapter = new AllInitiativenListAdapter(parent, allInis, R.id.initiativenList);
+            ((LiqoidApplication) getApplication()).lqfbInstances.save();
             handler.sendEmptyMessage(0);
 
         }
@@ -115,8 +117,11 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
 
             if (msg.what == 0) {
 
-                if (progressDialog.isShowing()) {
+                try {
                     progressDialog.dismiss();
+                } catch (Exception e) {
+                    //Sometimes it is not attached anymore
+                    progressDialog = null;
                 }
                 final ListView listview = (ListView) findViewById(R.id.initiativenList);
                 listview.setAdapter(inisListAdapter);

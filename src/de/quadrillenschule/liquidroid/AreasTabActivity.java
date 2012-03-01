@@ -24,7 +24,10 @@ import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.Toast;
+import de.quadrillenschule.liquidroid.model.Area;
 import de.quadrillenschule.liquidroid.model.AreasListAdapter;
+import de.quadrillenschule.liquidroid.model.LQFBInstance;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -131,10 +134,16 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
 
         @Override
         public void run() {
+                LQFBInstance myinstance = ((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance();
 
+            ArrayList<Area> selectedAreas = new ArrayList<Area>();
+            for (Area a : myinstance.areas) {
+                if (a.isSelected()) {
+                    selectedAreas.add(a);
+                }
+            }
             if (force || ((LiqoidApplication) getApplication()).lqfbInstances.load() < 0) {
-
-
+          
                 Context context = getApplicationContext();
                 if (((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance().downloadAreas() >= 0) {
                     areasListAdapter = new AreasListAdapter(parent, ((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance().areas, R.id.areasList);
@@ -150,8 +159,13 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
                     }
                 }
 
+             
             }
+               for (Area selectedArea : selectedAreas) {
+                    myinstance.areas.getById(selectedArea.getId()).setSelected(true);
+                }
             areasListAdapter = new AreasListAdapter(parent, ((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance().areas, R.id.areasList);
+            ((LiqoidApplication) getApplication()).lqfbInstances.save();
 
             handler.sendEmptyMessage(0);
 
@@ -163,7 +177,12 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
         @Override
         public void handleMessage(Message msg) {
             if (msg.what >= 0) {
-                progressDialog.dismiss();
+                try {
+                    progressDialog.dismiss();
+                } catch (Exception e) {
+                    //Sometimes it is not attached anymore
+                    progressDialog = null;
+                }
                 final ListView listview = (ListView) findViewById(R.id.areasList);
                 listview.setAdapter(areasListAdapter);
 
@@ -179,6 +198,6 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
     public void lqfbInstanceChanged() {
 
         refreshAreasList(false);
-      
+
     }
 }
