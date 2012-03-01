@@ -16,8 +16,6 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TabHost;
-import android.widget.TextView;
-import de.quadrillenschule.liquidroid.model.LQFBInstance;
 import de.quadrillenschule.liquidroid.model.LQFBInstances;
 import de.quadrillenschule.liquidroid.model.LQFBInstancesListAdapter;
 import java.util.ArrayList;
@@ -38,8 +36,6 @@ public class LiqoidMainActivity extends TabActivity implements TabHost.OnTabChan
         if (!gestureLibrary.load()) {
             finish();
         }
-
-        ((LiqoidApplication) getApplication()).lqfbInstances.load();
 
         setContentView(R.layout.main);
 
@@ -79,12 +75,7 @@ public class LiqoidMainActivity extends TabActivity implements TabHost.OnTabChan
         instanceSpinner.setOnItemSelectedListener(this);
     }
 
-    @Override
-    public void onPause() {
-        ((LiqoidApplication) getApplication()).onPause();
-        super.onPause();
-    }
-
+  
     public static void setTabColor(TabHost tabhost) {
         for (int i = 0; i < tabhost.getTabWidget().getChildCount(); i++) {
             tabhost.getTabWidget().getChildAt(i).setBackgroundColor(Color.parseColor("#303030")); //unselected
@@ -97,7 +88,7 @@ public class LiqoidMainActivity extends TabActivity implements TabHost.OnTabChan
     public void onItemSelected(AdapterView<?> arg0, View arg1, int i, long arg3) {
         LQFBInstances ls = ((LiqoidApplication) getApplication()).lqfbInstances;
         if (ls.indexOf(ls.getSelectedInstance()) != i) {
-            ((LiqoidApplication) getApplication()).lqfbInstances.setSelectedInstance(i);
+            ls.setSelectedInstance(i);
             ((LiqoidApplication) getApplication()).fireLQFBInstanceChangedEvent();
         }
     }

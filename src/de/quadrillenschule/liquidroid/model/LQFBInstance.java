@@ -20,7 +20,7 @@ public class LQFBInstance {
     private boolean selected = false;
     public Areas areas;
     private String apiversion = "";
-    private AreaFromAPIParser areaParser;
+    private AreasFromAPIParser areaParser;
     private InitiativenFromAPIParser iniParser;
     public static final String AREA_API = "area";
 
@@ -31,14 +31,14 @@ public class LQFBInstance {
         this.apiUrl = apiUrl;
         this.webUrl = webUrl;
         this.developerkey = developerkey;
-       // areaParser = new AreaFromAPIParser(null);
+        // areaParser = new AreaFromAPIParser(null);
         areas = new Areas();// areaParser.areas;
         this.selected = selected;
         this.apiversion = apiversion;
     }
 
     public LQFBInstance() {
-      //  areaParser = new AreaFromAPIParser(null);
+        //  areaParser = new AreaFromAPIParser(null);
 
         areas = new Areas();
     }
@@ -48,40 +48,22 @@ public class LQFBInstance {
         return name;
     }
 
-    public String toXML() {
-        String retval = "<lqfbinstance>";
-        retval += "<iname>" + name + "</iname>";
-        retval += "<apiUrl>" + apiUrl + "</apiUrl>";
-        retval += "<webUrl>" + webUrl + "</webUrl>";
-        retval += "<developerkey>" + developerkey + "</developerkey>";
-        retval += "<iselected>" + selected + "</iselected>";
-        retval += "<apiversion>" + apiversion + "</apiversion>";
-        retval += areas.toXML();
-        retval += "</lqfbinstance>";
-        return retval;
-
-    }
-
     public int downloadAreas() {
         SAXParserFactory factory = SAXParserFactory.newInstance();
         SAXParser saxparser;
-        Areas oldAreas = areas;
         Areas selectedAreas = new Areas();
         for (Area a : areas) {
             if (a.isSelected()) {
                 selectedAreas.add(a);
             }
         }
-        areaParser = new AreaFromAPIParser(areas);
+        areaParser = new AreasFromAPIParser();
         try {
             saxparser = factory.newSAXParser();
             saxparser.parse(API1Queries.queryOutputStream("area", "", apiUrl, developerkey), areaParser);
-
             areas = areaParser.areas;
 
         } catch (Exception e) {
-            //  temp=null;
-            areas = oldAreas;
             return -1;
         }
         for (Area a : areas) {
@@ -95,14 +77,9 @@ public class LQFBInstance {
     public int downloadInitiativen(Area area) {
         SAXParserFactory factory = SAXParserFactory.newInstance();
         SAXParser saxparser;
-        Initiativen selectedInitiativen = new Initiativen();
-        for (Initiative i : area.getInitiativen()) {
-            if (i.isSelected()) {
-                selectedInitiativen.add(i);
-            }
-        }
-        iniParser = new InitiativenFromAPIParser(area, area.getInitiativen());
-        area.setInitiativen(new Initiativen());
+
+        area.getInitiativen().clear();
+        iniParser = new InitiativenFromAPIParser(area);
         String[] states = {"new", "accepted", "frozen", "voting"};
         for (String state : states) {
             try {
@@ -111,14 +88,7 @@ public class LQFBInstance {
             } catch (Exception e) {
                 return -1;
             }
-            for (Initiative i : iniParser.inis) {
-                area.getInitiativen().add(i);
-                for (Initiative si: selectedInitiativen){
-                if (i.issue_id==si.issue_id){
-                i.setSelected(true);
-                }
-                }
-            }
+          
         }
         return 0;
     }

@@ -30,11 +30,5 @@ import java.util.ArrayList;
             }
             return null;
         }
-        public String toXML() {
-            String retval = "<areas>";
-            for (Area area : this) {
-                retval += area.toXML();
-            }
-            return retval += "</areas>";
-        }
+     
     }

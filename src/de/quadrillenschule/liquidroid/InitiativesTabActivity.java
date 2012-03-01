@@ -18,6 +18,8 @@ import de.quadrillenschule.liquidroid.model.AllInitiativenListAdapter;
 import de.quadrillenschule.liquidroid.model.Area;
 import de.quadrillenschule.liquidroid.model.Initiative;
 import de.quadrillenschule.liquidroid.model.Initiativen;
+import de.quadrillenschule.liquidroid.model.LQFBInstance;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -44,17 +46,16 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
         gestures.addOnGesturePerformedListener((LiqoidMainActivity) getParent());
 
         ((LiqoidApplication) getApplication()).addLQFBInstancesChangeListener(this);
-        //   lqfbInstanceChanged();
         refreshInisList(false);
 
     }
 
-  
-    public void refreshInisList(boolean force) {
-
-        progressDialog = ProgressDialog.show(InitiativesTabActivity.this, "",
-                getApplicationContext().getString(R.string.downloading) + "\n" + ((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance().getName() + "...", true);
-        RefreshInisListThread ralt = new RefreshInisListThread(force, this);
+    public void refreshInisList(boolean download) {
+        if (download) {
+            progressDialog = ProgressDialog.show(InitiativesTabActivity.this, "",
+                    getApplicationContext().getString(R.string.downloading) + "\n" + ((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance().getName() + "...", true);
+        }
+        RefreshInisListThread ralt = new RefreshInisListThread(download, this);
         ralt.start();
 
     }
@@ -62,32 +63,41 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
 
     private class RefreshInisListThread extends Thread {
 
-        boolean force;
+        boolean download;
         InitiativesTabActivity parent;
 
-        public RefreshInisListThread(boolean force, InitiativesTabActivity parent) {
-            this.force = force;
+        public RefreshInisListThread(boolean download, InitiativesTabActivity parent) {
+            this.download = download;
             this.parent = parent;
         }
 
         @Override
         public void run() {
-
-            if (force || ((LiqoidApplication) getApplication()).lqfbInstances.load() < 0) {
-                for (Area a : ((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance().areas) {
+            LQFBInstance myInstance = ((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance();
+            if (download) {
+                for (Area a : myInstance.areas) {
                     if (a.isSelected()) {
-
-                        if (force) {
-                            currentlyDownloadedArea = a.getName();
+                        currentlyDownloadedArea = a.getName();
+                        handler.sendEmptyMessage(2);
+                        ArrayList<Integer> selectedIssues = new ArrayList<Integer>();
+                        for (Initiative ini : a.getInitiativen()) {
+                            if (ini.isSelected()) {
+                                selectedIssues.add(ini.issue_id);
+                            }
+                        }
+                        while (myInstance.downloadInitiativen(a) < 0) {
+                            handler.sendEmptyMessage(-1);
+                            try {
+                                this.sleep(3000);
+                            } catch (InterruptedException ex) {
+                            }
                             handler.sendEmptyMessage(2);
 
-                            if (((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance().downloadInitiativen(a) >= 0) {
-                            } else {
-                                handler.sendEmptyMessage(-1);
-                                try {
-                                    this.sleep(2000);
-                                } catch (InterruptedException ex) {
-                                    Logger.getLogger(AreasTabActivity.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        for (Initiative ini : a.getInitiativen()) {
+                            for (int i : selectedIssues) {
+                                if (ini.issue_id == i) {
+                                    ini.setSelected(true);
                                 }
                             }
                         }
@@ -95,7 +105,7 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
                 }
             }
             allInis.clear();
-            for (Area a : ((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance().areas) {
+            for (Area a : myInstance.areas) {
                 if (a.isSelected()) {
 
                     for (Initiative i : a.getInitiativen()) {
@@ -105,7 +115,6 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
             }
             allInis.sortById();
             inisListAdapter = new AllInitiativenListAdapter(parent, allInis, R.id.initiativenList);
-            ((LiqoidApplication) getApplication()).lqfbInstances.save();
             handler.sendEmptyMessage(0);
 
         }
@@ -132,7 +141,7 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
 
             }
             if (msg.what == 2) {
-                progressDialog.setMessage(getApplicationContext().getString(R.string.downloading) + "\n" + ((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance().getName() + "\n" + currentlyDownloadedArea + "...");
+                progressDialog.setMessage(getApplicationContext().getString(R.string.downloading) + "\n" + currentlyDownloadedArea + "...");
 
             }
 

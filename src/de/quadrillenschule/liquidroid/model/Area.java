@@ -27,20 +27,6 @@ package de.quadrillenschule.liquidroid.model;
         }
 
     
-        String toXML() {
-            String retval = "<area>";
-            retval += "<area_id>" + id + "</area_id>";
-            retval += "<area_name>" + name + "</area_name>";
-            retval += "<area_selected>" + selected + "</area_selected>";
-            retval += "<area_description>" + description + "</area_description>";
-            retval += "<area_direct_member_count>" + direct_member_count + "</area_direct_member_count>";
-            retval += "<area_member_weight>" + member_weight + "</area_member_weight>";
-            retval += "<area_autoreject_weight>" + autoreject_weight + "</area_autoreject_weight>";
-            retval += "<area_active>" + active + "</area_active>";
-            retval += initiativen.toXML();
-            retval += "</area>";
-            return retval;
-        }
 
         /**
          * @return the id

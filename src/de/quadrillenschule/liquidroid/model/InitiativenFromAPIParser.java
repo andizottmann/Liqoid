@@ -17,17 +17,16 @@ import org.xml.sax.helpers.DefaultHandler;
  */
 public class InitiativenFromAPIParser extends DefaultHandler {
 
-    public Initiativen inis,oldInis;
+    public Initiativen inis;
     Initiative currentInitiative;
     StringBuffer charBuff;
     Area area;
 
-    public InitiativenFromAPIParser(Area area, Initiativen oldInis) {
+    public InitiativenFromAPIParser(Area area) {
         super();
-        this.area = area;
-        this.oldInis=oldInis;
+        this.area=area;
         charBuff = new StringBuffer();
-        inis = new Initiativen();
+        inis = area.getInitiativen();
     }
 
     @Override
@@ -88,19 +87,12 @@ public class InitiativenFromAPIParser extends DefaultHandler {
     public void endElement(String uri, String localName, String qName) {
         if (qName.equals("id")) {
             currentInitiative.id = Integer.parseInt(charBuff.toString());
-
-
         }
 
         if (qName.equals("initiative")) {
             if (currentInitiative != null) {
-                if (area.getInitiativen().findByIssueID(currentInitiative.issue_id).size()>0){
-                currentInitiative.setSelected(area.getInitiativen().findByIssueID(currentInitiative.issue_id).get(1).isSelected());
-                }
-               // if (inis.findByIssueID(currentInitiative.issue_id).size() == 0) {
-                    inis.add(currentInitiative);
-                //}
-
+                     inis.add(currentInitiative);
+             
             }
 
 
@@ -168,16 +160,5 @@ public class InitiativenFromAPIParser extends DefaultHandler {
             currentInitiative.revoked = myDateParser(charBuff.toString());
         }
 
-    }
-      @Override
-    public void endDocument() {
-        //Reconstruct selected inis
-        if (oldInis != null) {
-            for (Initiative newIni: inis) {
-                if (oldInis.findByIssueID(newIni.issue_id).size()>0){
-                newIni.setSelected(oldInis.findByIssueID(newIni.issue_id).get(0).isSelected());
-                }
-            }
-        }
     }
 }

@@ -34,30 +34,6 @@ public class Initiative implements Comparable<Initiative> {
     private boolean selected = false;
 
   
-    public String toXML() {
-        String retval = "<initiative>";
-        retval += "<ini_id>" + id + "</ini_id>";
-        retval += "<ini_selected>" + selected + "</ini_selected>";
-        retval += "<ini_name>" + name + "</ini_name>";
-        retval += "<ini_state>" + state + "</ini_state>";
-        retval += "<ini_created>" + InitiativenFromAPIParser.dateToStringFormatter(created) + "</ini_created>";
-        retval += "<ini_issue_created>" + InitiativenFromAPIParser.dateToStringFormatter(issue_created) + "</ini_issue_created>";
-        retval += "<ini_issue_id>" + issue_id + "</ini_issue_id>";
-        retval += "<ini_issue_discussion_time>" + issue_discussion_time + "</ini_issue_discussion_time>";
-        retval += "<ini_issue_admission_time>" + issue_admission_time + "</ini_issue_admission_time>";
-        retval += "<ini_issue_verification_time>" + issue_verification_time + "</ini_issue_verification_time>";
-        retval += "<ini_issue_voting_time>" + issue_voting_time + "</ini_issue_voting_time>";
-        try {
-            retval += "<ini_supporter_count>" + supporter_count + "</ini_supporter_count>";
-            retval += "<ini_issue_accepted>" + issue_accepted + "</ini_issue_accepted>";
-            retval += "<ini_issue_half_frozen>" + issue_half_frozen + "</ini_issue_half_frozen>";
-            retval += "<ini_issue_fully_frozen>" + issue_fully_frozen + "</ini_issue_fully_frozen>";
-            retval += "<ini_issue_closed>" + issue_closed + "</ini_issue_closed>";
-        } catch (Exception e) {
-        }
-
-        return retval + "</initiative>";
-    }
 
     public Date getDateForStartVoting() {
         Calendar cal = Calendar.getInstance();

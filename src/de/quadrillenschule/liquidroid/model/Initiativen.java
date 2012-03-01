@@ -38,14 +38,6 @@ public class Initiativen extends ArrayList<Initiative> {
     }
 
 
-    public String toXML() {
-        String retval = "<initiatives>";
-        for (Initiative i : this) {
-            retval += i.toXML();
-        }
-        return retval + "</initiatives>";
-
-    }
 
     public Initiativen findByIssueID(int find) {
         Initiativen retval = new Initiativen();
