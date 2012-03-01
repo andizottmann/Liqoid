@@ -150,9 +150,6 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
                     }
                 }
 
-
-
-
             }
             areasListAdapter = new AreasListAdapter(parent, ((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance().areas, R.id.areasList);
 
@@ -181,7 +178,7 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
 
     public void lqfbInstanceChanged() {
 
-        areasListAdapter = null;
         refreshAreasList(false);
+      
     }
 }

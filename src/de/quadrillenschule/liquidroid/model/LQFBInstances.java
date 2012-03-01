@@ -23,7 +23,7 @@ public class LQFBInstances extends ArrayList<LQFBInstance> {
     public LQFBInstances(LiqoidApplication liqoidApplication) {
         super();
         this.liqoidApplication = liqoidApplication;
-        initFromFileOrDefaults();
+        //  initFromFileOrDefaults();
     }
 
     public void initFromFileOrDefaults() {
@@ -70,10 +70,9 @@ public class LQFBInstances extends ArrayList<LQFBInstance> {
         for (LQFBInstance instance : this) {
             instance.setSelected(false);
         }
-        try {
-            get(id).setSelected(true);
-        } catch (Exception e) {
-        }
+
+        get(id).setSelected(true);
+
     }
 
     public String toXML() {
@@ -98,6 +97,7 @@ public class LQFBInstances extends ArrayList<LQFBInstance> {
 
     public int load() {
         int retval = 0;
+        int selectedInstance = indexOf(getSelectedInstance());
         ArrayList<LQFBInstance> keepInstances = new ArrayList();
         keepInstances.addAll(this);
         if (!liqoidApplication.getApplicationFile().canRead()) {
@@ -123,9 +123,7 @@ public class LQFBInstances extends ArrayList<LQFBInstance> {
             }
             retval = -1;
         }
-        if (getSelectedInstance() == null) {
-            setSelectedInstance(0);
-        }
+        setSelectedInstance(selectedInstance);
         return retval;
     }
 }

@@ -6,7 +6,6 @@ package de.quadrillenschule.liquidroid;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.gesture.GestureOverlayView;
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,7 +14,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ListView;
-import android.widget.Toast;
 import de.quadrillenschule.liquidroid.model.AllInitiativenListAdapter;
 import de.quadrillenschule.liquidroid.model.Area;
 import de.quadrillenschule.liquidroid.model.Initiative;
@@ -46,7 +44,7 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
         gestures.addOnGesturePerformedListener((LiqoidMainActivity) getParent());
 
         ((LiqoidApplication) getApplication()).addLQFBInstancesChangeListener(this);
-     //   lqfbInstanceChanged();
+        //   lqfbInstanceChanged();
         refreshInisList(false);
 
     }
@@ -73,8 +71,8 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
 
         @Override
         public void run() {
-       
-            if (force ||  ((LiqoidApplication) getApplication()).lqfbInstances.load()<0) {
+
+            if (force || ((LiqoidApplication) getApplication()).lqfbInstances.load() < 0) {
                 for (Area a : ((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance().areas) {
                     if (a.isSelected()) {
 
@@ -105,7 +103,7 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
                 }
             }
             allInis.sortById();
-              inisListAdapter = new AllInitiativenListAdapter(parent, allInis, R.id.initiativenList);
+            inisListAdapter = new AllInitiativenListAdapter(parent, allInis, R.id.initiativenList);
             handler.sendEmptyMessage(0);
 
         }
@@ -120,9 +118,9 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
                 if (progressDialog.isShowing()) {
                     progressDialog.dismiss();
                 }
-               final ListView listview = (ListView) findViewById(R.id.initiativenList);
+                final ListView listview = (ListView) findViewById(R.id.initiativenList);
                 listview.setAdapter(inisListAdapter);
- 
+
             }
             if (msg.what == -1) {
                 progressDialog.setMessage(getApplicationContext().getString(R.string.download_error));
@@ -159,6 +157,9 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
     }
 
     public void lqfbInstanceChanged() {
-         refreshInisList(false);
+        refreshInisList(false);
+        final ListView listview = (ListView) findViewById(R.id.initiativenList);
+        listview.setAdapter(inisListAdapter);
+
     }
 }

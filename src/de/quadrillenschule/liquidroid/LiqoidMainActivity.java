@@ -16,21 +16,21 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TabHost;
+import android.widget.TextView;
+import de.quadrillenschule.liquidroid.model.LQFBInstance;
 import de.quadrillenschule.liquidroid.model.LQFBInstancesListAdapter;
 import java.util.ArrayList;
 
 public class LiqoidMainActivity extends TabActivity implements TabHost.OnTabChangeListener, GestureOverlayView.OnGesturePerformedListener, OnItemSelectedListener {
 
-   
     TabHost tabHost;
     GestureLibrary gestureLibrary;
     ArrayAdapter adapter;
 
-
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
-     
+
         super.onCreate(savedInstanceState);
 
         gestureLibrary = GestureLibraries.fromRawResource(this, R.raw.gestures);
@@ -38,7 +38,7 @@ public class LiqoidMainActivity extends TabActivity implements TabHost.OnTabChan
             finish();
         }
 
-        ((LiqoidApplication)getApplication()).lqfbInstances.load();
+        ((LiqoidApplication) getApplication()).lqfbInstances.load();
 
         setContentView(R.layout.main);
 
@@ -71,22 +71,16 @@ public class LiqoidMainActivity extends TabActivity implements TabHost.OnTabChan
         tabHost.setOnTabChangedListener(this);
         tabHost.setCurrentTab(3);
 
-          final Spinner instanceSpinner = (Spinner) findViewById(R.id.instanceSelector);
-        adapter = new LQFBInstancesListAdapter(this, ((LiqoidApplication)getApplication()).lqfbInstances, android.R.layout.simple_spinner_item, this);
+        final Spinner instanceSpinner = (Spinner) findViewById(R.id.instanceSelector);
+        adapter = new LQFBInstancesListAdapter(this, ((LiqoidApplication) getApplication()).lqfbInstances, android.R.layout.simple_spinner_item, this);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         instanceSpinner.setAdapter(adapter);
         instanceSpinner.setOnItemSelectedListener(this);
-
-
-
     }
-
-
-   
 
     @Override
     public void onPause() {
-        ((LiqoidApplication)getApplication()).lqfbInstances.save();
+        ((LiqoidApplication) getApplication()).lqfbInstances.save();
         super.onPause();
     }
 
@@ -99,11 +93,11 @@ public class LiqoidMainActivity extends TabActivity implements TabHost.OnTabChan
     }
 
     //Instances Spinner item selected
-    public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-        ((LiqoidApplication)getApplication()).lqfbInstances.setSelectedInstance((int) arg3);
-       ((LiqoidApplication)getApplication()).fireLQFBInstanceChangedEvent();
+    public void onItemSelected(AdapterView<?> arg0, View arg1, int i, long arg3) {
+        ((LiqoidApplication) getApplication()).lqfbInstances.setSelectedInstance(i);
+        ((LiqoidApplication) getApplication()).toast(this,i+":"+arg3);
+        ((LiqoidApplication) getApplication()).fireLQFBInstanceChangedEvent();
     }
-
 
     public void onTabChanged(String arg0) {
         setTabColor(tabHost);
@@ -117,7 +111,7 @@ public class LiqoidMainActivity extends TabActivity implements TabHost.OnTabChan
             Prediction prediction = predictions.get(0);
             // We want at least some confidence in the result
             if (prediction.score > 1.0) {
-                     int base = tabHost.getCurrentTab();
+                int base = tabHost.getCurrentTab();
 
                 // Show the spell
                 if (prediction.name.equals("right")) {
@@ -127,13 +121,13 @@ public class LiqoidMainActivity extends TabActivity implements TabHost.OnTabChan
                     tabHost.setCurrentTab(base - 1);
                 }
                 if (prediction.name.equals("left")) {
-                     if (base > 2) {
+                    if (base > 2) {
                         return;
                     }
                     tabHost.setCurrentTab(base + 1);
 
                 }
-                   
+
 
             }
         }
