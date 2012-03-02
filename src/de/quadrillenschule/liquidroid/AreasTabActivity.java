@@ -8,6 +8,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.gesture.GestureOverlayView;
 import android.net.Uri;
 import android.os.Bundle;
@@ -171,6 +172,7 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
                     //Sometimes it is not attached anymore
                     progressDialog = null;
                 }
+                ((LiqoidApplication) getApplication()).loadSelectedAreasFromPrefs();
                 final ListView listview = (ListView) findViewById(R.id.areasList);
                 listview.setAdapter(areasListAdapter);
 
@@ -187,6 +189,8 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
 
         }
     };
+
+   
 
     public void lqfbInstanceChanged() {
         refreshAreasList(false);

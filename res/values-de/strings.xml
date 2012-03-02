@@ -8,7 +8,7 @@
     <string name="menu_refresh">Aktualisieren</string>
      <string name="downloading">Lade vom LQFB Server</string>
      <string name="download_ok">Download ok</string>
-    <string name="download_error">Fehler beim Download.\n Probiere es später nocheinmal..</string>
+    <string name="download_error">Fehler bei Serververbindung.\n Netzaffines Liqoid wartet auf Netz..</string>
     <string name="open_browser">Im Browser öffnen</string>
  <string name="instances_prompt">Wähle eine LQFB Instanz</string>
 </resources>

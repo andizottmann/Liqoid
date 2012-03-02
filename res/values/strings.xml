@@ -8,7 +8,7 @@
     <string name="menu_refresh">Refresh</string>
     <string name="downloading">Downloading from LQFB server</string>
     <string name="download_ok">Download successfull</string>
-    <string name="download_error">Error when trying to download.\n Retry later.</string>
+    <string name="download_error">Error when trying to download.\n Waiting for network...</string>
     <string name="open_browser">Open in Browser</string>
     <string name="instances_prompt">Choose a LQFB instance</string>
 </resources>

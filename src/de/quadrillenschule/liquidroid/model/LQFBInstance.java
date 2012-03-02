@@ -14,6 +14,7 @@ import javax.xml.parsers.SAXParserFactory;
 public class LQFBInstance {
 
     private String name = "";
+    private String prefsName = "";
     private String apiUrl = "";
     private String webUrl = "";
     private String developerkey = "";
@@ -24,9 +25,9 @@ public class LQFBInstance {
     private InitiativenFromAPIParser iniParser;
     public static final String AREA_API = "area";
 
-    public LQFBInstance(String name, String apiUrl, String webUrl, String developerkey, String apiversion, boolean selected) {
+    public LQFBInstance(String prefsName, String name, String apiUrl, String webUrl, String developerkey, String apiversion, boolean selected) {
 
-
+        this.prefsName = prefsName;
         this.name = name;
         this.apiUrl = apiUrl;
         this.webUrl = webUrl;
@@ -88,7 +89,7 @@ public class LQFBInstance {
             } catch (Exception e) {
                 return -1;
             }
-          
+
         }
         return 0;
     }
@@ -175,5 +176,19 @@ public class LQFBInstance {
      */
     public void setApiversion(String apiversion) {
         this.apiversion = apiversion;
+    }
+
+    /**
+     * @return the prefsName
+     */
+    public String getPrefsName() {
+        return prefsName;
+    }
+
+    /**
+     * @param prefsName the prefsName to set
+     */
+    public void setPrefsName(String prefsName) {
+        this.prefsName = prefsName;
     }
 }

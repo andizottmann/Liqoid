@@ -2,6 +2,7 @@ package de.quadrillenschule.liquidroid;
 
 import android.app.TabActivity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.gesture.Gesture;
 import android.gesture.GestureLibraries;
@@ -16,6 +17,8 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TabHost;
+import de.quadrillenschule.liquidroid.model.Area;
+import de.quadrillenschule.liquidroid.model.LQFBInstance;
 import de.quadrillenschule.liquidroid.model.LQFBInstances;
 import de.quadrillenschule.liquidroid.model.LQFBInstancesListAdapter;
 import java.util.ArrayList;
@@ -69,13 +72,17 @@ public class LiqoidMainActivity extends TabActivity implements TabHost.OnTabChan
         tabHost.setCurrentTab(3);
 
         final Spinner instanceSpinner = (Spinner) findViewById(R.id.instanceSelector);
+
+       
+
         adapter = new LQFBInstancesListAdapter(this, ((LiqoidApplication) getApplication()).lqfbInstances, android.R.layout.simple_spinner_item, this);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         instanceSpinner.setAdapter(adapter);
         instanceSpinner.setOnItemSelectedListener(this);
     }
 
-  
+   
+
     public static void setTabColor(TabHost tabhost) {
         for (int i = 0; i < tabhost.getTabWidget().getChildCount(); i++) {
             tabhost.getTabWidget().getChildAt(i).setBackgroundColor(Color.parseColor("#303030")); //unselected
