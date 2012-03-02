@@ -4,12 +4,17 @@
  */
 package de.quadrillenschule.liquidroid.model;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.StringWriter;
+import java.io.Writer;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import org.apache.http.HttpResponse;
@@ -28,24 +33,53 @@ import org.apache.http.impl.conn.SingleClientConnManager;
 public class CachedAPI1Queries {
 
     File cacheFolder;
-    public String url;
+    public String url, api;
     public boolean wasReadFromNetwork = false;
 
     public CachedAPI1Queries(File cacheFolder) {
         this.cacheFolder = cacheFolder;
     }
 
+    private String convertStreamToString(InputStream is) throws IOException {
+        if (is != null) {
+            Writer writer = new StringWriter();
+            char[] buffer = new char[1024];
+            try {
+                Reader reader = new BufferedReader(
+                        new InputStreamReader(is, "UTF-8"));
+                int n;
+                while ((n = reader.read(buffer)) != -1) {
+                    writer.write(buffer, 0, n);
+                }
+            } finally {
+                is.close();
+            }
+            return writer.toString();
+        } else {
+            return "";
+        }
+    }
+
     public void storeInCache(InputStream is) {
         if (wasReadFromNetwork) {
             File myfile = new File(cacheFolder, url.hashCode() + ".xml");
             try {
-                myfile.createNewFile();
-                FileOutputStream fos = new FileOutputStream(myfile);
-                byte[] b = new byte[1];
-                while (is.read(b) >= 0) {
-                    fos.write(b);
+                String endswith = ">";
+                if (api.equals("area")) {
+                    endswith = "</area_list>";
                 }
-                fos.close();
+                if (api.equals("initiative")) {
+                    endswith = "</initiative_list>";
+                }
+                String string = convertStreamToString(is);
+
+                if (string.contains(endswith)) {
+
+                    myfile.createNewFile();
+                    FileOutputStream fos = new FileOutputStream(myfile);
+                    fos.write(string.getBytes("UTF-8"));
+                    fos.close();
+                }
             } catch (Exception e) {
             }
         }
@@ -58,6 +92,7 @@ public class CachedAPI1Queries {
 
     public InputStream queryInputStream(String api, String parameters, String apiUrl, String developerkey, boolean forceNetwork) throws IOException, FileNotFoundException {
         url = apiUrl + api + ".html?key=" + developerkey + parameters;
+        this.api = api;
         if (forceNetwork) {
             return networkInputStream(url);
         }
@@ -91,7 +126,6 @@ public class CachedAPI1Queries {
             httpClient = new DefaultHttpClient();
         }
         HttpPost httpPost = new HttpPost(url);
-        String responseString = "";
         HttpResponse response = (HttpResponse) httpClient.execute(httpPost);
         wasReadFromNetwork = true;
 

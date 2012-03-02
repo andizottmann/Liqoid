@@ -76,15 +76,15 @@ public class LiqoidMainActivity extends TabActivity implements TabHost.OnTabChan
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         instanceSpinner.setAdapter(adapter);
         instanceSpinner.setOnItemSelectedListener(this);
+        int i = ((LiqoidApplication) getApplication()).lqfbInstances.indexOf(((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance());
+        instanceSpinner.setSelection(i);
+
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        int i = ((LiqoidApplication) getApplication()).lqfbInstances.indexOf(((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance());
-        final Spinner instanceSpinner = (Spinner) findViewById(R.id.instanceSelector);
-        instanceSpinner.setSelection(i);
-    //    ((LiqoidApplication) getApplication()).fireLQFBInstanceChangedEvent();
+        //    ((LiqoidApplication) getApplication()).fireLQFBInstanceChangedEvent();
 
     }
 
