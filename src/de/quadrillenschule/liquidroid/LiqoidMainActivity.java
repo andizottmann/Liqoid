@@ -72,16 +72,21 @@ public class LiqoidMainActivity extends TabActivity implements TabHost.OnTabChan
         tabHost.setCurrentTab(3);
 
         final Spinner instanceSpinner = (Spinner) findViewById(R.id.instanceSelector);
-
-       
-
         adapter = new LQFBInstancesListAdapter(this, ((LiqoidApplication) getApplication()).lqfbInstances, android.R.layout.simple_spinner_item, this);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         instanceSpinner.setAdapter(adapter);
         instanceSpinner.setOnItemSelectedListener(this);
     }
 
-   
+    @Override
+    public void onResume() {
+        super.onResume();
+        int i = ((LiqoidApplication) getApplication()).lqfbInstances.indexOf(((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance());
+        final Spinner instanceSpinner = (Spinner) findViewById(R.id.instanceSelector);
+        instanceSpinner.setSelection(i);
+    //    ((LiqoidApplication) getApplication()).fireLQFBInstanceChangedEvent();
+
+    }
 
     public static void setTabColor(TabHost tabhost) {
         for (int i = 0; i < tabhost.getTabWidget().getChildCount(); i++) {

@@ -42,6 +42,8 @@ public class LiqoidApplication extends Application {
 
     }
 
+
+
     public void saveSelectedAreasToPrefs() {
         for (LQFBInstance lin : lqfbInstances) {
             SharedPreferences prefs = getSharedPreferences(lin.getPrefsName(), MODE_PRIVATE);

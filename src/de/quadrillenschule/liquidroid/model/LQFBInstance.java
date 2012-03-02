@@ -18,14 +18,13 @@ public class LQFBInstance {
     private String apiUrl = "";
     private String webUrl = "";
     private String developerkey = "";
-    private boolean selected = false;
     public Areas areas;
     private String apiversion = "";
     private AreasFromAPIParser areaParser;
     private InitiativenFromAPIParser iniParser;
     public static final String AREA_API = "area";
 
-    public LQFBInstance(String prefsName, String name, String apiUrl, String webUrl, String developerkey, String apiversion, boolean selected) {
+    public LQFBInstance(String prefsName, String name, String apiUrl, String webUrl, String developerkey, String apiversion) {
 
         this.prefsName = prefsName;
         this.name = name;
@@ -34,8 +33,7 @@ public class LQFBInstance {
         this.developerkey = developerkey;
         // areaParser = new AreaFromAPIParser(null);
         areas = new Areas();// areaParser.areas;
-        this.selected = selected;
-        this.apiversion = apiversion;
+         this.apiversion = apiversion;
     }
 
     public LQFBInstance() {
@@ -151,19 +149,7 @@ public class LQFBInstance {
         this.developerkey = developerkey;
     }
 
-    /**
-     * @return the selected
-     */
-    public boolean isSelected() {
-        return selected;
-    }
-
-    /**
-     * @param selected the selected to set
-     */
-    public void setSelected(boolean selected) {
-        this.selected = selected;
-    }
+  
 
     /**
      * @return the apiversion

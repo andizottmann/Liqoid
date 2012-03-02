@@ -46,15 +46,20 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
         gestures.addOnGesturePerformedListener((LiqoidMainActivity) getParent());
 
         ((LiqoidApplication) getApplication()).addLQFBInstancesChangeListener(this);
-        refreshInisList(false);
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        refreshInisList(false);
+    }
+
     public void refreshInisList(boolean download) {
-     
-            progressDialog = ProgressDialog.show(InitiativesTabActivity.this, "",
-                    getApplicationContext().getString(R.string.downloading) + "\n" + ((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance().getName() + "...", true);
-      
+
+        progressDialog = ProgressDialog.show(InitiativesTabActivity.this, "",
+                getApplicationContext().getString(R.string.downloading) + "\n" + ((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance().getName() + "...", true);
+
         RefreshInisListThread ralt = new RefreshInisListThread(download, this);
         ralt.start();
 
@@ -74,36 +79,36 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
         @Override
         public void run() {
             LQFBInstance myInstance = ((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance();
-           
-                for (Area a : myInstance.areas) {
-                    if (a.isSelected()) {
-                        currentlyDownloadedArea = a.getName();
-                        handler.sendEmptyMessage(2);
-                        ArrayList<Integer> selectedIssues = new ArrayList<Integer>();
-                        for (Initiative ini : a.getInitiativen()) {
-                            if (ini.isSelected()) {
-                                selectedIssues.add(ini.issue_id);
-                            }
-                        }
-                        while (myInstance.downloadInitiativen(a,((LiqoidApplication) getApplication()).cachedAPI1Queries,download) < 0) {
-                            handler.sendEmptyMessage(-1);
-                            try {
-                                this.sleep(3000);
-                            } catch (InterruptedException ex) {
-                            }
-                            handler.sendEmptyMessage(2);
 
+            for (Area a : myInstance.areas) {
+                if (a.isSelected()) {
+                    currentlyDownloadedArea = a.getName();
+                    handler.sendEmptyMessage(2);
+                    ArrayList<Integer> selectedIssues = new ArrayList<Integer>();
+                    for (Initiative ini : a.getInitiativen()) {
+                        if (ini.isSelected()) {
+                            selectedIssues.add(ini.issue_id);
                         }
-                        for (Initiative ini : a.getInitiativen()) {
-                            for (int i : selectedIssues) {
-                                if (ini.issue_id == i) {
-                                    ini.setSelected(true);
-                                }
+                    }
+                    while (myInstance.downloadInitiativen(a, ((LiqoidApplication) getApplication()).cachedAPI1Queries, download) < 0) {
+                        handler.sendEmptyMessage(-1);
+                        try {
+                            this.sleep(3000);
+                        } catch (InterruptedException ex) {
+                        }
+                        handler.sendEmptyMessage(2);
+
+                    }
+                    for (Initiative ini : a.getInitiativen()) {
+                        for (int i : selectedIssues) {
+                            if (ini.issue_id == i) {
+                                ini.setSelected(true);
                             }
                         }
                     }
                 }
-            
+            }
+
 
             allInis.clear();
             ((LiqoidApplication) getApplication()).loadSelectedIssuesFromPrefs();
@@ -125,7 +130,6 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
 
         @Override
         public void handleMessage(Message msg) {
-
             if (msg.what == 0) {
 
                 try {
@@ -138,16 +142,18 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
                 listview.setAdapter(inisListAdapter);
 
             }
-            if (msg.what == -1) {
-                progressDialog.setMessage(getApplicationContext().getString(R.string.download_error));
+            if (progressDialog != null) {
+
+                if (msg.what == -1) {
+                    progressDialog.setMessage(getApplicationContext().getString(R.string.download_error));
+
+                }
+                if (msg.what == 2) {
+                    progressDialog.setMessage(getApplicationContext().getString(R.string.downloading) + "\n" + currentlyDownloadedArea + "...");
+
+                }
 
             }
-            if (msg.what == 2) {
-                progressDialog.setMessage(getApplicationContext().getString(R.string.downloading) + "\n" + currentlyDownloadedArea + "...");
-
-            }
-
-
         }
     };
 
@@ -174,8 +180,6 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
 
     public void lqfbInstanceChanged() {
         refreshInisList(false);
-        final ListView listview = (ListView) findViewById(R.id.initiativenList);
-        listview.setAdapter(inisListAdapter);
 
     }
 }

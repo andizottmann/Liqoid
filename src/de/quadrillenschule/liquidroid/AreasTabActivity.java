@@ -53,7 +53,13 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
 
         ((LiqoidApplication) getApplication()).addLQFBInstancesChangeListener(this);
 
-        refreshAreasList(false);
+      
+    }
+
+     @Override
+    public void onResume() {
+         super.onResume();
+         refreshAreasList(false);
     }
 
     public void onNothingSelected(AdapterView<?> arg0) {
@@ -164,6 +170,7 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
 
         @Override
         public void handleMessage(Message msg) {
+
             if (msg.what >= 0) {
                 try {
                     progressDialog.dismiss();
@@ -176,6 +183,7 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
                 listview.setAdapter(areasListAdapter);
 
             }
+            if (progressDialog!=null){
             if (msg.what == -1) {
                 progressDialog.setMessage(getApplicationContext().getString(R.string.download_error));
 
@@ -184,7 +192,7 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
                 progressDialog.setMessage(getApplicationContext().getString(R.string.downloading));
 
             }
-
+            }
 
         }
     };
