@@ -104,7 +104,9 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
                     }
                 }
             }
+
             allInis.clear();
+            ((LiqoidApplication) getApplication()).loadSelectedIssuesFromPrefs();
             for (Area a : myInstance.areas) {
                 if (a.isSelected()) {
 

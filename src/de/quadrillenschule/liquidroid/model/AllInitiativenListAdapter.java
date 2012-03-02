@@ -38,16 +38,16 @@ public class AllInitiativenListAdapter extends ArrayAdapter<Initiative> {
         retval.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View arg0) {
-              try {
+                try {
 
 
-                initiativen.findByName(((CheckBox) arg0).getText().toString()).get(0).setSelected(!initiativen.findByName(((CheckBox) arg0).getText().toString()).get(0).isSelected());
-          //    ((LiqoidApplication)activity.getApplication()).lqfbInstances.save();
-              } catch (Exception e){
+                    initiativen.findByName(((CheckBox) arg0).getText().toString()).get(0).setSelected(!initiativen.findByName(((CheckBox) arg0).getText().toString()).get(0).isSelected());
+                    ((LiqoidApplication) activity.getApplication()).saveSelectedIssuesToPrefs();
+                } catch (Exception e) {
                 }
             }
         });
-        
+
         activity.registerForContextMenu(retval);
 
 

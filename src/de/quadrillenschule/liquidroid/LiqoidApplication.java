@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.widget.Toast;
 import de.quadrillenschule.liquidroid.model.Area;
+import de.quadrillenschule.liquidroid.model.Initiative;
 import de.quadrillenschule.liquidroid.model.LQFBInstance;
 import de.quadrillenschule.liquidroid.model.LQFBInstances;
 import de.quadrillenschule.liquidroid.tools.CrashLog;
@@ -39,7 +40,7 @@ public class LiqoidApplication extends Application {
 
     }
 
-    public void saveSelectedAreasToPrefs(){
+    public void saveSelectedAreasToPrefs() {
         for (LQFBInstance lin : lqfbInstances) {
             SharedPreferences prefs = getSharedPreferences(lin.getPrefsName(), MODE_PRIVATE);
             SharedPreferences.Editor editor = prefs.edit();
@@ -52,12 +53,12 @@ public class LiqoidApplication extends Application {
             editor.putString("selectedareas", selectedareas);
             editor.commit();
         }
-       
     }
-     public void loadSelectedAreasFromPrefs(){
+
+    public void loadSelectedAreasFromPrefs() {
         for (LQFBInstance lin : lqfbInstances) {
             SharedPreferences prefs = getSharedPreferences(lin.getPrefsName(), MODE_PRIVATE);
-            String[] selectedareas_str = prefs.getString("selectedareas", "0").split(":",0);
+            String[] selectedareas_str = prefs.getString("selectedareas", "0").split(":", 0);
             ArrayList<Integer> selectedAreas = new ArrayList<Integer>();
             for (String s : selectedareas_str) {
                 try {
@@ -73,6 +74,48 @@ public class LiqoidApplication extends Application {
             }
         }
     }
+
+    public void saveSelectedIssuesToPrefs() {
+        for (LQFBInstance lin : lqfbInstances) {
+            SharedPreferences prefs = getSharedPreferences(lin.getPrefsName(), MODE_PRIVATE);
+            SharedPreferences.Editor editor = prefs.edit();
+            String selectedinis = "";
+            for (Area a : lin.areas) {
+                for (Initiative ini : a.getInitiativen()) {
+                    if (ini.isSelected()) {
+                        selectedinis += ini.issue_id + ":";
+                    }
+                }
+            }
+            editor.putString("selectedissues", selectedinis);
+            editor.commit();
+        }
+    }
+
+    public void loadSelectedIssuesFromPrefs() {
+        for (LQFBInstance lin : lqfbInstances) {
+            SharedPreferences prefs = getSharedPreferences(lin.getPrefsName(), MODE_PRIVATE);
+            String[] selectedInis_str = prefs.getString("selectedissues", "0").split(":", 0);
+            ArrayList<Integer> selectedInis = new ArrayList<Integer>();
+            for (String s : selectedInis_str) {
+                try {
+                    selectedInis.add(Integer.parseInt(s));
+                } catch (Exception e) {
+                }
+            }
+            for (Integer i : selectedInis) {
+                for (Area a:lin.areas){
+
+                try {   
+                    for (Initiative ini:a.getInitiativen().findByIssueID(i)){
+                    ini.setSelected(true);
+                    }
+                } catch (Exception e) {
+                }}
+            }
+        }
+    }
+
     public void addLQFBInstancesChangeListener(LQFBInstanceChangeListener l) {
         lqfbInstanceChangeListeners.add(l);
     }
