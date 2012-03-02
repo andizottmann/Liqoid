@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.widget.Toast;
 import de.quadrillenschule.liquidroid.model.Area;
+import de.quadrillenschule.liquidroid.model.CachedAPI1Queries;
 import de.quadrillenschule.liquidroid.model.Initiative;
 import de.quadrillenschule.liquidroid.model.LQFBInstance;
 import de.quadrillenschule.liquidroid.model.LQFBInstances;
@@ -24,6 +25,7 @@ public class LiqoidApplication extends Application {
 
     public LQFBInstances lqfbInstances;
     ArrayList<LQFBInstanceChangeListener> lqfbInstanceChangeListeners;
+    public CachedAPI1Queries cachedAPI1Queries;
 
     public LiqoidApplication() {
         super();
@@ -33,7 +35,7 @@ public class LiqoidApplication extends Application {
     @Override
     public void onCreate() {
         Thread.setDefaultUncaughtExceptionHandler(new CrashLog(new File(getExternalFilesDir(null), "liqoid.log")));
-
+        cachedAPI1Queries=new CachedAPI1Queries(getCacheDir());
         lqfbInstances = new LQFBInstances(this);
         lqfbInstanceChangeListeners = new ArrayList<LQFBInstanceChangeListener>();
 

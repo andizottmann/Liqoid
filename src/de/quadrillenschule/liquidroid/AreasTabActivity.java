@@ -145,7 +145,7 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
             if (download) {
 
                 Context context = getApplicationContext();
-                while (myinstance.downloadAreas() < 0) {
+                while (myinstance.downloadAreas(((LiqoidApplication) getApplication()).cachedAPI1Queries) < 0) {
                     handler.sendEmptyMessage(-1);
                     try {
                         this.sleep(3000);

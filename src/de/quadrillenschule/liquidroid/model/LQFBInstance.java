@@ -49,7 +49,7 @@ public class LQFBInstance {
         return name;
     }
 
-    public int downloadAreas() {
+    public int downloadAreas(CachedAPI1Queries cachedAPI1Queries) {
         SAXParserFactory factory = SAXParserFactory.newInstance();
         SAXParser saxparser;
         Areas selectedAreas = new Areas();
@@ -61,7 +61,8 @@ public class LQFBInstance {
         areaParser = new AreasFromAPIParser();
         try {
             saxparser = factory.newSAXParser();
-            saxparser.parse(API1Queries.queryOutputStream("area", "", apiUrl, developerkey), areaParser);
+            saxparser.parse(cachedAPI1Queries.queryInputStream("area", "", apiUrl, developerkey), areaParser);
+         //   cachedAPI1Queries.storeInCache(areaParser.docBuff.toString());
             areas = areaParser.areas;
 
         } catch (Exception e) {
@@ -75,7 +76,7 @@ public class LQFBInstance {
         return 0;
     }
 
-    public int downloadInitiativen(Area area) {
+    public int downloadInitiativen(Area area,CachedAPI1Queries cachedAPI1Queries) {
         SAXParserFactory factory = SAXParserFactory.newInstance();
         SAXParser saxparser;
 
@@ -85,7 +86,7 @@ public class LQFBInstance {
         for (String state : states) {
             try {
                 saxparser = factory.newSAXParser();
-                saxparser.parse(API1Queries.queryOutputStream("initiative", "&area_id=" + area.getId() + "&state=" + state, apiUrl, developerkey), iniParser);
+                saxparser.parse(cachedAPI1Queries.queryInputStream("initiative", "&area_id=" + area.getId() + "&state=" + state, apiUrl, developerkey), iniParser);
             } catch (Exception e) {
                 return -1;
             }

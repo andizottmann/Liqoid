@@ -21,8 +21,14 @@ public class AreasFromAPIParser extends DefaultHandler {
     public AreasFromAPIParser() {
         charBuff = new StringBuffer();
         areas = new Areas();
-        
+  
     }
+
+    @Override
+    public void startDocument() {
+
+    }
+
 
     @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
@@ -57,6 +63,4 @@ public class AreasFromAPIParser extends DefaultHandler {
     public void characters(char ch[], int start, int length) {
         charBuff.append(ch, start, length);
     }
-
-   
 }

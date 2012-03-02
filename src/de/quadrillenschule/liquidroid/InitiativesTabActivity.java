@@ -85,7 +85,7 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
                                 selectedIssues.add(ini.issue_id);
                             }
                         }
-                        while (myInstance.downloadInitiativen(a) < 0) {
+                        while (myInstance.downloadInitiativen(a,((LiqoidApplication) getApplication()).cachedAPI1Queries) < 0) {
                             handler.sendEmptyMessage(-1);
                             try {
                                 this.sleep(3000);
