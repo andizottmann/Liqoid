@@ -56,8 +56,11 @@ public class CachedAPI1Queries {
         return myfile.exists();
     }
 
-    public InputStream queryInputStream(String api, String parameters, String apiUrl, String developerkey) throws IOException, FileNotFoundException {
+    public InputStream queryInputStream(String api, String parameters, String apiUrl, String developerkey, boolean forceNetwork) throws IOException, FileNotFoundException {
         url = apiUrl + api + ".html?key=" + developerkey + parameters;
+        if (forceNetwork) {
+            return networkInputStream(url);
+        }
         if (cacheExists(url)) {
             return cacheInputStream(url);
         }
@@ -92,8 +95,8 @@ public class CachedAPI1Queries {
         HttpResponse response = (HttpResponse) httpClient.execute(httpPost);
         wasReadFromNetwork = true;
 
-       
-        storeInCache( response.getEntity().getContent());
+
+        storeInCache(response.getEntity().getContent());
         return cacheInputStream(url);
     }
 }

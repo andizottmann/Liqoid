@@ -114,10 +114,10 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
 
     public void refreshAreasList(boolean force) {
 
-        if (force) {
-            progressDialog = ProgressDialog.show(AreasTabActivity.this, "",
-                    getApplicationContext().getString(R.string.downloading) + "\n" + ((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance().getName() + "...", true);
-        }
+
+        progressDialog = ProgressDialog.show(AreasTabActivity.this, "",
+                getApplicationContext().getString(R.string.downloading) + "\n" + ((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance().getName() + "...", true);
+
         RefreshAreasListThread ralt = new RefreshAreasListThread(force, this);
         ralt.start();
     }
@@ -142,18 +142,17 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
                     selectedAreas.add(a);
                 }
             }
-            if (download) {
 
-                Context context = getApplicationContext();
-                while (myinstance.downloadAreas(((LiqoidApplication) getApplication()).cachedAPI1Queries) < 0) {
-                    handler.sendEmptyMessage(-1);
-                    try {
-                        this.sleep(3000);
-                    } catch (InterruptedException ex) {
-                    }
-                    handler.sendEmptyMessage(-2);
-         }
+            Context context = getApplicationContext();
+            while (myinstance.downloadAreas(((LiqoidApplication) getApplication()).cachedAPI1Queries, download) < 0) {
+                handler.sendEmptyMessage(-1);
+                try {
+                    this.sleep(3000);
+                } catch (InterruptedException ex) {
+                }
+                handler.sendEmptyMessage(-2);
             }
+
             for (Area selectedArea : selectedAreas) {
                 myinstance.areas.getById(selectedArea.getId()).setSelected(true);
             }
@@ -189,8 +188,6 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
 
         }
     };
-
-   
 
     public void lqfbInstanceChanged() {
         refreshAreasList(false);

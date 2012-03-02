@@ -51,10 +51,10 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
     }
 
     public void refreshInisList(boolean download) {
-        if (download) {
+     
             progressDialog = ProgressDialog.show(InitiativesTabActivity.this, "",
                     getApplicationContext().getString(R.string.downloading) + "\n" + ((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance().getName() + "...", true);
-        }
+      
         RefreshInisListThread ralt = new RefreshInisListThread(download, this);
         ralt.start();
 
@@ -74,7 +74,7 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
         @Override
         public void run() {
             LQFBInstance myInstance = ((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance();
-            if (download) {
+           
                 for (Area a : myInstance.areas) {
                     if (a.isSelected()) {
                         currentlyDownloadedArea = a.getName();
@@ -85,7 +85,7 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
                                 selectedIssues.add(ini.issue_id);
                             }
                         }
-                        while (myInstance.downloadInitiativen(a,((LiqoidApplication) getApplication()).cachedAPI1Queries) < 0) {
+                        while (myInstance.downloadInitiativen(a,((LiqoidApplication) getApplication()).cachedAPI1Queries,download) < 0) {
                             handler.sendEmptyMessage(-1);
                             try {
                                 this.sleep(3000);
@@ -103,7 +103,7 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
                         }
                     }
                 }
-            }
+            
 
             allInis.clear();
             ((LiqoidApplication) getApplication()).loadSelectedIssuesFromPrefs();
