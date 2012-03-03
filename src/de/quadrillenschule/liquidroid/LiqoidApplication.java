@@ -44,40 +44,7 @@ public class LiqoidApplication extends Application {
 
 
 
-    public void saveSelectedAreasToPrefs() {
-        for (LQFBInstance lin : lqfbInstances) {
-            SharedPreferences prefs = getSharedPreferences(lin.getPrefsName(), MODE_PRIVATE);
-            SharedPreferences.Editor editor = prefs.edit();
-            String selectedareas = "";
-            for (Area a : lin.areas) {
-                if (a.isSelected()) {
-                    selectedareas += a.getId() + ":";
-                }
-            }
-            editor.putString("selectedareas", selectedareas);
-            editor.commit();
-        }
-    }
 
-    public void loadSelectedAreasFromPrefs() {
-        for (LQFBInstance lin : lqfbInstances) {
-            SharedPreferences prefs = getSharedPreferences(lin.getPrefsName(), MODE_PRIVATE);
-            String[] selectedareas_str = prefs.getString("selectedareas", "0").split(":", 0);
-            ArrayList<Integer> selectedAreas = new ArrayList<Integer>();
-            for (String s : selectedareas_str) {
-                try {
-                    selectedAreas.add(Integer.parseInt(s));
-                } catch (Exception e) {
-                }
-            }
-            for (Integer i : selectedAreas) {
-                try {
-                    lin.areas.getById(i).setSelected(true);
-                } catch (Exception e) {
-                }
-            }
-        }
-    }
 
     public void saveSelectedIssuesToPrefs() {
         for (LQFBInstance lin : lqfbInstances) {

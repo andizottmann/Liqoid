@@ -35,14 +35,15 @@ public class AreasListAdapter extends ArrayAdapter<Area> {
         retval.setTextColor(Color.BLACK);
         retval.setBackgroundColor(Color.argb(255, 245, 245, 245));
         retval.setText(areas.get(position).getName());
-        retval.setChecked(areas.get(position).isSelected());
+        retval.setChecked(areas.isSelected(position));
 
         retval.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View arg0) {
-
-                areas.getByName(((CheckBox) arg0).getText().toString()).setSelected(!areas.getByName(((CheckBox) arg0).getText().toString()).isSelected());
-               ((LiqoidApplication) activity.getApplication()).saveSelectedAreasToPrefs();
+                Area myarea = areas.getByName(((CheckBox) arg0).getText().toString());
+                areas.setSelectedArea(myarea, !areas.isSelected(myarea.getId()));
+              //  areas.getByName(((CheckBox) arg0).getText().toString()).setSelected(!areas.getByName(((CheckBox) arg0).getText().toString()).isSelected());
+                //((LiqoidApplication) activity.getApplication()).saveSelectedAreasToPrefs();
             }
         });
 

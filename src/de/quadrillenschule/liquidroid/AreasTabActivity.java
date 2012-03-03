@@ -53,13 +53,13 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
 
         ((LiqoidApplication) getApplication()).addLQFBInstancesChangeListener(this);
 
-      
+
     }
 
-     @Override
+    @Override
     public void onResume() {
-         super.onResume();
-         refreshAreasList(false);
+        super.onResume();
+        refreshAreasList(false);
     }
 
     public void onNothingSelected(AdapterView<?> arg0) {
@@ -142,14 +142,6 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
         public void run() {
             LQFBInstance myinstance = ((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance();
 
-            ArrayList<Area> selectedAreas = new ArrayList<Area>();
-            for (Area a : myinstance.areas) {
-                if (a.isSelected()) {
-                    selectedAreas.add(a);
-                }
-            }
-
-            Context context = getApplicationContext();
             while (myinstance.downloadAreas(((LiqoidApplication) getApplication()).cachedAPI1Queries, download) < 0) {
                 handler.sendEmptyMessage(-1);
                 try {
@@ -157,10 +149,6 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
                 } catch (InterruptedException ex) {
                 }
                 handler.sendEmptyMessage(-2);
-            }
-
-            for (Area selectedArea : selectedAreas) {
-                myinstance.areas.getById(selectedArea.getId()).setSelected(true);
             }
             areasListAdapter = new AreasListAdapter(parent, myinstance.areas, R.id.areasList);
             handler.sendEmptyMessage(0);
@@ -178,20 +166,19 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
                     //Sometimes it is not attached anymore
                     progressDialog = null;
                 }
-                ((LiqoidApplication) getApplication()).loadSelectedAreasFromPrefs();
-                final ListView listview = (ListView) findViewById(R.id.areasList);
+                 final ListView listview = (ListView) findViewById(R.id.areasList);
                 listview.setAdapter(areasListAdapter);
 
             }
-            if (progressDialog!=null){
-            if (msg.what == -1) {
-                progressDialog.setMessage(getApplicationContext().getString(R.string.download_error));
+            if (progressDialog != null) {
+                if (msg.what == -1) {
+                    progressDialog.setMessage(getApplicationContext().getString(R.string.download_error));
 
-            }
-            if (msg.what == -2) {
-                progressDialog.setMessage(getApplicationContext().getString(R.string.downloading));
+                }
+                if (msg.what == -2) {
+                    progressDialog.setMessage(getApplicationContext().getString(R.string.downloading));
 
-            }
+                }
             }
 
         }

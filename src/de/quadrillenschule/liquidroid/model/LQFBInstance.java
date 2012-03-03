@@ -4,6 +4,9 @@
  */
 package de.quadrillenschule.liquidroid.model;
 
+import android.app.Application;
+import android.content.SharedPreferences;
+import de.quadrillenschule.liquidroid.LiqoidApplication;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
@@ -23,23 +26,17 @@ public class LQFBInstance {
     private AreasFromAPIParser areaParser;
     private InitiativenFromAPIParser iniParser;
     public static final String AREA_API = "area";
+    SharedPreferences instancePrefs;
 
-    public LQFBInstance(String prefsName, String name, String apiUrl, String webUrl, String developerkey, String apiversion) {
-
+    public LQFBInstance(LiqoidApplication la, String prefsName, String name, String apiUrl, String webUrl, String developerkey, String apiversion) {
         this.prefsName = prefsName;
         this.name = name;
         this.apiUrl = apiUrl;
         this.webUrl = webUrl;
         this.developerkey = developerkey;
-        // areaParser = new AreaFromAPIParser(null);
-        areas = new Areas();// areaParser.areas;
-         this.apiversion = apiversion;
-    }
-
-    public LQFBInstance() {
-        //  areaParser = new AreaFromAPIParser(null);
-
-        areas = new Areas();
+        this.instancePrefs = la.getSharedPreferences(prefsName, Application.MODE_PRIVATE);
+        areas = new Areas(instancePrefs);// areaParser.areas;
+        this.apiversion = apiversion;
     }
 
     @Override
@@ -50,31 +47,22 @@ public class LQFBInstance {
     public int downloadAreas(CachedAPI1Queries cachedAPI1Queries, boolean forceNetwork) {
         SAXParserFactory factory = SAXParserFactory.newInstance();
         SAXParser saxparser;
-        Areas selectedAreas = new Areas();
-        for (Area a : areas) {
-            if (a.isSelected()) {
-                selectedAreas.add(a);
-            }
-        }
-        areaParser = new AreasFromAPIParser();
+    
+        areaParser = new AreasFromAPIParser(instancePrefs);
         try {
             saxparser = factory.newSAXParser();
             saxparser.parse(cachedAPI1Queries.queryInputStream("area", "", apiUrl, developerkey, forceNetwork), areaParser);
-         //   cachedAPI1Queries.storeInCache(areaParser.docBuff.toString());
+            //   cachedAPI1Queries.storeInCache(areaParser.docBuff.toString());
             areas = areaParser.areas;
 
         } catch (Exception e) {
             return -1;
         }
-        for (Area a : areas) {
-            if (selectedAreas.getById(a.getId()) != null) {
-                a.setSelected(true);
-            }
-        }
+       
         return 0;
     }
 
-    public int downloadInitiativen(Area area,CachedAPI1Queries cachedAPI1Queries, boolean forceNetwork) {
+    public int downloadInitiativen(Area area, CachedAPI1Queries cachedAPI1Queries, boolean forceNetwork) {
         SAXParserFactory factory = SAXParserFactory.newInstance();
         SAXParser saxparser;
 
@@ -84,7 +72,7 @@ public class LQFBInstance {
         for (String state : states) {
             try {
                 saxparser = factory.newSAXParser();
-                saxparser.parse(cachedAPI1Queries.queryInputStream("initiative", "&area_id=" + area.getId() + "&state=" + state, apiUrl, developerkey,forceNetwork), iniParser);
+                saxparser.parse(cachedAPI1Queries.queryInputStream("initiative", "&area_id=" + area.getId() + "&state=" + state, apiUrl, developerkey, forceNetwork), iniParser);
             } catch (Exception e) {
                 return -1;
             }
@@ -148,8 +136,6 @@ public class LQFBInstance {
     public void setDeveloperkey(String developerkey) {
         this.developerkey = developerkey;
     }
-
-  
 
     /**
      * @return the apiversion

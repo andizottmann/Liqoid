@@ -4,6 +4,7 @@
  */
 package de.quadrillenschule.liquidroid.model;
 
+import android.content.SharedPreferences;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -18,9 +19,9 @@ public class AreasFromAPIParser extends DefaultHandler {
     public Areas areas;
     StringBuffer charBuff;
 
-    public AreasFromAPIParser() {
+    public AreasFromAPIParser(SharedPreferences instancePrefs) {
         charBuff = new StringBuffer();
-        areas = new Areas();
+        areas = new Areas(instancePrefs);
   
     }
 

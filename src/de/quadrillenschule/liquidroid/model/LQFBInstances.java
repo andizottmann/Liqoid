@@ -31,22 +31,22 @@ public class LQFBInstances extends ArrayList<LQFBInstance> {
     private void initInstances() {
 
         if (isEmpty()) {
-            this.add(new LQFBInstance("DE_PIRATEN_BUND",
+             this.add(new LQFBInstance(liqoidApplication,"DE_PIRATEN_BUND",
                     "Piraten Bund",
                     "https://lqfb.piratenpartei.de/pp/api/",
                     "https://lqfb.piratenpartei.de/pp/",
                     "6Bw8HGL8Bp2z4wK6L3Zw", "1.x"));
-            this.add(new LQFBInstance("DE_PIRATEN_SA",
+            this.add(new LQFBInstance(liqoidApplication,"DE_PIRATEN_SA",
                     "Piraten Sachsen-Anhalt",
                     "http://lqfb.piraten-lsa.de/lsa/api/",
                     "http://lqfb.piraten-lsa.de/lsa/",
                     "jXKWm5rFLQXQ8f6LMf92", "1.x"));
-            this.add(new LQFBInstance("DE_TESTINSTANZ_VALID",
+            this.add(new LQFBInstance(liqoidApplication,"DE_TESTINSTANZ_VALID",
                     "Testinstanz (valid URL)",
                     "http://dev.liquidfeedback.org/test/api/",
                     "http://dev.liquidfeedback.org/test/",
                     "GTR8MjH6x98w6mztGB7J", "1.x"));
-            this.add(new LQFBInstance("DE_TESTINSTANZ_INVALID",
+            this.add(new LQFBInstance(liqoidApplication,"DE_TESTINSTANZ_INVALID",
                     "Testinstanz (invalid URL)",
                     "https://lqfb.piratenptei.de/pp/api/",
                     "https://lqfb.piratenptei.de/pp/",

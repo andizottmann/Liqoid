@@ -80,46 +80,45 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
         public void run() {
             LQFBInstance myInstance = ((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance();
 
-            for (Area a : myInstance.areas) {
-                if (a.isSelected()) {
-                    currentlyDownloadedArea = a.getName();
+            for (Area a : myInstance.areas.getSelectedAreas()) {
+                currentlyDownloadedArea = a.getName();
+                handler.sendEmptyMessage(2);
+                ArrayList<Integer> selectedIssues = new ArrayList<Integer>();
+                for (Initiative ini : a.getInitiativen()) {
+                    if (ini.isSelected()) {
+                        selectedIssues.add(ini.issue_id);
+                    }
+                }
+                while (myInstance.downloadInitiativen(a, ((LiqoidApplication) getApplication()).cachedAPI1Queries, download) < 0) {
+                    handler.sendEmptyMessage(-1);
+                    try {
+                        this.sleep(3000);
+                    } catch (InterruptedException ex) {
+                    }
                     handler.sendEmptyMessage(2);
-                    ArrayList<Integer> selectedIssues = new ArrayList<Integer>();
-                    for (Initiative ini : a.getInitiativen()) {
-                        if (ini.isSelected()) {
-                            selectedIssues.add(ini.issue_id);
-                        }
-                    }
-                    while (myInstance.downloadInitiativen(a, ((LiqoidApplication) getApplication()).cachedAPI1Queries, download) < 0) {
-                        handler.sendEmptyMessage(-1);
-                        try {
-                            this.sleep(3000);
-                        } catch (InterruptedException ex) {
-                        }
-                        handler.sendEmptyMessage(2);
 
-                    }
-                    for (Initiative ini : a.getInitiativen()) {
-                        for (int i : selectedIssues) {
-                            if (ini.issue_id == i) {
-                                ini.setSelected(true);
-                            }
+                }
+                for (Initiative ini : a.getInitiativen()) {
+                    for (int i : selectedIssues) {
+                        if (ini.issue_id == i) {
+                            ini.setSelected(true);
                         }
                     }
                 }
+
             }
 
 
             allInis.clear();
             ((LiqoidApplication) getApplication()).loadSelectedIssuesFromPrefs();
-            for (Area a : myInstance.areas) {
-                if (a.isSelected()) {
+            for (Area a : myInstance.areas.getSelectedAreas()) {
+              
 
                     for (Initiative i : a.getInitiativen()) {
                         allInis.add(i);
                     }
                 }
-            }
+            
             allInis.sortById();
             inisListAdapter = new AllInitiativenListAdapter(parent, allInis, R.id.initiativenList);
             handler.sendEmptyMessage(0);
