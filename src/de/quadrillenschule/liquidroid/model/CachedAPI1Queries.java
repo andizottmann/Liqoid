@@ -72,7 +72,7 @@ public class CachedAPI1Queries {
                     endswith = "</initiative_list>";
                 }
                 String string = convertStreamToString(is);
-
+                string = string.replaceAll("<current_draft_content>(.*?)</current_draft_content>", "");
                 if (string.contains(endswith)) {
 
                     myfile.createNewFile();
