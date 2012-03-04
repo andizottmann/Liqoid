@@ -77,16 +77,21 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
 
             for (Area a : myInstance.areas.getSelectedAreas()) {
                 currentlyDownloadedArea = a.getName();
-                if (myInstance.willDownloadInitiativen(a, ((LiqoidApplication) getApplication()).cachedAPI1Queries, download)){
-                     handler.sendEmptyMessage(1);
+                if (myInstance.willDownloadInitiativen(a, ((LiqoidApplication) getApplication()).cachedAPI1Queries, download)) {
+                    handler.sendEmptyMessage(1);
 
                 }
                 handler.sendEmptyMessage(2);
+                int retrycounter = 0;
+                int maxretries = 4;
 
-                while (myInstance.downloadInitiativen(a, ((LiqoidApplication) getApplication()).cachedAPI1Queries, download) < 0) {
+
+                while ((retrycounter <= maxretries) && (myInstance.downloadInitiativen(a, ((LiqoidApplication) getApplication()).cachedAPI1Queries, download) < 0)) {
                     handler.sendEmptyMessage(-1);
                     try {
-                        this.sleep(3000);
+                        this.sleep((2 ^ retrycounter) * 1000);
+                        retrycounter++;
+
                     } catch (InterruptedException ex) {
                     }
                     handler.sendEmptyMessage(2);
@@ -95,7 +100,7 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
 
 
             }
-       allInis = new Initiativen(getSharedPreferences(((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance().getPrefsName(), RESULT_OK));
+            allInis = new Initiativen(getSharedPreferences(((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance().getPrefsName(), RESULT_OK));
             for (Area a : myInstance.areas.getSelectedAreas()) {
 
 

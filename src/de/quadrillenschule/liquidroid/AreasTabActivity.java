@@ -136,16 +136,20 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
             if (myinstance.willDownloadAreas(((LiqoidApplication) getApplication()).cachedAPI1Queries, download)) {
                 handler.sendEmptyMessage(1);
             }
+            int retrycounter=0;
+            int maxretries=4;
 
-            while (myinstance.downloadAreas(((LiqoidApplication) getApplication()).cachedAPI1Queries, download) < 0) {
+            while ((retrycounter<=maxretries)&&(myinstance.downloadAreas(((LiqoidApplication) getApplication()).cachedAPI1Queries, download)) < 0) {
 
                 handler.sendEmptyMessage(-1);
                 try {
-                    this.sleep(3000);
+                    this.sleep((2^retrycounter)*1000);
+                    retrycounter++;
                 } catch (InterruptedException ex) {
                 }
                 handler.sendEmptyMessage(-2);
             }
+           
             areasListAdapter = new AreasListAdapter(parent, myinstance.areas, R.id.areasList);
             handler.sendEmptyMessage(0);
         }
