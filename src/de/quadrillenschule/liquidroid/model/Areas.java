@@ -16,18 +16,18 @@ public class Areas extends ArrayList<Area> {
     SharedPreferences instancePrefs;
 
     public Areas(SharedPreferences instancePrefs) {
+        super();
         this.instancePrefs = instancePrefs;
     }
 
     public Areas getSelectedAreas() {
         Areas retval = new Areas(instancePrefs);
-        String[] selectedareas_str = instancePrefs.getString("selectedareas", "0").split(":", 0);
+        String[] selectedareas_str = instancePrefs.getString("selectedareas", "").split(":");
         ArrayList<Integer> selectedAreas = new ArrayList<Integer>();
         for (String s : selectedareas_str) {
-            try {
+            if (!s.equals("")){
                 selectedAreas.add(Integer.parseInt(s));
-            } catch (Exception e) {
-            }
+            } 
         }
 
         for (Integer i : selectedAreas) {
@@ -70,19 +70,28 @@ public class Areas extends ArrayList<Area> {
             } else {
                 //is selected, unselect
 
-                String newselectedareas = "";
+                String newselectedareas = ":";
                 for (String snippet : selectedAreasString.split(":")) {
-                    if (!snippet.equals(myarea.getId() + "")) {
-                        newselectedareas += myarea.getId() + ":";
+                    if (!snippet.equals(myarea.getId() + "")&&(!snippet.equals(""))) {
+                        newselectedareas += snippet + ":";
                     }
                 }
-                int len = newselectedareas.length();
-                selectedAreasString = newselectedareas.substring(0, len - 1);
+           /*     int len = newselectedareas.length();
+                if (len >= 0) {
+                    selectedAreasString = newselectedareas.substring(0, len);
+                }*/
+                selectedAreasString=newselectedareas;
             }
 
         }
         SharedPreferences.Editor editor = instancePrefs.edit();
-
+        selectedAreasString.replaceAll("::", ":");
+        if (selectedAreasString.startsWith(":")){
+        selectedAreasString=selectedAreasString.substring(1);
+        }
+          if (selectedAreasString.endsWith(":")){
+        selectedAreasString=selectedAreasString.substring(0,selectedAreasString.length()-1);
+        }
         editor.putString("selectedareas", selectedAreasString);
         editor.commit();
     }

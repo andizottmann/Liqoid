@@ -4,6 +4,8 @@
  */
 package de.quadrillenschule.liquidroid.model;
 
+import android.content.SharedPreferences;
+
 /**
  *
  * @author andi
@@ -18,9 +20,10 @@ public class Area {
     private int autoreject_weight = -1;
     private boolean active = false;
     private Initiativen initiativen;
+    SharedPreferences instancePrefs;
 
-    public Area() {
-        initiativen = new Initiativen();
+    public Area(SharedPreferences instancePrefs) {
+        initiativen = new Initiativen(instancePrefs);
     }
 
     /**

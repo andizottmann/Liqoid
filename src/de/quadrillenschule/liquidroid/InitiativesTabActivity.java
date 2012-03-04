@@ -37,7 +37,7 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-        allInis = new Initiativen();
+        allInis = new Initiativen(getSharedPreferences(((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance().getPrefsName(), RESULT_OK));
 
         setContentView(R.layout.initiativentab);
 
@@ -109,16 +109,16 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
             }
 
 
-            allInis.clear();
+            allInis = new Initiativen(getSharedPreferences(((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance().getPrefsName(), RESULT_OK));
             ((LiqoidApplication) getApplication()).loadSelectedIssuesFromPrefs();
             for (Area a : myInstance.areas.getSelectedAreas()) {
-              
 
-                    for (Initiative i : a.getInitiativen()) {
-                        allInis.add(i);
-                    }
+
+                for (Initiative i : a.getInitiativen()) {
+                    allInis.add(i);
                 }
-            
+            }
+
             allInis.sortById();
             inisListAdapter = new AllInitiativenListAdapter(parent, allInis, R.id.initiativenList);
             handler.sendEmptyMessage(0);
@@ -178,6 +178,7 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
     }
 
     public void lqfbInstanceChanged() {
+
         refreshInisList(false);
 
     }

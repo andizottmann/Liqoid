@@ -41,9 +41,11 @@ public class AreasListAdapter extends ArrayAdapter<Area> {
 
             public void onClick(View arg0) {
                 Area myarea = areas.getByName(((CheckBox) arg0).getText().toString());
-                areas.setSelectedArea(myarea, !areas.isSelected(myarea.getId()));
+                boolean value=((CheckBox) arg0).isChecked();
+                areas.setSelectedArea(myarea,value);
+
               //  areas.getByName(((CheckBox) arg0).getText().toString()).setSelected(!areas.getByName(((CheckBox) arg0).getText().toString()).isSelected());
-                //((LiqoidApplication) activity.getApplication()).saveSelectedAreasToPrefs();
+             //   ((LiqoidApplication) activity.getApplication()).toast(activity, areas.instancePrefs.getString("selectedareas",""));
             }
         });
 
