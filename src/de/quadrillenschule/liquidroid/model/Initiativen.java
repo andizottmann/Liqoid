@@ -24,7 +24,7 @@ public class Initiativen extends ArrayList<Initiative> {
 
     public Initiativen getSelectedIssues() {
         Initiativen retval = new Initiativen(instancePrefs);
-        String[] selectedissues_str = instancePrefs.getString("selectedissues", "0").split(":", 0);
+        String[] selectedissues_str = instancePrefs.getString("selectedissues", "0").split(":");
         ArrayList<Integer> selectedIssues = new ArrayList<Integer>();
         for (String s : selectedissues_str) {
             try {
@@ -44,7 +44,7 @@ public class Initiativen extends ArrayList<Initiative> {
     public boolean isSelected(int pos) {
 
         Initiative myini = this.get(pos);
-        String[] selectedissues_str = instancePrefs.getString("selectedissues", "0").split(":", 0);
+        String[] selectedissues_str = instancePrefs.getString("selectedissues", "0").split(":");
         for (String s : selectedissues_str) {
             try {
                 if (Integer.parseInt(s) == myini.issue_id) {
@@ -59,12 +59,12 @@ public class Initiativen extends ArrayList<Initiative> {
     }
 
     public void setSelectedIssue(int issueid, boolean value) {
-     
-        String selectedIssuesString = instancePrefs.getString("selectedissued", "");
- 
+
+        String selectedIssuesString = instancePrefs.getString("selectedissues", "");
+
         if (value) {
             //Shall be selected
-            if (this.getSelectedIssues().findByIssueID(issueid).size()==0) {
+            if (this.getSelectedIssues().findByIssueID(issueid).size() == 0) {
                 //is not selected
                 selectedIssuesString = selectedIssuesString + ":" + issueid;
             } else {
@@ -72,8 +72,8 @@ public class Initiativen extends ArrayList<Initiative> {
             }
         } else {
             //Shall not be selected
-              if (this.getSelectedIssues().findByIssueID(issueid).size()==0) {
-                  //is not selected do nothing
+            if (this.getSelectedIssues().findByIssueID(issueid).size() == 0) {
+                //is not selected do nothing
             } else {
                 //is selected, unselect
 
@@ -84,17 +84,23 @@ public class Initiativen extends ArrayList<Initiative> {
                     }
                 }
                 int len = newselectedissues.length();
-                if (len>=0){
-                selectedIssuesString = newselectedissues.substring(0, len - 1);
+                if (len >= 0) {
+                    selectedIssuesString = newselectedissues.substring(0, len - 1);
                 }
-                }
+            }
 
         }
 
-  
-        SharedPreferences.Editor editor = instancePrefs.edit();
 
-        editor.putString("selectedareas", selectedIssuesString);
+        SharedPreferences.Editor editor = instancePrefs.edit();
+        selectedIssuesString = selectedIssuesString.replaceAll("::", ":");
+        if (selectedIssuesString.startsWith(":")) {
+            selectedIssuesString = selectedIssuesString.substring(1);
+        }
+        if (selectedIssuesString.endsWith(":")) {
+            selectedIssuesString = selectedIssuesString.substring(0, selectedIssuesString.length() - 1);
+        }
+        editor.putString("selectedissues", selectedIssuesString);
         editor.commit();
     }
 

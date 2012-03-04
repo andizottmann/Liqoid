@@ -31,8 +31,7 @@ public class Initiative implements Comparable<Initiative> {
     public Date issue_fully_frozen;
     public Date issue_closed;
     public Date current_draft_created;
-    private boolean selected = false;
-
+ 
   
 
     public Date getDateForStartVoting() {
@@ -134,20 +133,7 @@ public class Initiative implements Comparable<Initiative> {
         return retval;
     }
 
-    /**
-     * @return the selected
-     */
-    public boolean isSelected() {
-        return selected;
-    }
-
-    /**
-     * @param selected the selected to set
-     */
-    public void setSelected(boolean selected) {
-        this.selected = selected;
-    }
-
+   
     public int compareTo(Initiative arg0) {
         return ((Integer) this.issue_id).compareTo((Integer) arg0.issue_id);
     }

@@ -33,16 +33,16 @@ public class AllInitiativenListAdapter extends ArrayAdapter<Initiative> {
         retval.setTextColor(Color.BLACK);
         retval.setBackgroundColor(Color.argb(255, 245, 245, 245));
         retval.setText(initiativen.get(position).name);
-        retval.setChecked(initiativen.get(position).isSelected());
-
+        retval.setChecked(initiativen.isSelected(position));
         retval.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View arg0) {
                 try {
+                    boolean value = ((CheckBox) arg0).isChecked();
+                    int myissueid = initiativen.findByName(((CheckBox) arg0).getText().toString()).get(0).issue_id;
 
-
-                    initiativen.findByName(((CheckBox) arg0).getText().toString()).get(0).setSelected(!initiativen.findByName(((CheckBox) arg0).getText().toString()).get(0).isSelected());
-                    ((LiqoidApplication) activity.getApplication()).saveSelectedIssuesToPrefs();
+                    //  .get(0).setSelected(!initiativen.findByName(((CheckBox) arg0).getText().toString()).get(0).isSelected());
+                    initiativen.setSelectedIssue(myissueid, value);
                 } catch (Exception e) {
                 }
             }

@@ -83,12 +83,7 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
             for (Area a : myInstance.areas.getSelectedAreas()) {
                 currentlyDownloadedArea = a.getName();
                 handler.sendEmptyMessage(2);
-                ArrayList<Integer> selectedIssues = new ArrayList<Integer>();
-                for (Initiative ini : a.getInitiativen()) {
-                    if (ini.isSelected()) {
-                        selectedIssues.add(ini.issue_id);
-                    }
-                }
+              
                 while (myInstance.downloadInitiativen(a, ((LiqoidApplication) getApplication()).cachedAPI1Queries, download) < 0) {
                     handler.sendEmptyMessage(-1);
                     try {
@@ -98,19 +93,12 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
                     handler.sendEmptyMessage(2);
 
                 }
-                for (Initiative ini : a.getInitiativen()) {
-                    for (int i : selectedIssues) {
-                        if (ini.issue_id == i) {
-                            ini.setSelected(true);
-                        }
-                    }
-                }
+               
 
             }
 
 
             allInis = new Initiativen(getSharedPreferences(((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance().getPrefsName(), RESULT_OK));
-            ((LiqoidApplication) getApplication()).loadSelectedIssuesFromPrefs();
             for (Area a : myInstance.areas.getSelectedAreas()) {
 
 

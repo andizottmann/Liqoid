@@ -85,7 +85,7 @@ public class Areas extends ArrayList<Area> {
 
         }
         SharedPreferences.Editor editor = instancePrefs.edit();
-        selectedAreasString.replaceAll("::", ":");
+        selectedAreasString=selectedAreasString.replaceAll("::", ":");
         if (selectedAreasString.startsWith(":")){
         selectedAreasString=selectedAreasString.substring(1);
         }
