@@ -27,7 +27,6 @@ public class LQFBInstance {
     private AreasFromAPIParser areaParser;
     private InitiativenFromAPIParser iniParser;
     public static final String AREA_API = "area";
-    private long dataage_areas = 0, dataage_inis = 0;
     SharedPreferences instancePrefs;
 
     public LQFBInstance(LiqoidApplication la, String prefsName, String name, String apiUrl, String webUrl, String developerkey, String apiversion) {

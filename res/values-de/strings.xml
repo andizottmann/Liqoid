@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Liqoid</string>
-    <string name="tab_upcoming">Anstehend</string>
+         <string name="dataage">Datenalter</string>   <string name="tab_upcoming">Anstehend</string>
     <string name="tab_recent">Neueste</string>
     <string name="tab_inis">Themen</string>
     <string name="tab_areas">Gebiete</string>

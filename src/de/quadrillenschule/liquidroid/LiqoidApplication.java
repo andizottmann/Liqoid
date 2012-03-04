@@ -6,12 +6,9 @@ package de.quadrillenschule.liquidroid;
 
 import android.app.Application;
 import android.content.Context;
-import android.content.SharedPreferences;
+import android.widget.TextView;
 import android.widget.Toast;
-import de.quadrillenschule.liquidroid.model.Area;
 import de.quadrillenschule.liquidroid.model.CachedAPI1Queries;
-import de.quadrillenschule.liquidroid.model.Initiative;
-import de.quadrillenschule.liquidroid.model.LQFBInstance;
 import de.quadrillenschule.liquidroid.model.LQFBInstances;
 import de.quadrillenschule.liquidroid.tools.CrashLog;
 import java.io.File;
@@ -38,12 +35,15 @@ public class LiqoidApplication extends Application {
         cachedAPI1Queries=new CachedAPI1Queries(getCacheDir());
         lqfbInstances = new LQFBInstances(this);
         lqfbInstanceChangeListeners = new ArrayList<LQFBInstanceChangeListener>();
-
-
     }
 
+    public void statusLineText(String text){
+        if (statusLine!=null){
+        statusLine.setText(text);
+        }
+    }
 
-
+    public TextView statusLine=null;
 
 
    

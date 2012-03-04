@@ -22,8 +22,12 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.CheckBox;
 import android.widget.ListView;
+import android.widget.TextView;
 import de.quadrillenschule.liquidroid.model.AreasListAdapter;
 import de.quadrillenschule.liquidroid.model.LQFBInstance;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  *
@@ -114,7 +118,7 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
     }
 
     public void refreshAreasList(boolean force) {
-      if (force) {
+        if (force) {
             pauseDownload = false;
         }
         RefreshAreasListThread ralt = new RefreshAreasListThread(force, this);
@@ -165,7 +169,13 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
 
         @Override
         public void handleMessage(Message msg) {
-            if ((msg.what == 1)&&(!pauseDownload)) {
+
+            long dataage = ((LiqoidApplication) getApplication()).cachedAPI1Queries.dataage;
+            DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String dataagestr = formatter.format(new Date(dataage));
+            ((LiqoidApplication) getApplication()).statusLineText(getApplicationContext().getString(R.string.dataage) + ": " + dataagestr);
+
+            if ((msg.what == 1) && (!pauseDownload)) {
                 progressDialog = ProgressDialog.show(AreasTabActivity.this, "",
                         getApplicationContext().getString(R.string.downloading) + "\n" + ((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance().getName() + "...", true);
 

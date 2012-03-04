@@ -19,6 +19,9 @@ import de.quadrillenschule.liquidroid.model.Area;
 import de.quadrillenschule.liquidroid.model.Initiative;
 import de.quadrillenschule.liquidroid.model.Initiativen;
 import de.quadrillenschule.liquidroid.model.LQFBInstance;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  *
@@ -30,6 +33,7 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
     Initiativen allInis;
     ProgressDialog progressDialog;
     private boolean pauseDownload = false;
+    long overallDataAge = 0;
 
     /** Called when the activity is first created. */
     @Override
@@ -78,7 +82,7 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
         @Override
         public void run() {
             LQFBInstance myInstance = ((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance();
-
+            overallDataAge = System.currentTimeMillis();
             for (Area a : myInstance.areas.getSelectedAreas()) {
                 currentlyDownloadedArea = a.getName();
                 if (myInstance.willDownloadInitiativen(a, ((LiqoidApplication) getApplication()).cachedAPI1Queries, download)) {
@@ -103,10 +107,12 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
                     handler.sendEmptyMessage(2);
 
                 }
-                  if (retrycounter >= maxretries) {
-                pauseDownload = true;
-            }
-
+                if (retrycounter >= maxretries) {
+                    pauseDownload = true;
+                }
+                if (overallDataAge > ((LiqoidApplication) getApplication()).cachedAPI1Queries.dataage) {
+                    overallDataAge = ((LiqoidApplication) getApplication()).cachedAPI1Queries.dataage;
+                }
             }
             allInis = new Initiativen(getSharedPreferences(((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance().getPrefsName(), RESULT_OK));
             for (Area a : myInstance.areas.getSelectedAreas()) {
@@ -127,15 +133,24 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
 
         @Override
         public void handleMessage(Message msg) {
-            if ((msg.what == 1)&&(!pauseDownload)) {
+            long dataage = overallDataAge;
+            DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String dataagestr = formatter.format(new Date(dataage));
+            String prefix = "";
+            if (pauseDownload) {
+                prefix = "Offline - ";
+            }
+            ((LiqoidApplication) getApplication()).statusLineText(prefix + getApplicationContext().getString(R.string.dataage) + ": " + dataagestr);
+
+            if ((msg.what == 1) && (!pauseDownload)) {
 
                 progressDialog = ProgressDialog.show(InitiativesTabActivity.this, "",
                         getApplicationContext().getString(R.string.downloading) + "\n" + ((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance().getName() + "...", true);
-            }
+             }
             if (msg.what == 0) {
 
                 try {
-                    progressDialog.dismiss();
+                    progressDialog.cancel();
                 } catch (Exception e) {
                     //Sometimes it is not attached anymore
                     progressDialog = null;

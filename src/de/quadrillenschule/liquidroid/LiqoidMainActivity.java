@@ -17,6 +17,7 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TabHost;
+import android.widget.TextView;
 import de.quadrillenschule.liquidroid.model.Area;
 import de.quadrillenschule.liquidroid.model.LQFBInstance;
 import de.quadrillenschule.liquidroid.model.LQFBInstances;
@@ -78,7 +79,8 @@ public class LiqoidMainActivity extends TabActivity implements TabHost.OnTabChan
         instanceSpinner.setOnItemSelectedListener(this);
         int i = ((LiqoidApplication) getApplication()).lqfbInstances.indexOf(((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance());
         instanceSpinner.setSelection(i);
-
+        
+        ((LiqoidApplication) getApplication()).statusLine=((TextView) findViewById(R.id.statusline));
     }
 
     @Override

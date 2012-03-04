@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Liqoid</string>
+     <string name="dataage">Data from</string>
     <string name="tab_upcoming">Upcoming</string>
     <string name="tab_recent">Recent</string>
     <string name="tab_inis">Inis</string>
