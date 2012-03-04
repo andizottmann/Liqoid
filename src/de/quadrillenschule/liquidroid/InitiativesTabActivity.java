@@ -86,10 +86,10 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
             for (Area a : myInstance.areas.getSelectedAreas()) {
                 currentlyDownloadedArea = a.getName();
                 if (myInstance.willDownloadInitiativen(a, ((LiqoidApplication) getApplication()).cachedAPI1Queries, download)) {
-                    handler.sendEmptyMessage(1);
+                    handler.sendEmptyMessage(DOWNLOADING);
 
                 }
-                handler.sendEmptyMessage(2);
+                handler.sendEmptyMessage(DOWNLOAD_RETRY);
                 int retrycounter = 0;
                 int maxretries = 4;
                 if (pauseDownload) {
@@ -97,14 +97,14 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
                 }
 
                 while ((retrycounter <= maxretries) && (myInstance.downloadInitiativen(a, ((LiqoidApplication) getApplication()).cachedAPI1Queries, download) < 0)) {
-                    handler.sendEmptyMessage(-1);
+                    handler.sendEmptyMessage(DOWNLOAD_ERROR);
                     try {
                         this.sleep((2 ^ retrycounter) * 1000);
                         retrycounter++;
 
                     } catch (InterruptedException ex) {
                     }
-                    handler.sendEmptyMessage(2);
+                    handler.sendEmptyMessage(DOWNLOAD_RETRY);
 
                 }
                 if (retrycounter >= maxretries) {
@@ -125,14 +125,17 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
 
             allInis.sortById();
             inisListAdapter = new AllInitiativenListAdapter(parent, allInis, R.id.initiativenList);
-            handler.sendEmptyMessage(0);
+            handler.sendEmptyMessage(FINISH_OK);
 
         }
     }
+    private static int FINISH_OK = 0, DOWNLOADING = 1, DOWNLOAD_ERROR = -1, DOWNLOAD_RETRY = 2;
     private Handler handler = new Handler() {
 
         @Override
         public void handleMessage(Message msg) {
+
+            //Setting the status line text
             long dataage = overallDataAge;
             DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String dataagestr = formatter.format(new Date(dataage));
@@ -142,12 +145,13 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
             }
             ((LiqoidApplication) getApplication()).statusLineText(prefix + getApplicationContext().getString(R.string.dataage) + ": " + dataagestr);
 
-            if ((msg.what == 1) && (!pauseDownload)) {
+            //Updating status of progressdialog
+            if ((msg.what == DOWNLOADING) && (!pauseDownload)) {
 
                 progressDialog = ProgressDialog.show(InitiativesTabActivity.this, "",
                         getApplicationContext().getString(R.string.downloading) + "\n" + ((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance().getName() + "...", true);
-             }
-            if (msg.what == 0) {
+            }
+            if (msg.what == FINISH_OK) {
 
                 try {
                     progressDialog.cancel();
@@ -161,11 +165,11 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
             }
             if (progressDialog != null) {
 
-                if (msg.what == -1) {
+                if (msg.what == DOWNLOAD_ERROR) {
                     progressDialog.setMessage(getApplicationContext().getString(R.string.download_error));
 
                 }
-                if (msg.what == 2) {
+                if (msg.what == DOWNLOAD_RETRY) {
                     progressDialog.setMessage(getApplicationContext().getString(R.string.downloading) + "\n" + currentlyDownloadedArea + "...");
 
                 }
