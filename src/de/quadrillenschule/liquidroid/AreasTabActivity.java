@@ -34,6 +34,7 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
     private AreasListAdapter areasListAdapter;
     private ProgressDialog progressDialog;
     private View contextMenuView;
+    private boolean pauseDownload = false;
 
     /** Called when the activity is first created. */
     @Override
@@ -113,9 +114,9 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
     }
 
     public void refreshAreasList(boolean force) {
-
-
-
+      if (force) {
+            pauseDownload = false;
+        }
         RefreshAreasListThread ralt = new RefreshAreasListThread(force, this);
         ralt.start();
     }
@@ -128,6 +129,7 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
         public RefreshAreasListThread(boolean download, AreasTabActivity parent) {
             this.download = download;
             this.parent = parent;
+
         }
 
         @Override
@@ -136,20 +138,25 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
             if (myinstance.willDownloadAreas(((LiqoidApplication) getApplication()).cachedAPI1Queries, download)) {
                 handler.sendEmptyMessage(1);
             }
-            int retrycounter=0;
-            int maxretries=4;
-
-            while ((retrycounter<=maxretries)&&(myinstance.downloadAreas(((LiqoidApplication) getApplication()).cachedAPI1Queries, download)) < 0) {
+            int retrycounter = 0;
+            int maxretries = 4;
+            if (pauseDownload) {
+                maxretries = 0;
+            }
+            while ((retrycounter <= maxretries) && (myinstance.downloadAreas(((LiqoidApplication) getApplication()).cachedAPI1Queries, download)) < 0) {
 
                 handler.sendEmptyMessage(-1);
                 try {
-                    this.sleep((2^retrycounter)*1000);
+                    this.sleep((2 ^ retrycounter) * 1000);
                     retrycounter++;
                 } catch (InterruptedException ex) {
                 }
                 handler.sendEmptyMessage(-2);
             }
-           
+
+            if (retrycounter >= maxretries) {
+                pauseDownload = true;
+            }
             areasListAdapter = new AreasListAdapter(parent, myinstance.areas, R.id.areasList);
             handler.sendEmptyMessage(0);
         }
@@ -158,7 +165,7 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
 
         @Override
         public void handleMessage(Message msg) {
-            if (msg.what == 1) {
+            if ((msg.what == 1)&&(!pauseDownload)) {
                 progressDialog = ProgressDialog.show(AreasTabActivity.this, "",
                         getApplicationContext().getString(R.string.downloading) + "\n" + ((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance().getName() + "...", true);
 

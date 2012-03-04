@@ -29,6 +29,7 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
     AllInitiativenListAdapter inisListAdapter;
     Initiativen allInis;
     ProgressDialog progressDialog;
+    private boolean pauseDownload = false;
 
     /** Called when the activity is first created. */
     @Override
@@ -69,6 +70,9 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
         public RefreshInisListThread(boolean download, InitiativesTabActivity parent) {
             this.download = download;
             this.parent = parent;
+            if (download) {
+                pauseDownload = false;
+            }
         }
 
         @Override
@@ -84,7 +88,9 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
                 handler.sendEmptyMessage(2);
                 int retrycounter = 0;
                 int maxretries = 4;
-
+                if (pauseDownload) {
+                    maxretries = 0;
+                }
 
                 while ((retrycounter <= maxretries) && (myInstance.downloadInitiativen(a, ((LiqoidApplication) getApplication()).cachedAPI1Queries, download) < 0)) {
                     handler.sendEmptyMessage(-1);
@@ -97,7 +103,9 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
                     handler.sendEmptyMessage(2);
 
                 }
-
+                  if (retrycounter >= maxretries) {
+                pauseDownload = true;
+            }
 
             }
             allInis = new Initiativen(getSharedPreferences(((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance().getPrefsName(), RESULT_OK));
@@ -119,7 +127,7 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
 
         @Override
         public void handleMessage(Message msg) {
-            if (msg.what == 1) {
+            if ((msg.what == 1)&&(!pauseDownload)) {
 
                 progressDialog = ProgressDialog.show(InitiativesTabActivity.this, "",
                         getApplicationContext().getString(R.string.downloading) + "\n" + ((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance().getName() + "...", true);
