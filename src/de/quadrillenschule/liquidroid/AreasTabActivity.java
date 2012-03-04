@@ -6,9 +6,7 @@ package de.quadrillenschule.liquidroid;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.gesture.GestureOverlayView;
 import android.net.Uri;
 import android.os.Bundle;
@@ -24,12 +22,8 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.CheckBox;
 import android.widget.ListView;
-import de.quadrillenschule.liquidroid.model.Area;
 import de.quadrillenschule.liquidroid.model.AreasListAdapter;
 import de.quadrillenschule.liquidroid.model.LQFBInstance;
-import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -121,8 +115,6 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
     public void refreshAreasList(boolean force) {
 
 
-        progressDialog = ProgressDialog.show(AreasTabActivity.this, "",
-                getApplicationContext().getString(R.string.downloading) + "\n" + ((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance().getName() + "...", true);
 
         RefreshAreasListThread ralt = new RefreshAreasListThread(force, this);
         ralt.start();
@@ -141,8 +133,12 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
         @Override
         public void run() {
             LQFBInstance myinstance = ((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance();
+            if (myinstance.willDownloadAreas(((LiqoidApplication) getApplication()).cachedAPI1Queries, download)) {
+                handler.sendEmptyMessage(1);
+            }
 
             while (myinstance.downloadAreas(((LiqoidApplication) getApplication()).cachedAPI1Queries, download) < 0) {
+
                 handler.sendEmptyMessage(-1);
                 try {
                     this.sleep(3000);
@@ -158,15 +154,19 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
 
         @Override
         public void handleMessage(Message msg) {
+            if (msg.what == 1) {
+                progressDialog = ProgressDialog.show(AreasTabActivity.this, "",
+                        getApplicationContext().getString(R.string.downloading) + "\n" + ((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance().getName() + "...", true);
 
-            if (msg.what >= 0) {
+            }
+            if (msg.what == 0) {
                 try {
                     progressDialog.dismiss();
                 } catch (Exception e) {
                     //Sometimes it is not attached anymore
                     progressDialog = null;
                 }
-                 final ListView listview = (ListView) findViewById(R.id.areasList);
+                final ListView listview = (ListView) findViewById(R.id.areasList);
                 listview.setAdapter(areasListAdapter);
 
             }

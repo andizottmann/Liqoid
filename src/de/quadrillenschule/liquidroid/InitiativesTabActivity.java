@@ -19,9 +19,6 @@ import de.quadrillenschule.liquidroid.model.Area;
 import de.quadrillenschule.liquidroid.model.Initiative;
 import de.quadrillenschule.liquidroid.model.Initiativen;
 import de.quadrillenschule.liquidroid.model.LQFBInstance;
-import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -57,8 +54,6 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
 
     public void refreshInisList(boolean download) {
 
-        progressDialog = ProgressDialog.show(InitiativesTabActivity.this, "",
-                getApplicationContext().getString(R.string.downloading) + "\n" + ((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance().getName() + "...", true);
 
         RefreshInisListThread ralt = new RefreshInisListThread(download, this);
         ralt.start();
@@ -82,8 +77,12 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
 
             for (Area a : myInstance.areas.getSelectedAreas()) {
                 currentlyDownloadedArea = a.getName();
+                if (myInstance.willDownloadInitiativen(a, ((LiqoidApplication) getApplication()).cachedAPI1Queries, download)){
+                     handler.sendEmptyMessage(1);
+
+                }
                 handler.sendEmptyMessage(2);
-              
+
                 while (myInstance.downloadInitiativen(a, ((LiqoidApplication) getApplication()).cachedAPI1Queries, download) < 0) {
                     handler.sendEmptyMessage(-1);
                     try {
@@ -93,12 +92,10 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
                     handler.sendEmptyMessage(2);
 
                 }
-               
+
 
             }
-
-
-            allInis = new Initiativen(getSharedPreferences(((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance().getPrefsName(), RESULT_OK));
+       allInis = new Initiativen(getSharedPreferences(((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance().getPrefsName(), RESULT_OK));
             for (Area a : myInstance.areas.getSelectedAreas()) {
 
 
@@ -117,6 +114,11 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
 
         @Override
         public void handleMessage(Message msg) {
+            if (msg.what == 1) {
+
+                progressDialog = ProgressDialog.show(InitiativesTabActivity.this, "",
+                        getApplicationContext().getString(R.string.downloading) + "\n" + ((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance().getName() + "...", true);
+            }
             if (msg.what == 0) {
 
                 try {

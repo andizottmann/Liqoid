@@ -35,6 +35,7 @@ public class CachedAPI1Queries {
     File cacheFolder;
     public String url, api;
     public boolean wasReadFromNetwork = false;
+    public long dataage = 0;
 
     public CachedAPI1Queries(File cacheFolder) {
         this.cacheFolder = cacheFolder;
@@ -90,6 +91,12 @@ public class CachedAPI1Queries {
         return myfile.exists();
     }
 
+    public boolean willDownloadQuery(String api, String parameters, String apiUrl, String developerkey, boolean forceNetwork) throws FileNotFoundException {
+       if (forceNetwork){return true;}
+        url = apiUrl + api + ".html?key=" + developerkey + parameters;
+        return !cacheExists(url);
+    }
+
     public InputStream queryInputStream(String api, String parameters, String apiUrl, String developerkey, boolean forceNetwork) throws IOException, FileNotFoundException {
         url = apiUrl + api + ".html?key=" + developerkey + parameters;
         this.api = api;
@@ -104,6 +111,7 @@ public class CachedAPI1Queries {
 
     private InputStream cacheInputStream(String purl) throws FileNotFoundException {
         File myfile = new File(cacheFolder, purl.hashCode() + ".xml");
+        dataage = myfile.lastModified();
         FileInputStream fis = new FileInputStream(myfile);
 
         return fis;
@@ -128,7 +136,7 @@ public class CachedAPI1Queries {
         HttpPost httpPost = new HttpPost(url);
         HttpResponse response = (HttpResponse) httpClient.execute(httpPost);
         wasReadFromNetwork = true;
-
+        dataage = System.currentTimeMillis();
 
         storeInCache(response.getEntity().getContent());
         return cacheInputStream(url);

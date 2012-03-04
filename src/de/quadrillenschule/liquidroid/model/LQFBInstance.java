@@ -7,6 +7,7 @@ package de.quadrillenschule.liquidroid.model;
 import android.app.Application;
 import android.content.SharedPreferences;
 import de.quadrillenschule.liquidroid.LiqoidApplication;
+import java.io.FileNotFoundException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
@@ -26,6 +27,7 @@ public class LQFBInstance {
     private AreasFromAPIParser areaParser;
     private InitiativenFromAPIParser iniParser;
     public static final String AREA_API = "area";
+    private long dataage_areas = 0, dataage_inis = 0;
     SharedPreferences instancePrefs;
 
     public LQFBInstance(LiqoidApplication la, String prefsName, String name, String apiUrl, String webUrl, String developerkey, String apiversion) {
@@ -44,10 +46,18 @@ public class LQFBInstance {
         return name;
     }
 
+    public boolean willDownloadAreas(CachedAPI1Queries cachedAPI1Queries, boolean forceNetwork) {
+        try {
+            return cachedAPI1Queries.willDownloadQuery("area", "", apiUrl, developerkey, forceNetwork);
+        } catch (FileNotFoundException e) {
+            return true;
+        }
+    }
+
     public int downloadAreas(CachedAPI1Queries cachedAPI1Queries, boolean forceNetwork) {
         SAXParserFactory factory = SAXParserFactory.newInstance();
         SAXParser saxparser;
-    
+
         areaParser = new AreasFromAPIParser(instancePrefs);
         try {
             saxparser = factory.newSAXParser();
@@ -58,8 +68,24 @@ public class LQFBInstance {
         } catch (Exception e) {
             return -1;
         }
-       
+
         return 0;
+    }
+
+     public boolean willDownloadInitiativen(Area area,CachedAPI1Queries cachedAPI1Queries, boolean forceNetwork) {
+         String[] states = {"new", "accepted", "frozen", "voting"};
+        boolean retval=false;
+         for (String state : states) {
+
+         try {
+            if (cachedAPI1Queries.willDownloadQuery("initiative", "&area_id=" + area.getId() + "&state=" + state, apiUrl, developerkey, forceNetwork)){
+            retval=true;
+            }
+        } catch (FileNotFoundException e) {
+            return true;
+        }
+         }
+        return retval;
     }
 
     public int downloadInitiativen(Area area, CachedAPI1Queries cachedAPI1Queries, boolean forceNetwork) {
