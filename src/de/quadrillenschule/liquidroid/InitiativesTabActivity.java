@@ -22,6 +22,8 @@ import de.quadrillenschule.liquidroid.model.LQFBInstance;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -33,13 +35,14 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
     Initiativen allInis;
     ProgressDialog progressDialog;
     private boolean pauseDownload = false;
+    private boolean isRefreshing = false;
     long overallDataAge = 0;
 
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-        allInis = new Initiativen(getSharedPreferences(((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance().getPrefsName(), RESULT_OK));
+        allInis = new Initiativen(getSharedPreferences(((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance().getPrefsName(), MODE_PRIVATE));
 
         setContentView(R.layout.initiativentab);
 
@@ -58,9 +61,8 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
     }
 
     public void refreshInisList(boolean download) {
-
-
         RefreshInisListThread ralt = new RefreshInisListThread(download, this);
+        //runOnUiThread(ralt);
         ralt.start();
 
     }
@@ -81,6 +83,10 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
 
         @Override
         public void run() {
+            if (isRefreshing) {
+                return;
+            }
+            isRefreshing = true;
             LQFBInstance myInstance = ((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance();
             overallDataAge = System.currentTimeMillis();
             for (Area a : myInstance.areas.getSelectedAreas()) {
@@ -113,6 +119,8 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
                 if (overallDataAge > ((LiqoidApplication) getApplication()).cachedAPI1Queries.dataage) {
                     overallDataAge = ((LiqoidApplication) getApplication()).cachedAPI1Queries.dataage;
                 }
+                handler.sendEmptyMessage(FINISH_SINGLE_OK);
+
             }
             allInis = new Initiativen(getSharedPreferences(((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance().getPrefsName(), RESULT_OK));
             for (Area a : myInstance.areas.getSelectedAreas()) {
@@ -124,12 +132,15 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
             }
 
             allInis.sortById();
+
             inisListAdapter = new AllInitiativenListAdapter(parent, allInis, R.id.initiativenList);
+            inisListAdapter.notifyDataSetChanged();
+
             handler.sendEmptyMessage(FINISH_OK);
 
         }
     }
-    private static int FINISH_OK = 0, DOWNLOADING = 1, DOWNLOAD_ERROR = -1, DOWNLOAD_RETRY = 2;
+    private static int FINISH_OK = 0, FINISH_SINGLE_OK = 3, DOWNLOADING = 1, DOWNLOAD_ERROR = -1, DOWNLOAD_RETRY = 2;
     private Handler handler = new Handler() {
 
         @Override
@@ -161,7 +172,18 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
                 }
                 final ListView listview = (ListView) findViewById(R.id.initiativenList);
                 listview.setAdapter(inisListAdapter);
+                findViewById(R.id.initiativenList).refreshDrawableState();
+                isRefreshing = false;
 
+            }
+            if (msg.what == FINISH_SINGLE_OK) {
+
+                try {
+                    progressDialog.cancel();
+                } catch (Exception e) {
+                    //Sometimes it is not attached anymore
+                    progressDialog = null;
+                }
             }
             if (progressDialog != null) {
 

@@ -39,6 +39,7 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
     private ProgressDialog progressDialog;
     private View contextMenuView;
     private boolean pauseDownload = false;
+    private boolean isRefreshing = false;
 
     /** Called when the activity is first created. */
     @Override
@@ -56,8 +57,8 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
+    public void onStart() {
+        super.onStart();
         refreshAreasList(false);
     }
 
@@ -138,6 +139,11 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
 
         @Override
         public void run() {
+            if (isRefreshing) {
+                return;
+            }
+            isRefreshing = true;
+
             LQFBInstance myinstance = ((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance();
             if (myinstance.willDownloadAreas(((LiqoidApplication) getApplication()).cachedAPI1Queries, download)) {
                 handler.sendEmptyMessage(DOWNLOADING);
@@ -161,12 +167,14 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
             if (retrycounter >= maxretries) {
                 pauseDownload = true;
             }
+            handler.sendEmptyMessage(0);
             areasListAdapter = new AreasListAdapter(parent, myinstance.areas, R.id.areasList);
+
+            findViewById(R.id.areasList).refreshDrawableState();
             handler.sendEmptyMessage(0);
         }
     }
-      private static int FINISH_OK = 0, DOWNLOADING = 1, DOWNLOAD_ERROR = -1, DOWNLOAD_RETRY = 2;
-
+    private static int FINISH_OK = 0, DOWNLOADING = 1, DOWNLOAD_ERROR = -1, DOWNLOAD_RETRY = 2;
     private Handler handler = new Handler() {
 
         @Override
@@ -175,7 +183,11 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
             long dataage = ((LiqoidApplication) getApplication()).cachedAPI1Queries.dataage;
             DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String dataagestr = formatter.format(new Date(dataage));
-            ((LiqoidApplication) getApplication()).statusLineText(getApplicationContext().getString(R.string.dataage) + ": " + dataagestr);
+            String prefix = "";
+            if (pauseDownload) {
+                prefix = "Offline - ";
+            }
+            ((LiqoidApplication) getApplication()).statusLineText(prefix + getApplicationContext().getString(R.string.dataage) + ": " + dataagestr);
 
             //update progressdialog
             if ((msg.what == DOWNLOADING) && (!pauseDownload)) {
@@ -192,6 +204,8 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
                 }
                 final ListView listview = (ListView) findViewById(R.id.areasList);
                 listview.setAdapter(areasListAdapter);
+                isRefreshing = false;
+
 
             }
             if (progressDialog != null) {
