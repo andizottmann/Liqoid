@@ -6,6 +6,7 @@ package de.quadrillenschule.liquidroid;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.res.Configuration;
 import android.gesture.GestureOverlayView;
 import android.os.Bundle;
 import android.os.Handler;
@@ -22,8 +23,6 @@ import de.quadrillenschule.liquidroid.model.LQFBInstance;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -35,7 +34,6 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
     Initiativen allInis;
     ProgressDialog progressDialog;
     private boolean pauseDownload = false;
-    private boolean isRefreshing = false;
     long overallDataAge = 0;
 
     /** Called when the activity is first created. */
@@ -58,6 +56,13 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
     public void onResume() {
         super.onResume();
         refreshInisList(false);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        refreshInisList(false);
+
     }
 
     public void refreshInisList(boolean download) {
@@ -83,10 +88,7 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
 
         @Override
         public void run() {
-            if (isRefreshing) {
-                return;
-            }
-            isRefreshing = true;
+
             LQFBInstance myInstance = ((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance();
             overallDataAge = System.currentTimeMillis();
             for (Area a : myInstance.areas.getSelectedAreas()) {
@@ -173,7 +175,6 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
                 final ListView listview = (ListView) findViewById(R.id.initiativenList);
                 listview.setAdapter(inisListAdapter);
                 findViewById(R.id.initiativenList).refreshDrawableState();
-                isRefreshing = false;
 
             }
             if (msg.what == FINISH_SINGLE_OK) {

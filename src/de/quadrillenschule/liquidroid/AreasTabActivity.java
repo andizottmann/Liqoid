@@ -7,6 +7,7 @@ package de.quadrillenschule.liquidroid;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.gesture.GestureOverlayView;
 import android.net.Uri;
 import android.os.Bundle;
@@ -39,7 +40,6 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
     private ProgressDialog progressDialog;
     private View contextMenuView;
     private boolean pauseDownload = false;
-    private boolean isRefreshing = false;
 
     /** Called when the activity is first created. */
     @Override
@@ -57,9 +57,16 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
+    public void onResume() {
+        super.onResume();
         refreshAreasList(false);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        refreshAreasList(false);
+
     }
 
     public void onNothingSelected(AdapterView<?> arg0) {
@@ -139,10 +146,6 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
 
         @Override
         public void run() {
-            if (isRefreshing) {
-                return;
-            }
-            isRefreshing = true;
 
             LQFBInstance myinstance = ((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance();
             if (myinstance.willDownloadAreas(((LiqoidApplication) getApplication()).cachedAPI1Queries, download)) {
@@ -204,9 +207,6 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
                 }
                 final ListView listview = (ListView) findViewById(R.id.areasList);
                 listview.setAdapter(areasListAdapter);
-                isRefreshing = false;
-
-
             }
             if (progressDialog != null) {
                 if (msg.what == DOWNLOAD_ERROR) {
