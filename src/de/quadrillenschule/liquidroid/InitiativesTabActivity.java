@@ -15,7 +15,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ListView;
-import de.quadrillenschule.liquidroid.model.AllInitiativenListAdapter;
+import de.quadrillenschule.liquidroid.gui.AllInitiativenListAdapter;
 import de.quadrillenschule.liquidroid.model.Area;
 import de.quadrillenschule.liquidroid.model.Initiative;
 import de.quadrillenschule.liquidroid.model.Initiativen;
@@ -112,6 +112,7 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
             updateAreas();
             LQFBInstance myInstance = ((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance();
             overallDataAge = System.currentTimeMillis();
+            inisListAdapter=null;
             for (Area a : myInstance.areas.getSelectedAreas()) {
                 currentlyDownloadedArea = a.getName();
                 if (myInstance.willDownloadInitiativen(a, ((LiqoidApplication) getApplication()).cachedAPI1Queries, download)) {
@@ -154,7 +155,7 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
                 }
             }
 
-            allInis.sortById();
+            allInis.reverse(Initiative.ISSUE_CREATED_COMP);
 
             inisListAdapter = new AllInitiativenListAdapter(parent, allInis, R.id.initiativenList);
             inisListAdapter.notifyDataSetChanged();
@@ -194,6 +195,7 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
                     progressDialog = null;
                 }
                 final ListView listview = (ListView) findViewById(R.id.initiativenList);
+
                 listview.setAdapter(inisListAdapter);
                 findViewById(R.id.initiativenList).refreshDrawableState();
 

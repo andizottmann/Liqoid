@@ -13,16 +13,16 @@ import java.util.Date;
  */
 public class Initiative implements Comparable<Initiative> {
 
-    public int id=0;
-    public int area_id=0;
-    public String name="";
-    public String state="";
-    public int issue_id=0;
-    public long issue_discussion_time=0;
-    public long issue_admission_time=0;
-    public long issue_verification_time=0;
-    public long issue_voting_time=0;
-    public int supporter_count=0;//,issue_voter_count=-1,positive_votes=-1,negative_voters=-1;
+    public int id = 0;
+    public int area_id = 0;
+    public String name = "";
+    public String state = "";
+    public int issue_id = 0;
+    public long issue_discussion_time = 0;
+    public long issue_admission_time = 0;
+    public long issue_verification_time = 0;
+    public long issue_voting_time = 0;
+    public int supporter_count = 0;//,issue_voter_count=-1,positive_votes=-1,negative_voters=-1;
     public Date revoked;
     public Date created;
     public Date issue_created;
@@ -31,8 +31,8 @@ public class Initiative implements Comparable<Initiative> {
     public Date issue_fully_frozen;
     public Date issue_closed;
     public Date current_draft_created;
- 
-  
+    public static final int ISSUE_ID_COMP = 0, ISSUE_CREATED_COMP = 1;
+    private int comparator = ISSUE_ID_COMP;
 
     public Date getDateForStartVoting() {
         Calendar cal = Calendar.getInstance();
@@ -133,8 +133,29 @@ public class Initiative implements Comparable<Initiative> {
         return retval;
     }
 
-   
     public int compareTo(Initiative arg0) {
-        return ((Integer) this.issue_id).compareTo((Integer) arg0.issue_id);
+        switch (comparator) {
+            case ISSUE_ID_COMP:
+                return ((Integer) this.issue_id).compareTo((Integer) arg0.issue_id);
+            case ISSUE_CREATED_COMP:
+                return (this.issue_created).compareTo(arg0.issue_created);
+
+            default:
+                return ((Integer) this.issue_id).compareTo((Integer) arg0.issue_id);
+        }
+    }
+
+    /**
+     * @return the comparator
+     */
+    public int getComparator() {
+        return comparator;
+    }
+
+    /**
+     * @param comparator the comparator to set
+     */
+    public void setComparator(int comparator) {
+        this.comparator = comparator;
     }
 }

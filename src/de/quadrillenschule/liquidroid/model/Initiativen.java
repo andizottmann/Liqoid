@@ -41,9 +41,29 @@ public class Initiativen extends ArrayList<Initiative> {
         return retval;
     }
 
-    public boolean isSelected(int pos) {
+    public boolean isPositionSelected(int pos) {
 
         Initiative myini = this.get(pos);
+        String[] selectedissues_str = instancePrefs.getString("selectedissues", "0").split(":");
+        for (String s : selectedissues_str) {
+            try {
+                if (Integer.parseInt(s) == myini.issue_id) {
+                    return true;
+                }
+            } catch (Exception e) {
+            }
+        }
+
+
+        return false;
+    }
+
+    public boolean isIssueSelected(int issueid) {
+        Initiativen myinis = findByIssueID(issueid);
+        if (myinis.size() <= 0) {
+            return false;
+        }
+        Initiative myini = myinis.get(0);
         String[] selectedissues_str = instancePrefs.getString("selectedissues", "0").split(":");
         for (String s : selectedissues_str) {
             try {
@@ -84,7 +104,7 @@ public class Initiativen extends ArrayList<Initiative> {
                     }
                 }
                 int len = newselectedissues.length();
-                if (len >= 0) {
+                if (len > 0) {
                     selectedIssuesString = newselectedissues.substring(0, len - 1);
                 }
             }
@@ -146,7 +166,17 @@ public class Initiativen extends ArrayList<Initiative> {
         return retval;
     }
 
-    public void sortById() {
+    public void sort(int comparator) {
+        for (Initiative i : this) {
+            i.setComparator(comparator);
+        }
+        Collections.sort(this);
+    }
+
+    public void reverse(int comparator) {
+        for (Initiative i : this) {
+            i.setComparator(comparator);
+        }
         Collections.reverse(this);
     }
 }

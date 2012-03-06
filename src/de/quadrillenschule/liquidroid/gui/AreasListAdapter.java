@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.quadrillenschule.liquidroid.model;
+package de.quadrillenschule.liquidroid.gui;
 
 import android.app.Activity;
 import android.content.Context;
@@ -14,6 +14,8 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import de.quadrillenschule.liquidroid.AreasTabActivity;
 import de.quadrillenschule.liquidroid.LiqoidApplication;
+import de.quadrillenschule.liquidroid.model.Area;
+import de.quadrillenschule.liquidroid.model.Areas;
 
 public class AreasListAdapter extends ArrayAdapter<Area> {
 

@@ -24,7 +24,7 @@ import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
-import de.quadrillenschule.liquidroid.model.AreasListAdapter;
+import de.quadrillenschule.liquidroid.gui.AreasListAdapter;
 import de.quadrillenschule.liquidroid.model.LQFBInstance;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;

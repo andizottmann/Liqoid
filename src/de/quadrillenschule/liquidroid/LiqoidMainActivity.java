@@ -18,7 +18,7 @@ import android.widget.Spinner;
 import android.widget.TabHost;
 import android.widget.TextView;
 import de.quadrillenschule.liquidroid.model.LQFBInstances;
-import de.quadrillenschule.liquidroid.model.LQFBInstancesListAdapter;
+import de.quadrillenschule.liquidroid.gui.LQFBInstancesListAdapter;
 import java.util.ArrayList;
 
 public class LiqoidMainActivity extends TabActivity implements GestureOverlayView.OnGesturePerformedListener, OnItemSelectedListener {

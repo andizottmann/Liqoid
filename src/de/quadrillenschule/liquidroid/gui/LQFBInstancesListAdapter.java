@@ -2,12 +2,14 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.quadrillenschule.liquidroid.model;
+package de.quadrillenschule.liquidroid.gui;
 
 import android.app.Activity;
 import android.content.Context;
 import android.widget.ArrayAdapter;
 import android.widget.Filter;
+import de.quadrillenschule.liquidroid.model.LQFBInstance;
+import de.quadrillenschule.liquidroid.model.LQFBInstances;
 
 /**
  *

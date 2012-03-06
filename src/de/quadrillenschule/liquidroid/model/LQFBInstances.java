@@ -36,6 +36,13 @@ public class LQFBInstances extends ArrayList<LQFBInstance> {
                     "https://lqfb.piratenpartei.de/pp/api/",
                     "https://lqfb.piratenpartei.de/pp/",
                     "6Bw8HGL8Bp2z4wK6L3Zw", "1.x"));
+              this.add(new LQFBInstance(liqoidApplication,"DE_PIRATEN_MV",
+                    "Piraten Mecklenburg-Vorpommern",
+                    "https://lqpp.de/mv/api/",
+                    "https://lqpp.de/mv/",
+                    "VpmyJGYbqTQPcc9wyzzk", "1.x"));
+
+
             this.add(new LQFBInstance(liqoidApplication,"DE_PIRATEN_SA",
                     "Piraten Sachsen-Anhalt",
                     "http://lqfb.piraten-lsa.de/lsa/api/",
