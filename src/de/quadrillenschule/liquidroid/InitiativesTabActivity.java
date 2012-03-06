@@ -86,9 +86,30 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
             }
         }
 
+        void updateAreas() {
+            LQFBInstance myinstance = ((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance();
+            if (myinstance.willDownloadAreas(((LiqoidApplication) getApplication()).cachedAPI1Queries, download)) {
+                handler.sendEmptyMessage(DOWNLOADING);
+            }
+            int retrycounter = 0;
+            int maxretries = 1;
+
+            while ((retrycounter <= maxretries) && (myinstance.downloadAreas(((LiqoidApplication) getApplication()).cachedAPI1Queries, download)) < 0) {
+
+                handler.sendEmptyMessage(DOWNLOAD_ERROR);
+                try {
+                    this.sleep((2 ^ retrycounter) * 1000);
+                    retrycounter++;
+                } catch (InterruptedException ex) {
+                }
+                handler.sendEmptyMessage(DOWNLOAD_RETRY);
+            }
+            handler.sendEmptyMessage(FINISH_OK);
+        }
+
         @Override
         public void run() {
-
+            updateAreas();
             LQFBInstance myInstance = ((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance();
             overallDataAge = System.currentTimeMillis();
             for (Area a : myInstance.areas.getSelectedAreas()) {
