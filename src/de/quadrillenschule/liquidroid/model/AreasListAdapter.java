@@ -7,6 +7,7 @@ package de.quadrillenschule.liquidroid.model;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Vibrator;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -36,16 +37,19 @@ public class AreasListAdapter extends ArrayAdapter<Area> {
         retval.setBackgroundColor(Color.argb(255, 245, 245, 245));
         retval.setText(areas.get(position).getName());
         retval.setChecked(areas.isSelected(position));
-
         retval.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View arg0) {
                 Area myarea = areas.getByName(((CheckBox) arg0).getText().toString());
-                boolean value=((CheckBox) arg0).isChecked();
-                areas.setSelectedArea(myarea,value);
+                boolean value = ((CheckBox) arg0).isChecked();
+                areas.setSelectedArea(myarea, value);
 
-              //  areas.getByName(((CheckBox) arg0).getText().toString()).setSelected(!areas.getByName(((CheckBox) arg0).getText().toString()).isSelected());
-             //   ((LiqoidApplication) activity.getApplication()).toast(activity, areas.instancePrefs.getString("selectedareas",""));
+                try {
+                    Vibrator v = (Vibrator) activity.getSystemService(Context.VIBRATOR_SERVICE);
+                    v.vibrate(30);
+                } catch (Exception e) {
+                    //its not a vibrator :/
+                }
             }
         });
 

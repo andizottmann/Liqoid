@@ -7,6 +7,7 @@ package de.quadrillenschule.liquidroid.model;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Vibrator;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -28,8 +29,8 @@ public class AllInitiativenListAdapter extends ArrayAdapter<Initiative> {
 
     @Override
     public View getView(int position, View convertview, ViewGroup parent) {
-        CheckBox retval = new CheckBox(activity);
-
+        // CheckBox retval = new CheckBox(activity);
+        CheckBox retval = new CheckBox(activity, null, android.R.attr.starStyle);
         retval.setTextColor(Color.BLACK);
         retval.setBackgroundColor(Color.argb(255, 245, 245, 245));
         retval.setText(initiativen.get(position).name);
@@ -40,8 +41,12 @@ public class AllInitiativenListAdapter extends ArrayAdapter<Initiative> {
                 try {
                     boolean value = ((CheckBox) arg0).isChecked();
                     int myissueid = initiativen.findByName(((CheckBox) arg0).getText().toString()).get(0).issue_id;
-
-                    //  .get(0).setSelected(!initiativen.findByName(((CheckBox) arg0).getText().toString()).get(0).isSelected());
+                    try {
+                        Vibrator v = (Vibrator) activity.getSystemService(Context.VIBRATOR_SERVICE);
+                        v.vibrate(30);
+                    } catch (Exception e) {
+                        //its not a vibrator :/
+                    }
                     initiativen.setSelectedIssue(myissueid, value);
                 } catch (Exception e) {
                 }
