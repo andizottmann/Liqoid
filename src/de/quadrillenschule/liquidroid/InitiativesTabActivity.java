@@ -36,19 +36,18 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
     private boolean pauseDownload = false;
     long overallDataAge = 0;
     private boolean sortNewestFirst = true;
+    private String currentlyDownloadedArea = "";
+
 
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         allInis = new Initiativen(getSharedPreferences(((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance().getPrefsName(), MODE_PRIVATE));
-
         setContentView(R.layout.initiativentab);
-
         GestureOverlayView gestures = (GestureOverlayView) findViewById(R.id.allinisgestures);
         gestures.setGestureVisible(false);
         gestures.addOnGesturePerformedListener((LiqoidMainActivity) getParent());
-
         ((LiqoidApplication) getApplication()).addLQFBInstancesChangeListener(this);
 
     }
@@ -63,17 +62,13 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         refreshInisList(false);
-
     }
 
     public void refreshInisList(boolean download) {
         RefreshInisListThread ralt = new RefreshInisListThread(download, this);
-        //runOnUiThread(ralt);
         ralt.start();
-
     }
-    public String currentlyDownloadedArea = "";
-
+ 
     private class RefreshInisListThread extends Thread {
 
         boolean download;
@@ -160,7 +155,7 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
             inisListAdapter = new AllInitiativenListAdapter(parent, allInis, R.id.initiativenList);
             sortList();
             inisListAdapter.notifyDataSetChanged();
-              handler.sendEmptyMessage(FINISH_OK);
+            handler.sendEmptyMessage(FINISH_OK);
 
         }
     }
@@ -250,7 +245,7 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
                 refreshInisList(true);
                 return true;
             case R.id.sort_inislist:
-                sortNewestFirst=!sortNewestFirst;
+                sortNewestFirst = !sortNewestFirst;
                 sortList();
                 return true;
             default:
