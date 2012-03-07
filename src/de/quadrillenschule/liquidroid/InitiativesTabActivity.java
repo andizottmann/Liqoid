@@ -28,7 +28,7 @@ import java.util.Date;
  *
  * @author andi
  */
-public class InitiativesTabActivity extends Activity implements LQFBInstanceChangeListener {
+public class InitiativesTabActivity extends Activity  {
 
     AllInitiativenListAdapter inisListAdapter;
     Initiativen allInis;
@@ -47,8 +47,7 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
         GestureOverlayView gestures = (GestureOverlayView) findViewById(R.id.allinisgestures);
         gestures.setGestureVisible(false);
         gestures.addOnGesturePerformedListener((LiqoidMainActivity) getParent());
-        ((LiqoidApplication) getApplication()).addLQFBInstancesChangeListener(this);
-
+  
     }
 
     @Override
@@ -254,9 +253,4 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
         }
     }
 
-    public void lqfbInstanceChanged() {
-
-        refreshInisList(false);
-
-    }
 }
