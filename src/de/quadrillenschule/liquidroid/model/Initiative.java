@@ -32,7 +32,7 @@ public class Initiative implements Comparable<Initiative> {
     public Date issue_closed;
     public Date current_draft_created;
     public static final int ISSUE_ID_COMP = 0, ISSUE_CREATED_COMP = 1;
-    private int comparator = ISSUE_ID_COMP;
+    private int comparator = 1;
 
     public Date getDateForStartVoting() {
         Calendar cal = Calendar.getInstance();
@@ -139,7 +139,6 @@ public class Initiative implements Comparable<Initiative> {
                 return ((Integer) this.issue_id).compareTo((Integer) arg0.issue_id);
             case ISSUE_CREATED_COMP:
                 return (this.issue_created).compareTo(arg0.issue_created);
-
             default:
                 return ((Integer) this.issue_id).compareTo((Integer) arg0.issue_id);
         }

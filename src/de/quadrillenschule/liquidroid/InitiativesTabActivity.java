@@ -35,6 +35,7 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
     ProgressDialog progressDialog;
     private boolean pauseDownload = false;
     long overallDataAge = 0;
+    private boolean sortNewestFirst = true;
 
     /** Called when the activity is first created. */
     @Override
@@ -112,7 +113,7 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
             updateAreas();
             LQFBInstance myInstance = ((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance();
             overallDataAge = System.currentTimeMillis();
-            inisListAdapter=null;
+            inisListAdapter = null;
             for (Area a : myInstance.areas.getSelectedAreas()) {
                 currentlyDownloadedArea = a.getName();
                 if (myInstance.willDownloadInitiativen(a, ((LiqoidApplication) getApplication()).cachedAPI1Queries, download)) {
@@ -155,10 +156,10 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
                 }
             }
 
-            allInis.reverse(Initiative.ISSUE_CREATED_COMP);
 
             inisListAdapter = new AllInitiativenListAdapter(parent, allInis, R.id.initiativenList);
             inisListAdapter.notifyDataSetChanged();
+            sortList();
 
             handler.sendEmptyMessage(FINISH_OK);
 
@@ -197,6 +198,7 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
                 final ListView listview = (ListView) findViewById(R.id.initiativenList);
 
                 listview.setAdapter(inisListAdapter);
+
                 findViewById(R.id.initiativenList).refreshDrawableState();
 
             }
@@ -232,6 +234,24 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
         return true;
     }
 
+    private void sortList() {
+        if (sortNewestFirst) {
+            allInis.reverse(Initiative.ISSUE_CREATED_COMP);
+            try {
+                ((MenuItem) findViewById(R.id.sort_inislist)).setTitle(getString(R.string.sortnewestfirst));
+            } catch (Exception e) {
+            }
+        } else {
+
+            allInis.sort(Initiative.ISSUE_CREATED_COMP);
+            try {
+                ((MenuItem) findViewById(R.id.sort_inislist)).setTitle(getString(R.string.sortoldestfirst));
+            } catch (Exception e) {
+            }
+        }
+        inisListAdapter.notifyDataSetChanged();
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
@@ -239,7 +259,9 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
             case R.id.refresh_inislist:
                 refreshInisList(true);
                 return true;
-
+            case R.id.sort_inislist:
+                sortList();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
