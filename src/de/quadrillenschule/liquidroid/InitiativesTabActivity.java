@@ -38,7 +38,6 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
     private boolean sortNewestFirst = true;
     private String currentlyDownloadedArea = "";
 
-
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle icicle) {
@@ -68,7 +67,7 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
         RefreshInisListThread ralt = new RefreshInisListThread(download, this);
         ralt.start();
     }
- 
+
     private class RefreshInisListThread extends Thread {
 
         boolean download;
@@ -106,56 +105,58 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
         @Override
         public void run() {
             updateAreas();
-            LQFBInstance myInstance = ((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance();
             overallDataAge = System.currentTimeMillis();
             inisListAdapter = null;
-            for (Area a : myInstance.areas.getSelectedAreas()) {
-                currentlyDownloadedArea = a.getName();
-                if (myInstance.willDownloadInitiativen(a, ((LiqoidApplication) getApplication()).cachedAPI1Queries, download)) {
-                    handler.sendEmptyMessage(DOWNLOADING);
+            allInis = new Initiativen(getSharedPreferences(((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance().getPrefsName(), RESULT_OK));
 
-                }
-                handler.sendEmptyMessage(DOWNLOAD_RETRY);
-                int retrycounter = 0;
-                int maxretries = 4;
-                if (pauseDownload) {
-                    maxretries = 0;
-                }
+            for (LQFBInstance myInstance : ((LiqoidApplication) getApplication()).lqfbInstances) {
+                for (Area a : myInstance.areas.getSelectedAreas()) {
+                    currentlyDownloadedArea = a.getName();
+                    if (myInstance.willDownloadInitiativen(a, ((LiqoidApplication) getApplication()).cachedAPI1Queries, download)) {
+                        handler.sendEmptyMessage(DOWNLOADING);
 
-                while ((retrycounter <= maxretries) && (myInstance.downloadInitiativen(a, ((LiqoidApplication) getApplication()).cachedAPI1Queries, download) < 0)) {
-                    handler.sendEmptyMessage(DOWNLOAD_ERROR);
-                    try {
-                        this.sleep((2 ^ retrycounter) * 1000);
-                        retrycounter++;
-
-                    } catch (InterruptedException ex) {
                     }
                     handler.sendEmptyMessage(DOWNLOAD_RETRY);
+                    int retrycounter = 0;
+                    int maxretries = 4;
+                    if (pauseDownload) {
+                        maxretries = 0;
+                    }
+
+                    while ((retrycounter <= maxretries) && (myInstance.downloadInitiativen(a, ((LiqoidApplication) getApplication()).cachedAPI1Queries, download) < 0)) {
+                        handler.sendEmptyMessage(DOWNLOAD_ERROR);
+                        try {
+                            this.sleep((2 ^ retrycounter) * 1000);
+                            retrycounter++;
+
+                        } catch (InterruptedException ex) {
+                        }
+                        handler.sendEmptyMessage(DOWNLOAD_RETRY);
+
+                    }
+                    if (retrycounter >= maxretries) {
+                        pauseDownload = true;
+                    }
+                    if (overallDataAge > ((LiqoidApplication) getApplication()).cachedAPI1Queries.dataage) {
+                        overallDataAge = ((LiqoidApplication) getApplication()).cachedAPI1Queries.dataage;
+                    }
+                    handler.sendEmptyMessage(FINISH_SINGLE_OK);
 
                 }
-                if (retrycounter >= maxretries) {
-                    pauseDownload = true;
+                for (Area a : myInstance.areas.getSelectedAreas()) {
+
+
+                    for (Initiative i : a.getInitiativen()) {
+                        allInis.add(i);
+                    }
                 }
-                if (overallDataAge > ((LiqoidApplication) getApplication()).cachedAPI1Queries.dataage) {
-                    overallDataAge = ((LiqoidApplication) getApplication()).cachedAPI1Queries.dataage;
-                }
-                handler.sendEmptyMessage(FINISH_SINGLE_OK);
+                handler.sendEmptyMessage(FINISH_OK);
 
             }
-            allInis = new Initiativen(getSharedPreferences(((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance().getPrefsName(), RESULT_OK));
-            for (Area a : myInstance.areas.getSelectedAreas()) {
-
-
-                for (Initiative i : a.getInitiativen()) {
-                    allInis.add(i);
-                }
-            }
-
 
             inisListAdapter = new AllInitiativenListAdapter(parent, allInis, R.id.initiativenList);
             sortList();
             inisListAdapter.notifyDataSetChanged();
-            handler.sendEmptyMessage(FINISH_OK);
 
         }
     }
