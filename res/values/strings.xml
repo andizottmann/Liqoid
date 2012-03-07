@@ -12,6 +12,6 @@
     <string name="download_error">Error when trying to download.\n Waiting for network...</string>
     <string name="open_browser">Open in Browser</string>
     <string name="instances_prompt">Choose a LQFB instance</string>
-    <string name="sortnewestfirst">Newest first</string>
-    <string name="sortoldestfirst">Oldest first</string>
+    <string name="reversesort">Reverse Order</string>
+ 
 </resources>

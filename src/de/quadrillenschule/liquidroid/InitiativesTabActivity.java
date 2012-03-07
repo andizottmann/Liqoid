@@ -158,10 +158,9 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
 
 
             inisListAdapter = new AllInitiativenListAdapter(parent, allInis, R.id.initiativenList);
-            inisListAdapter.notifyDataSetChanged();
             sortList();
-
-            handler.sendEmptyMessage(FINISH_OK);
+            inisListAdapter.notifyDataSetChanged();
+              handler.sendEmptyMessage(FINISH_OK);
 
         }
     }
@@ -237,17 +236,8 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
     private void sortList() {
         if (sortNewestFirst) {
             allInis.reverse(Initiative.ISSUE_CREATED_COMP);
-            try {
-                ((MenuItem) findViewById(R.id.sort_inislist)).setTitle(getString(R.string.sortnewestfirst));
-            } catch (Exception e) {
-            }
         } else {
-
             allInis.sort(Initiative.ISSUE_CREATED_COMP);
-            try {
-                ((MenuItem) findViewById(R.id.sort_inislist)).setTitle(getString(R.string.sortoldestfirst));
-            } catch (Exception e) {
-            }
         }
         inisListAdapter.notifyDataSetChanged();
     }
@@ -260,6 +250,7 @@ public class InitiativesTabActivity extends Activity implements LQFBInstanceChan
                 refreshInisList(true);
                 return true;
             case R.id.sort_inislist:
+                sortNewestFirst=!sortNewestFirst;
                 sortList();
                 return true;
             default:

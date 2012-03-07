@@ -12,6 +12,5 @@
     <string name="download_error">Fehler bei Serververbindung.\n Netzaffines Liqoid wartet auf Netz..</string>
     <string name="open_browser">Im Browser öffnen</string>
     <string name="instances_prompt">Wähle eine LQFB Instanz</string>
-    <string name="sortnewestfirst">Neueste zuerst</string>
-    <string name="sortoldestfirst">Älteste zuerst</string>
-</resources>
+  <string name="reversesort">Umsortieren</string>
+ </resources>

@@ -5,5 +5,5 @@
           android:title="@string/menu_refresh"/>
   <item android:id="@+id/sort_inislist"
           android:icon="@drawable/ic_menu_refresh"
-          android:title="@string/sortnewestfirst"/>
+          android:title="@string/reversesort"/>
 </menu>

@@ -7,6 +7,7 @@ package de.quadrillenschule.liquidroid.model;
 import android.content.SharedPreferences;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 
 /**
  *
@@ -130,7 +131,13 @@ public class Initiativen extends ArrayList<Initiative> {
             existingIssueIds.add((Integer) ini.issue_id);
             return super.add(ini);
         }
+        processDuplicate(ini);
         return false;
+    }
+
+    private void processDuplicate(Initiative ini) {
+        Initiative existing = findByIssueID(ini.issue_id).get(0);
+
     }
 
     @Override
@@ -167,16 +174,38 @@ public class Initiativen extends ArrayList<Initiative> {
     }
 
     public void sort(int comparator) {
-        for (Initiative i : this) {
-            i.setComparator(comparator);
-        }
-        Collections.sort(this);
+     
+
+        Collections.sort(this, new Comparator<Initiative>() {
+
+            public int compare(Initiative o1, Initiative o2) {
+                long retval = (o1.issue_created.getTime() - o2.issue_created.getTime());
+                if (retval > 0) {
+                    return 1;
+                }
+                if (retval < 0) {
+                    return -1;
+                }
+                return 0;
+            }
+        });
+
     }
 
     public void reverse(int comparator) {
-        for (Initiative i : this) {
-            i.setComparator(comparator);
-        }
-        Collections.reverse(this);
+        Collections.sort(this, new Comparator<Initiative>() {
+
+            public int compare(Initiative o1, Initiative o2) {
+                long retval = (o1.issue_created.getTime() - o2.issue_created.getTime());
+                if (retval < 0) {
+                    return 1;
+                }
+                if (retval > 0) {
+                    return -1;
+                }
+                return 0;
+            }
+        });
+
     }
 }
