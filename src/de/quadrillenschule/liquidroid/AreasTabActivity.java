@@ -21,11 +21,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.Spinner;
 import de.quadrillenschule.liquidroid.gui.AreasListAdapter;
+import de.quadrillenschule.liquidroid.gui.LQFBInstancesListAdapter;
 import de.quadrillenschule.liquidroid.model.LQFBInstance;
+import de.quadrillenschule.liquidroid.model.LQFBInstances;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -34,12 +37,14 @@ import java.util.Date;
  *
  * @author andi
  */
-public class AreasTabActivity extends Activity implements LQFBInstanceChangeListener {
+public class AreasTabActivity extends Activity implements LQFBInstanceChangeListener, AdapterView.OnItemSelectedListener {
 
     private AreasListAdapter areasListAdapter;
     private ProgressDialog progressDialog;
     private View contextMenuView;
     private boolean pauseDownload = false;
+      ArrayAdapter adapter;
+
 
     /** Called when the activity is first created. */
     @Override
@@ -53,6 +58,13 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
 
         ((LiqoidApplication) getApplication()).addLQFBInstancesChangeListener(this);
 
+  final Spinner instanceSpinner = (Spinner) findViewById(R.id.instanceSelector);
+        adapter = new LQFBInstancesListAdapter(this, ((LiqoidApplication) getApplication()).lqfbInstances, android.R.layout.simple_spinner_item, this);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        instanceSpinner.setAdapter(adapter);
+        instanceSpinner.setOnItemSelectedListener(this);
+        int i = ((LiqoidApplication) getApplication()).lqfbInstances.indexOf(((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance());
+        instanceSpinner.setSelection(i);
 
     }
 
@@ -225,4 +237,14 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
     public void lqfbInstanceChanged() {
         refreshAreasList(false);
     }
+
+        //Instances Spinner item selected
+    public void onItemSelected(AdapterView<?> arg0, View arg1, int i, long arg3) {
+        LQFBInstances ls = ((LiqoidApplication) getApplication()).lqfbInstances;
+        if (ls.indexOf(ls.getSelectedInstance()) != i) {
+            ls.setSelectedInstance(i);
+            ((LiqoidApplication) getApplication()).fireLQFBInstanceChangedEvent();
+        }
+    }
+
 }

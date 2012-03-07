@@ -8,25 +8,16 @@ import android.gesture.GestureLibraries;
 import android.gesture.GestureLibrary;
 import android.gesture.GestureOverlayView;
 import android.gesture.Prediction;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 import android.widget.TabHost;
 import android.widget.TextView;
-import de.quadrillenschule.liquidroid.model.LQFBInstances;
-import de.quadrillenschule.liquidroid.gui.LQFBInstancesListAdapter;
 import java.util.ArrayList;
 
-public class LiqoidMainActivity extends TabActivity implements GestureOverlayView.OnGesturePerformedListener, OnItemSelectedListener {
+public class LiqoidMainActivity extends TabActivity implements GestureOverlayView.OnGesturePerformedListener{
 
     TabHost tabHost;
     GestureLibrary gestureLibrary;
-    ArrayAdapter adapter;
-
+  
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -67,14 +58,7 @@ public class LiqoidMainActivity extends TabActivity implements GestureOverlayVie
 
         tabHost.setCurrentTab(3);
 
-        final Spinner instanceSpinner = (Spinner) findViewById(R.id.instanceSelector);
-        adapter = new LQFBInstancesListAdapter(this, ((LiqoidApplication) getApplication()).lqfbInstances, android.R.layout.simple_spinner_item, this);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        instanceSpinner.setAdapter(adapter);
-        instanceSpinner.setOnItemSelectedListener(this);
-        int i = ((LiqoidApplication) getApplication()).lqfbInstances.indexOf(((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance());
-        instanceSpinner.setSelection(i);
-
+      
         ((LiqoidApplication) getApplication()).statusLine = ((TextView) findViewById(R.id.statusline));
     }
 
@@ -85,14 +69,7 @@ public class LiqoidMainActivity extends TabActivity implements GestureOverlayVie
 
     }
 
-    //Instances Spinner item selected
-    public void onItemSelected(AdapterView<?> arg0, View arg1, int i, long arg3) {
-        LQFBInstances ls = ((LiqoidApplication) getApplication()).lqfbInstances;
-        if (ls.indexOf(ls.getSelectedInstance()) != i) {
-            ls.setSelectedInstance(i);
-            ((LiqoidApplication) getApplication()).fireLQFBInstanceChangedEvent();
-        }
-    }
+   
 
     public void onGesturePerformed(GestureOverlayView overlay, Gesture gesture) {
         ArrayList<Prediction> predictions = gestureLibrary.recognize(gesture);
@@ -124,7 +101,5 @@ public class LiqoidMainActivity extends TabActivity implements GestureOverlayVie
         }
     }
 
-    public void onNothingSelected(AdapterView<?> arg0) {
-        //Do nothing
-    }
+
 }
