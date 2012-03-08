@@ -6,16 +6,22 @@ package de.quadrillenschule.liquidroid;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.gesture.GestureOverlayView;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ListView;
 import de.quadrillenschule.liquidroid.gui.InitiativenListAdapter;
+import de.quadrillenschule.liquidroid.gui.IssueItemView;
 import de.quadrillenschule.liquidroid.model.Area;
 import de.quadrillenschule.liquidroid.model.Initiative;
 import de.quadrillenschule.liquidroid.model.Initiativen;
@@ -258,5 +264,36 @@ public class InitiativesTabActivity extends Activity {
 
     protected InitiativenListAdapter getInitiativenListAdapter() {
         return new InitiativenListAdapter(this, allInis, R.id.initiativenList);
+    }
+    private View contextMenuView;
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        contextMenuView = v;
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.initem_contextmenu, menu);
+
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.open_browser_ini:
+                try {
+                    String issueid = ((IssueItemView) contextMenuView.getParent()).initiative.issue_id + "";
+                    String url = ((IssueItemView) contextMenuView.getParent()).initiative.getLqfbInstance().getWebUrl() + "issue/show/" + issueid + ".html";
+                    Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                    myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+
+                    startActivity(myIntent);
+                } catch (Exception e) {
+                    return false;
+                }
+                return true;
+
+            default:
+                return super.onContextItemSelected(item);
+        }
     }
 }

@@ -43,8 +43,7 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
     private ProgressDialog progressDialog;
     private View contextMenuView;
     private boolean pauseDownload = false;
-      ArrayAdapter adapter;
-
+    ArrayAdapter adapter;
 
     /** Called when the activity is first created. */
     @Override
@@ -58,7 +57,7 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
 
         ((LiqoidApplication) getApplication()).addLQFBInstancesChangeListener(this);
 
-  final Spinner instanceSpinner = (Spinner) findViewById(R.id.instanceSelector);
+        final Spinner instanceSpinner = (Spinner) findViewById(R.id.instanceSelector);
         adapter = new LQFBInstancesListAdapter(this, ((LiqoidApplication) getApplication()).lqfbInstances, android.R.layout.simple_spinner_item, this);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         instanceSpinner.setAdapter(adapter);
@@ -96,7 +95,6 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-        AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
         switch (item.getItemId()) {
             case R.id.open_browser:
                 try {
@@ -238,7 +236,7 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
         refreshAreasList(false);
     }
 
-        //Instances Spinner item selected
+    //Instances Spinner item selected
     public void onItemSelected(AdapterView<?> arg0, View arg1, int i, long arg3) {
         LQFBInstances ls = ((LiqoidApplication) getApplication()).lqfbInstances;
         if (ls.indexOf(ls.getSelectedInstance()) != i) {
@@ -246,5 +244,4 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
             ((LiqoidApplication) getApplication()).fireLQFBInstanceChangedEvent();
         }
     }
-
 }

@@ -6,12 +6,15 @@ package de.quadrillenschule.liquidroid.gui;
 
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import de.quadrillenschule.liquidroid.InitiativesTabActivity;
 import de.quadrillenschule.liquidroid.model.Initiative;
 import de.quadrillenschule.liquidroid.model.MultiInstanceInitiativen;
 
-public class InitiativenListAdapter extends ArrayAdapter<Initiative> {
+
+public class InitiativenListAdapter extends ArrayAdapter<Initiative>  {
 
     protected MultiInstanceInitiativen initiativen;
     private int viewId;
@@ -28,7 +31,8 @@ public class InitiativenListAdapter extends ArrayAdapter<Initiative> {
          if (initiativen.size() <= position) {
             return null;
         }
-      return getInternalView(position);
+         View retval= getInternalView(position);
+          return retval;
     }
 
     protected View getInternalView(int position){
