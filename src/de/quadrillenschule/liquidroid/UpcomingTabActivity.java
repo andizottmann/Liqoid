@@ -15,6 +15,12 @@ import de.quadrillenschule.liquidroid.model.Initiative;
 public class UpcomingTabActivity extends InitiativesTabActivity {
 
     @Override
+    protected void filterList() {
+        if (!filterOnlySelected) {
+            allInis.removeNonSelected();
+        }
+    }
+    @Override
     protected void sortList() {
         if (!sortNewestFirst) {
             allInis.reverse(Initiative.ISSUE_NEXT_EVENT_COMP);

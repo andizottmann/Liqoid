@@ -2,19 +2,24 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package de.quadrillenschule.liquidroid;
 
 import de.quadrillenschule.liquidroid.gui.InitiativenListAdapter;
 import de.quadrillenschule.liquidroid.gui.RecentInitiativenListAdapter;
-import de.quadrillenschule.liquidroid.gui.UpcomingInitiativenListAdapter;
 import de.quadrillenschule.liquidroid.model.Initiative;
 
 /**
  *
  * @author andi
  */
-public class RecentTabActivity  extends InitiativesTabActivity {
+public class RecentTabActivity extends InitiativesTabActivity {
+
+    @Override
+    protected void filterList() {
+        if (!filterOnlySelected) {
+            allInis.removeNonSelected();
+        }
+    }
 
     @Override
     protected void sortList() {
@@ -23,11 +28,14 @@ public class RecentTabActivity  extends InitiativesTabActivity {
         } else {
             allInis.sort(Initiative.ISSUE_LAST_EVENT_COMP);
         }
-        try {inisListAdapter.notifyDataSetChanged();} catch (Exception e){}
-   }
+        try {
+            inisListAdapter.notifyDataSetChanged();
+        } catch (Exception e) {
+        }
+    }
 
     @Override
-     protected InitiativenListAdapter getInitiativenListAdapter() {
+    protected InitiativenListAdapter getInitiativenListAdapter() {
         return new RecentInitiativenListAdapter(this, allInis, R.id.initiativenList);
     }
 }

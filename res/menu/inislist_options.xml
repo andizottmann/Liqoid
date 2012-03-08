@@ -3,7 +3,13 @@
     <item android:id="@+id/refresh_inislist"
           android:icon="@drawable/ic_menu_refresh"
           android:title="@string/menu_refresh"/>
-  <item android:id="@+id/sort_inislist"
+    <item android:id="@+id/sort_inislist"
           android:icon="@drawable/ic_menu_refresh"
           android:title="@string/reversesort"/>
+    <item android:id="@+id/toggleselectedfilter"
+          android:icon="@drawable/ic_menu_refresh"
+          android:title="@string/filterfavorites"/>
+    <item android:id="@+id/about"
+          android:icon="@drawable/ic_menu_refresh"
+          android:title="@string/about"/>
 </menu>

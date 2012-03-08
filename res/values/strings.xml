@@ -15,5 +15,7 @@
     <string name="reversesort">Reverse Order</string>
     <string name="share">Share</string>
     <string name="updating">Updating</string>
+    <string name="filterfavorites">Filter Favs</string>
+    <string name="about">About Liqoid</string>
 
 </resources>

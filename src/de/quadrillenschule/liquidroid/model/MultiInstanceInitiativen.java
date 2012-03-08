@@ -65,7 +65,6 @@ public class MultiInstanceInitiativen extends ArrayList<Initiative> {
         }
     }
 
-
     public class SortByLastEventComparator implements Comparator<Initiative> {
 
         public boolean orderNormal = true;
@@ -101,7 +100,7 @@ public class MultiInstanceInitiativen extends ArrayList<Initiative> {
             c = new SortByNextEventComparator();
             ((SortByNextEventComparator) c).orderNormal = true;
         }
-         if (comparator == Initiative.ISSUE_LAST_EVENT_COMP) {
+        if (comparator == Initiative.ISSUE_LAST_EVENT_COMP) {
             c = new SortByLastEventComparator();
             ((SortByLastEventComparator) c).orderNormal = true;
         }
@@ -118,5 +117,15 @@ public class MultiInstanceInitiativen extends ArrayList<Initiative> {
             ((SortByNextEventComparator) c).orderNormal = false;
         }
         Collections.sort(this, c);
+    }
+
+    public void removeNonSelected() {
+        ArrayList<Initiative> removeList=new ArrayList<Initiative>();
+        for (Initiative i : this) {
+            if (!i.getArea().getInitiativen().getSelectedIssues().isIssueSelected(i.issue_id)) {
+                removeList.add(i);
+            }
+        }
+        removeAll(removeList);
     }
 }

@@ -5,7 +5,9 @@
 package de.quadrillenschule.liquidroid;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.gesture.GestureOverlayView;
@@ -43,6 +45,7 @@ public class InitiativesTabActivity extends Activity {
     private boolean pauseDownload = false;
     long overallDataAge = 0;
     protected boolean sortNewestFirst = true;
+    protected boolean filterOnlySelected = false;
     private String currentlyDownloadedArea = "", currentlyDownloadedInstance = "";
 
     /** Called when the activity is first created. */
@@ -60,8 +63,8 @@ public class InitiativesTabActivity extends Activity {
     @Override
     public void onResume() {
         super.onResume();
-        if (inisListAdapter==null){
-        refreshInisList(false);
+        if (inisListAdapter == null) {
+            refreshInisList(false);
         }
     }
 
@@ -115,7 +118,6 @@ public class InitiativesTabActivity extends Activity {
                         handler.sendEmptyMessage(DOWNLOAD_RETRY);
                     }
                 }
-                //  handler.sendEmptyMessage(FINISH_OK);
             }
         }
 
@@ -168,20 +170,15 @@ public class InitiativesTabActivity extends Activity {
                     if (overallDataAge > ((LiqoidApplication) getApplication()).cachedAPI1Queries.dataage) {
                         overallDataAge = ((LiqoidApplication) getApplication()).cachedAPI1Queries.dataage;
                     }
-
                 }
                 for (Area a : myInstance.areas.getSelectedAreas()) {
-
-
                     for (Initiative i : a.getInitiativen()) {
                         allInis.add(i);
                     }
                 }
-                //     handler.sendEmptyMessage(FINISH_OK);
-
             }
-
-            inisListAdapter = getInitiativenListAdapter();//new InitiativenListAdapter(parent, allInis, R.id.initiativenList);
+            inisListAdapter = getInitiativenListAdapter();
+            filterList();
             sortList();
             inisListAdapter.notifyDataSetChanged();
             handler.sendEmptyMessage(FINISH_OK);
@@ -212,14 +209,12 @@ public class InitiativesTabActivity extends Activity {
             if ((msg.what == DOWNLOADING_INSTANCE)) {
                 progressDialog.setMessage(getApplicationContext().getString(R.string.downloading) + "\n" + currentlyDownloadedInstance + "...");
             }
-
             if (msg.what == UPDATING) {
 
                 progressDialog = ProgressDialog.show(InitiativesTabActivity.this, "",
                         getApplicationContext().getString(R.string.updating) + "...", true);
             }
             if (msg.what == FINISH_OK) {
-
                 try {
                     progressDialog.dismiss();
                 } catch (Exception e) {
@@ -227,24 +222,16 @@ public class InitiativesTabActivity extends Activity {
                     progressDialog = null;
                 }
                 final ListView listview = (ListView) findViewById(R.id.initiativenList);
-
                 listview.setAdapter(inisListAdapter);
-
                 findViewById(R.id.initiativenList).refreshDrawableState();
-
             }
-
             if ((progressDialog != null) && (!pauseDownload)) {
-
                 if (msg.what == DOWNLOAD_ERROR) {
                     progressDialog.setMessage(getApplicationContext().getString(R.string.download_error));
-
                 }
                 if (msg.what == DOWNLOAD_RETRY) {
                     progressDialog.setMessage(getApplicationContext().getString(R.string.downloading) + "\n" + currentlyDownloadedArea + " @ " + currentlyDownloadedInstance);
-
                 }
-
             }
         }
     };
@@ -257,7 +244,14 @@ public class InitiativesTabActivity extends Activity {
         return true;
     }
 
+    protected void filterList() {
+        if (filterOnlySelected) {
+            allInis.removeNonSelected();
+        }
+    }
+
     protected void sortList() {
+
         if (sortNewestFirst) {
             allInis.reverse(Initiative.ISSUE_CREATED_COMP);
         } else {
@@ -280,6 +274,24 @@ public class InitiativesTabActivity extends Activity {
             case R.id.sort_inislist:
                 sortNewestFirst = !sortNewestFirst;
                 sortList();
+                return true;
+            case R.id.toggleselectedfilter:
+
+                filterOnlySelected = !filterOnlySelected;
+                refreshInisList(false);
+
+                return true;
+            case R.id.about:
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setMessage("Hello, this is Liqoid!").setCancelable(false).setNegativeButton(":)", new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+                AlertDialog alert = builder.create();
+                alert.show();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -328,6 +340,7 @@ public class InitiativesTabActivity extends Activity {
                     return false;
                 }
                 return true;
+
             default:
                 return super.onContextItemSelected(item);
         }

@@ -15,5 +15,6 @@
     <string name="reversesort">Umsortieren</string>
     <string name="share">Teilen</string>
     <string name="updating">Aktualisiere</string>
-
+    <string name="filterfavorites">Favoriten Filtern</string>
+    <string name="about">Über Liqoid</string>
 </resources>
