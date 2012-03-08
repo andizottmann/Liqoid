@@ -20,8 +20,10 @@ import de.quadrillenschule.liquidroid.model.Area;
 import de.quadrillenschule.liquidroid.model.Initiative;
 import de.quadrillenschule.liquidroid.model.Initiativen;
 import de.quadrillenschule.liquidroid.model.LQFBInstance;
+import de.quadrillenschule.liquidroid.model.MultiInstanceInitiativen;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -31,7 +33,7 @@ import java.util.Date;
 public class InitiativesTabActivity extends Activity  {
 
     AllInitiativenListAdapter inisListAdapter;
-    Initiativen allInis;
+    MultiInstanceInitiativen allInis;
     ProgressDialog progressDialog;
     private boolean pauseDownload = false;
     long overallDataAge = 0;
@@ -42,7 +44,7 @@ public class InitiativesTabActivity extends Activity  {
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-        allInis = new Initiativen(getSharedPreferences(((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance().getPrefsName(), MODE_PRIVATE));
+        allInis = new MultiInstanceInitiativen();//new Initiativen(getSharedPreferences(((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance().getPrefsName(), MODE_PRIVATE));
         setContentView(R.layout.initiativentab);
         GestureOverlayView gestures = (GestureOverlayView) findViewById(R.id.allinisgestures);
         gestures.setGestureVisible(false);

@@ -16,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import de.quadrillenschule.liquidroid.model.Initiative;
 import de.quadrillenschule.liquidroid.model.Initiativen;
+import de.quadrillenschule.liquidroid.model.MultiInstanceInitiativen;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
@@ -26,24 +27,21 @@ import java.text.SimpleDateFormat;
 public class IssueItemView extends LinearLayout implements OnClickListener {
 
     Activity activity;
-    private Initiativen initiativen;
-    private int issueid;
+    private Initiative initiative;
     CheckBox myCheckBox;
     TextView statusLine;
 
-    public IssueItemView(Activity activity, Initiativen initiativen, int issueid) {
+    public IssueItemView(Activity activity, Initiative initiative) {
         super(activity);
         setOrientation(VERTICAL);
         this.activity = activity;
-        this.initiativen = initiativen;
-        this.issueid = issueid;
-        Initiative myini = initiativen.findByIssueID(issueid).get(0);
+        this.initiative = initiative;
         myCheckBox = new CheckBox(activity, null, android.R.attr.starStyle);
         myCheckBox.setTextColor(Color.BLACK);
         myCheckBox.setBackgroundColor(Color.argb(255, 245, 245, 245));
 
-        myCheckBox.setText(initiativen.findByIssueID(issueid).get(0).name);
-        myCheckBox.setChecked(initiativen.isIssueSelected(issueid));
+        myCheckBox.setText(initiative.name);
+        myCheckBox.setChecked(initiative.getArea().getInitiativen().isIssueSelected(initiative.issue_id));
         myCheckBox.setOnClickListener(this);
         myCheckBox.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
 
@@ -51,7 +49,7 @@ public class IssueItemView extends LinearLayout implements OnClickListener {
         statusLine.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
         DateFormat formatter = new SimpleDateFormat("yy-MM-dd HH:mm");
 
-        statusLine.setText("  " + myini.state + "     Created: " + formatter.format(myini.issue_created));
+        statusLine.setText("  " + initiative.state + "     Created: " + formatter.format(initiative.issue_created));
         statusLine.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
         statusLine.setTextColor(Color.parseColor("#108020"));
         statusLine.setBackgroundColor(Color.argb(255, 245, 245, 245));
@@ -60,36 +58,12 @@ public class IssueItemView extends LinearLayout implements OnClickListener {
         this.addView(myCheckBox);
     }
 
-    /**
-     * @return the initiativen
-     */
-    public Initiativen getInitiativen() {
-        return initiativen;
-    }
+  
 
-    /**
-     * @param initiativen the initiativen to set
-     */
-    public void setInitiativen(Initiativen initiativen) {
-        this.initiativen = initiativen;
-    }
-
-    /**
-     * @return the issueid
-     */
-    public int getIssueid() {
-        return issueid;
-    }
-
-    /**
-     * @param issueid the issueid to set
-     */
-    public void setIssueid(int issueid) {
-        this.issueid = issueid;
-    }
-
+   
     public void onClick(View arg0) {
-        initiativen.setSelectedIssue(issueid, !initiativen.isIssueSelected(issueid));
+        int issueid=initiative.issue_id;
+        initiative.getArea().getInitiativen().setSelectedIssue(issueid, !initiative.getArea().getInitiativen().isIssueSelected(issueid));
 
         try {
             Vibrator v = (Vibrator) activity.getSystemService(Context.VIBRATOR_SERVICE);

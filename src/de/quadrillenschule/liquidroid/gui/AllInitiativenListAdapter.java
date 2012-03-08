@@ -4,26 +4,20 @@
  */
 package de.quadrillenschule.liquidroid.gui;
 
-import android.app.Activity;
-import android.content.Context;
-import android.graphics.Color;
-import android.os.Vibrator;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
 import de.quadrillenschule.liquidroid.InitiativesTabActivity;
-import de.quadrillenschule.liquidroid.LiqoidApplication;
 import de.quadrillenschule.liquidroid.model.Initiative;
-import de.quadrillenschule.liquidroid.model.Initiativen;
+import de.quadrillenschule.liquidroid.model.MultiInstanceInitiativen;
 
 public class AllInitiativenListAdapter extends ArrayAdapter<Initiative> {
 
-    private Initiativen initiativen;
+    private MultiInstanceInitiativen initiativen;
     private int viewId;
     private InitiativesTabActivity activity;
 
-    public AllInitiativenListAdapter(InitiativesTabActivity activity, Initiativen initiativen, int viewId) {
+    public AllInitiativenListAdapter(InitiativesTabActivity activity, MultiInstanceInitiativen initiativen, int viewId) {
         super(activity, NO_SELECTION, initiativen);
         this.initiativen = initiativen;
         this.activity = activity;
@@ -35,7 +29,7 @@ public class AllInitiativenListAdapter extends ArrayAdapter<Initiative> {
             return null;
         }
         int issueid = initiativen.get(position).issue_id;
-        IssueItemView retval = new IssueItemView(activity, initiativen, issueid);
+        IssueItemView retval = new IssueItemView(activity, initiativen.get(position));
         
         return retval;
     }
