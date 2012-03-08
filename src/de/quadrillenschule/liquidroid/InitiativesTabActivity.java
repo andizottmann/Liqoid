@@ -291,7 +291,19 @@ public class InitiativesTabActivity extends Activity {
                     return false;
                 }
                 return true;
-
+            case R.id.share_ini:
+                try {
+                    String issueid = ((IssueItemView) contextMenuView.getParent()).initiative.issue_id + "";
+                    String url = ((IssueItemView) contextMenuView.getParent()).initiative.getLqfbInstance().getWebUrl() + "issue/show/" + issueid + ".html";
+                    Intent intent = new Intent(android.content.Intent.ACTION_SEND);
+                    intent.setType("text/plain");
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+                    intent.putExtra(Intent.EXTRA_TEXT, url);
+                    startActivity(Intent.createChooser(intent, getString(R.string.share)));
+                } catch (Exception e) {
+                    return false;
+                }
+                return true;
             default:
                 return super.onContextItemSelected(item);
         }
