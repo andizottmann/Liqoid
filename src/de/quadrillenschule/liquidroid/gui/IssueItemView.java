@@ -27,7 +27,7 @@ import java.text.SimpleDateFormat;
 public class IssueItemView extends LinearLayout implements OnClickListener {
 
     Activity activity;
-    private Initiative initiative;
+    protected Initiative initiative;
     CheckBox myCheckBox;
     TextView statusLine;
 
@@ -47,9 +47,8 @@ public class IssueItemView extends LinearLayout implements OnClickListener {
 
         statusLine = new TextView(activity);
         statusLine.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
-        DateFormat formatter = new SimpleDateFormat("yy-MM-dd HH:mm");
 
-        statusLine.setText("  " + initiative.state + "     Created: " + formatter.format(initiative.issue_created)+" "+initiative.getLqfbInstance().getShortName());
+        statusLine.setText(getStatusText());
         statusLine.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
         statusLine.setTextColor(Color.parseColor("#108020"));
         statusLine.setBackgroundColor(Color.argb(255, 245, 245, 245));
@@ -58,11 +57,13 @@ public class IssueItemView extends LinearLayout implements OnClickListener {
         this.addView(myCheckBox);
     }
 
-  
+    protected String getStatusText() {
+        DateFormat formatter = new SimpleDateFormat("yy-MM-dd HH:mm");
+      return "  " + initiative.state + "     Created: " + formatter.format(initiative.issue_created) + " " + initiative.getLqfbInstance().getShortName();
+    }
 
-   
     public void onClick(View arg0) {
-        int issueid=initiative.issue_id;
+        int issueid = initiative.issue_id;
         initiative.getArea().getInitiativen().setSelectedIssue(issueid, !initiative.getArea().getInitiativen().isIssueSelected(issueid));
 
         try {

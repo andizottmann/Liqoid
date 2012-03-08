@@ -4,6 +4,8 @@
  */
 package de.quadrillenschule.liquidroid;
 
+import de.quadrillenschule.liquidroid.gui.InitiativenListAdapter;
+import de.quadrillenschule.liquidroid.gui.UpcomingInitiativenListAdapter;
 import de.quadrillenschule.liquidroid.model.Initiative;
 
 /**
@@ -14,11 +16,16 @@ public class UpcomingTabActivity extends InitiativesTabActivity {
 
     @Override
     protected void sortList() {
-        if (sortNewestFirst) {
+        if (!sortNewestFirst) {
             allInis.reverse(Initiative.ISSUE_NEXT_EVENT_COMP);
         } else {
             allInis.sort(Initiative.ISSUE_NEXT_EVENT_COMP);
         }
         inisListAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+     protected InitiativenListAdapter getInitiativenListAdapter() {
+        return new UpcomingInitiativenListAdapter(this, allInis, R.id.initiativenList);
     }
 }

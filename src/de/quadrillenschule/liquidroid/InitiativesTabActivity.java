@@ -15,7 +15,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ListView;
-import de.quadrillenschule.liquidroid.gui.AllInitiativenListAdapter;
+import de.quadrillenschule.liquidroid.gui.InitiativenListAdapter;
 import de.quadrillenschule.liquidroid.model.Area;
 import de.quadrillenschule.liquidroid.model.Initiative;
 import de.quadrillenschule.liquidroid.model.Initiativen;
@@ -31,7 +31,7 @@ import java.util.Date;
  */
 public class InitiativesTabActivity extends Activity {
 
-    AllInitiativenListAdapter inisListAdapter;
+    InitiativenListAdapter inisListAdapter;
     MultiInstanceInitiativen allInis;
     ProgressDialog progressDialog;
     private boolean pauseDownload = false;
@@ -60,7 +60,7 @@ public class InitiativesTabActivity extends Activity {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-  //      refreshInisList(false);
+        //      refreshInisList(false);
     }
 
     public void refreshInisList(boolean download) {
@@ -156,7 +156,7 @@ public class InitiativesTabActivity extends Activity {
 
             }
 
-            inisListAdapter = new AllInitiativenListAdapter(parent, allInis, R.id.initiativenList);
+            inisListAdapter = getInitiativenListAdapter();//new InitiativenListAdapter(parent, allInis, R.id.initiativenList);
             sortList();
             inisListAdapter.notifyDataSetChanged();
 
@@ -254,5 +254,9 @@ public class InitiativesTabActivity extends Activity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    protected InitiativenListAdapter getInitiativenListAdapter() {
+        return new InitiativenListAdapter(this, allInis, R.id.initiativenList);
     }
 }

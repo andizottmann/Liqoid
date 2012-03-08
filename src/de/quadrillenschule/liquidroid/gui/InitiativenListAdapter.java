@@ -11,13 +11,13 @@ import de.quadrillenschule.liquidroid.InitiativesTabActivity;
 import de.quadrillenschule.liquidroid.model.Initiative;
 import de.quadrillenschule.liquidroid.model.MultiInstanceInitiativen;
 
-public class AllInitiativenListAdapter extends ArrayAdapter<Initiative> {
+public class InitiativenListAdapter extends ArrayAdapter<Initiative> {
 
-    private MultiInstanceInitiativen initiativen;
+    protected MultiInstanceInitiativen initiativen;
     private int viewId;
-    private InitiativesTabActivity activity;
+    protected InitiativesTabActivity activity;
 
-    public AllInitiativenListAdapter(InitiativesTabActivity activity, MultiInstanceInitiativen initiativen, int viewId) {
+    public InitiativenListAdapter(InitiativesTabActivity activity, MultiInstanceInitiativen initiativen, int viewId) {
         super(activity, NO_SELECTION, initiativen);
         this.initiativen = initiativen;
         this.activity = activity;
@@ -28,9 +28,12 @@ public class AllInitiativenListAdapter extends ArrayAdapter<Initiative> {
          if (initiativen.size() <= position) {
             return null;
         }
-        int issueid = initiativen.get(position).issue_id;
-        IssueItemView retval = new IssueItemView(activity, initiativen.get(position));
-        
+      return getInternalView(position);
+    }
+
+    protected View getInternalView(int position){
+      IssueItemView retval = new IssueItemView(activity, initiativen.get(position));
+
         return retval;
     }
 }
