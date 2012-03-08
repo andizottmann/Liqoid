@@ -33,7 +33,7 @@ public class Initiative{
     public Date issue_fully_frozen;
     public Date issue_closed;
     public Date current_draft_created;
-    public static final int ISSUE_ID_COMP = 0, ISSUE_CREATED_COMP = 1;
+    public static final int ISSUE_ID_COMP = 0, ISSUE_CREATED_COMP = 1, ISSUE_NEXT_EVENT_COMP=2;
     private LQFBInstance lqfbInstance;
     private Area area;
 

@@ -2,27 +2,23 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package de.quadrillenschule.liquidroid;
 
-import android.app.Activity;
-import android.os.Bundle;
-import android.widget.TextView;
+import de.quadrillenschule.liquidroid.model.Initiative;
 
 /**
  *
  * @author andi
  */
-public class UpcomingTabActivity extends Activity {
+public class UpcomingTabActivity extends InitiativesTabActivity {
 
-    /** Called when the activity is first created. */
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        TextView textview = new TextView(this);
-        textview.setText("This is the Upcoming events tab");
-        setContentView(textview);
+    protected void sortList() {
+        if (sortNewestFirst) {
+            allInis.reverse(Initiative.ISSUE_NEXT_EVENT_COMP);
+        } else {
+            allInis.sort(Initiative.ISSUE_NEXT_EVENT_COMP);
+        }
+        inisListAdapter.notifyDataSetChanged();
     }
-
 }

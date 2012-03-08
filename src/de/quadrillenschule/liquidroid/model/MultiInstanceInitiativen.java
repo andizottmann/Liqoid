@@ -34,25 +34,56 @@ public class MultiInstanceInitiativen extends ArrayList<Initiative> {
                     return -1;
                 }
             } catch (Exception e) {
-
             }
-             return 0;
+            return 0;
+        }
+    }
+
+    public class SortByNextEventComparator implements Comparator<Initiative> {
+
+        public boolean orderNormal = true;
+
+        public int compare(Initiative o1, Initiative o2) {
+            try {
+                long retval = 0;
+                if (orderNormal) {
+                    retval = (o1.getDateForNextEvent().getTime() - o2.getDateForNextEvent().getTime());
+                } else {
+                    retval = (o2.getDateForNextEvent().getTime() - o1.getDateForNextEvent().getTime());
+
+                }
+                if (retval > 0) {
+                    return 1;
+                }
+                if (retval < 0) {
+                    return -1;
+                }
+            } catch (Exception e) {
+            }
+            return 0;
         }
     }
 
     public void sort(int comparator) {
-        SortByIssueCreatedComparator c = new SortByIssueCreatedComparator();
-        c.orderNormal = true;
 
+        Comparator c = new SortByIssueCreatedComparator();
+        ((SortByIssueCreatedComparator) c).orderNormal = true;
+        if (comparator == Initiative.ISSUE_NEXT_EVENT_COMP) {
+            c = new SortByNextEventComparator();
+            ((SortByNextEventComparator) c).orderNormal = true;
+        }
         Collections.sort(this, c);
 
     }
 
     public void reverse(int comparator) {
-        SortByIssueCreatedComparator c = new SortByIssueCreatedComparator();
-        c.orderNormal = false;
+        Comparator c = new SortByIssueCreatedComparator();
 
+        ((SortByIssueCreatedComparator) c).orderNormal = false;
+        if (comparator == Initiative.ISSUE_NEXT_EVENT_COMP) {
+            c = new SortByNextEventComparator();
+            ((SortByNextEventComparator) c).orderNormal = false;
+        }
         Collections.sort(this, c);
-
     }
 }

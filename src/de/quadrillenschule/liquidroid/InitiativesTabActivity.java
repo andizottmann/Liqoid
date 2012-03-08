@@ -23,7 +23,6 @@ import de.quadrillenschule.liquidroid.model.LQFBInstance;
 import de.quadrillenschule.liquidroid.model.MultiInstanceInitiativen;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -37,7 +36,7 @@ public class InitiativesTabActivity extends Activity {
     ProgressDialog progressDialog;
     private boolean pauseDownload = false;
     long overallDataAge = 0;
-    private boolean sortNewestFirst = true;
+    protected boolean sortNewestFirst = true;
     private String currentlyDownloadedArea = "";
 
     /** Called when the activity is first created. */
@@ -232,7 +231,7 @@ public class InitiativesTabActivity extends Activity {
         return true;
     }
 
-    private void sortList() {
+    protected void sortList() {
         if (sortNewestFirst) {
             allInis.reverse(Initiative.ISSUE_CREATED_COMP);
         } else {
