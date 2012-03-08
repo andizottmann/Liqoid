@@ -21,12 +21,14 @@ public class InitiativenFromAPIParser extends DefaultHandler {
     Initiative currentInitiative;
     StringBuffer charBuff;
     Area area;
+    LQFBInstance lqfbInstance;
 
-    public InitiativenFromAPIParser(Area area) {
+    public InitiativenFromAPIParser(Area area, LQFBInstance lqfbInstance) {
         super();
         this.area=area;
         charBuff = new StringBuffer();
         inis = area.getInitiativen();
+        this.lqfbInstance=lqfbInstance;
     }
 
     @Override
@@ -40,7 +42,7 @@ public class InitiativenFromAPIParser extends DefaultHandler {
 
         if (qName.equals("initiative")) {
 
-            currentInitiative = new Initiative();
+            currentInitiative = new Initiative(area,lqfbInstance);
 
 
         }
