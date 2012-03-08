@@ -23,8 +23,8 @@ public class RecentTabActivity  extends InitiativesTabActivity {
         } else {
             allInis.sort(Initiative.ISSUE_LAST_EVENT_COMP);
         }
-        inisListAdapter.notifyDataSetChanged();
-    }
+        try {inisListAdapter.notifyDataSetChanged();} catch (Exception e){}
+   }
 
     @Override
      protected InitiativenListAdapter getInitiativenListAdapter() {

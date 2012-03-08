@@ -43,7 +43,7 @@ public class InitiativesTabActivity extends Activity {
     private boolean pauseDownload = false;
     long overallDataAge = 0;
     protected boolean sortNewestFirst = true;
-    private String currentlyDownloadedArea = "";
+    private String currentlyDownloadedArea = "", currentlyDownloadedInstance = "";
 
     /** Called when the activity is first created. */
     @Override
@@ -60,7 +60,9 @@ public class InitiativesTabActivity extends Activity {
     @Override
     public void onResume() {
         super.onResume();
+        if (inisListAdapter==null){
         refreshInisList(false);
+        }
     }
 
     @Override
@@ -90,41 +92,55 @@ public class InitiativesTabActivity extends Activity {
         void updateAreas() {
             for (LQFBInstance myInstance : ((LiqoidApplication) getApplication()).lqfbInstances) {
                 //    LQFBInstance myinstance = ((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance();
+                boolean doesDownload = false;
                 if (myInstance.willDownloadAreas(((LiqoidApplication) getApplication()).cachedAPI1Queries, download)) {
-                    handler.sendEmptyMessage(DOWNLOADING);
+                    currentlyDownloadedInstance = myInstance.getShortName();
+                    handler.sendEmptyMessage(DOWNLOADING_INSTANCE);
+                    doesDownload = true;
                 }
                 int retrycounter = 0;
                 int maxretries = 1;
 
                 while ((retrycounter <= maxretries) && (myInstance.downloadAreas(((LiqoidApplication) getApplication()).cachedAPI1Queries, download)) < 0) {
 
-                    handler.sendEmptyMessage(DOWNLOAD_ERROR);
+                    if (doesDownload) {
+                        handler.sendEmptyMessage(DOWNLOAD_ERROR);
+                    }
                     try {
                         this.sleep((2 ^ retrycounter) * 1000);
                         retrycounter++;
                     } catch (InterruptedException ex) {
                     }
-                    handler.sendEmptyMessage(DOWNLOAD_RETRY);
+                    if (doesDownload) {
+                        handler.sendEmptyMessage(DOWNLOAD_RETRY);
+                    }
                 }
-                handler.sendEmptyMessage(FINISH_OK);
+                //  handler.sendEmptyMessage(FINISH_OK);
             }
         }
 
         @Override
         public void run() {
+            handler.sendEmptyMessage(UPDATING);
+
             updateAreas();
             overallDataAge = System.currentTimeMillis();
-            inisListAdapter = null;
+            //   inisListAdapter = null;
             allInis = new Initiativen(getSharedPreferences(((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance().getPrefsName(), RESULT_OK));
 
             for (LQFBInstance myInstance : ((LiqoidApplication) getApplication()).lqfbInstances) {
+                currentlyDownloadedInstance = myInstance.getShortName();
+
                 for (Area a : myInstance.areas.getSelectedAreas()) {
                     currentlyDownloadedArea = a.getName();
+                    boolean doesDownload = false;
                     if (myInstance.willDownloadInitiativen(a, ((LiqoidApplication) getApplication()).cachedAPI1Queries, download)) {
                         handler.sendEmptyMessage(DOWNLOADING);
-
+                        doesDownload = true;
                     }
-                    handler.sendEmptyMessage(DOWNLOAD_RETRY);
+                    if (doesDownload) {
+                        handler.sendEmptyMessage(DOWNLOAD_RETRY);
+                    }
                     int retrycounter = 0;
                     int maxretries = 4;
                     if (pauseDownload) {
@@ -132,14 +148,18 @@ public class InitiativesTabActivity extends Activity {
                     }
 
                     while ((retrycounter <= maxretries) && (myInstance.downloadInitiativen(a, ((LiqoidApplication) getApplication()).cachedAPI1Queries, download) < 0)) {
-                        handler.sendEmptyMessage(DOWNLOAD_ERROR);
+                        if (doesDownload) {
+                            handler.sendEmptyMessage(DOWNLOAD_ERROR);
+                        }
                         try {
                             this.sleep((2 ^ retrycounter) * 1000);
                             retrycounter++;
 
                         } catch (InterruptedException ex) {
                         }
-                        handler.sendEmptyMessage(DOWNLOAD_RETRY);
+                        if (doesDownload) {
+                            handler.sendEmptyMessage(DOWNLOAD_RETRY);
+                        }
 
                     }
                     if (retrycounter >= maxretries) {
@@ -148,7 +168,6 @@ public class InitiativesTabActivity extends Activity {
                     if (overallDataAge > ((LiqoidApplication) getApplication()).cachedAPI1Queries.dataage) {
                         overallDataAge = ((LiqoidApplication) getApplication()).cachedAPI1Queries.dataage;
                     }
-                    handler.sendEmptyMessage(FINISH_SINGLE_OK);
 
                 }
                 for (Area a : myInstance.areas.getSelectedAreas()) {
@@ -158,17 +177,19 @@ public class InitiativesTabActivity extends Activity {
                         allInis.add(i);
                     }
                 }
-                handler.sendEmptyMessage(FINISH_OK);
+                //     handler.sendEmptyMessage(FINISH_OK);
 
             }
 
             inisListAdapter = getInitiativenListAdapter();//new InitiativenListAdapter(parent, allInis, R.id.initiativenList);
             sortList();
             inisListAdapter.notifyDataSetChanged();
+            handler.sendEmptyMessage(FINISH_OK);
+
 
         }
     }
-    private static int FINISH_OK = 0, FINISH_SINGLE_OK = 3, DOWNLOADING = 1, DOWNLOAD_ERROR = -1, DOWNLOAD_RETRY = 2;
+    private static int FINISH_OK = 0, DOWNLOADING = 1, DOWNLOAD_ERROR = -1, DOWNLOAD_RETRY = 2, UPDATING = 4, DOWNLOADING_INSTANCE = 5;
     private Handler handler = new Handler() {
 
         @Override
@@ -185,15 +206,22 @@ public class InitiativesTabActivity extends Activity {
             ((LiqoidApplication) getApplication()).statusLineText(prefix + getApplicationContext().getString(R.string.dataage) + ": " + dataagestr);
 
             //Updating status of progressdialog
-            if ((msg.what == DOWNLOADING) && (!pauseDownload)) {
+            if ((msg.what == DOWNLOADING)) {
+                progressDialog.setMessage(getApplicationContext().getString(R.string.downloading) + "\n" + currentlyDownloadedArea + "...");
+            }
+            if ((msg.what == DOWNLOADING_INSTANCE)) {
+                progressDialog.setMessage(getApplicationContext().getString(R.string.downloading) + "\n" + currentlyDownloadedInstance + "...");
+            }
+
+            if (msg.what == UPDATING) {
 
                 progressDialog = ProgressDialog.show(InitiativesTabActivity.this, "",
-                        getApplicationContext().getString(R.string.downloading) + "\n" + ((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance().getName() + "...", true);
+                        getApplicationContext().getString(R.string.updating) + "...", true);
             }
             if (msg.what == FINISH_OK) {
 
                 try {
-                    progressDialog.cancel();
+                    progressDialog.dismiss();
                 } catch (Exception e) {
                     //Sometimes it is not attached anymore
                     progressDialog = null;
@@ -205,23 +233,15 @@ public class InitiativesTabActivity extends Activity {
                 findViewById(R.id.initiativenList).refreshDrawableState();
 
             }
-            if (msg.what == FINISH_SINGLE_OK) {
 
-                try {
-                    progressDialog.cancel();
-                } catch (Exception e) {
-                    //Sometimes it is not attached anymore
-                    progressDialog = null;
-                }
-            }
-            if (progressDialog != null) {
+            if ((progressDialog != null) && (!pauseDownload)) {
 
                 if (msg.what == DOWNLOAD_ERROR) {
                     progressDialog.setMessage(getApplicationContext().getString(R.string.download_error));
 
                 }
                 if (msg.what == DOWNLOAD_RETRY) {
-                    progressDialog.setMessage(getApplicationContext().getString(R.string.downloading) + "\n" + currentlyDownloadedArea + "...");
+                    progressDialog.setMessage(getApplicationContext().getString(R.string.downloading) + "\n" + currentlyDownloadedArea + " @ " + currentlyDownloadedInstance);
 
                 }
 
@@ -243,7 +263,11 @@ public class InitiativesTabActivity extends Activity {
         } else {
             allInis.sort(Initiative.ISSUE_CREATED_COMP);
         }
-        inisListAdapter.notifyDataSetChanged();
+        try {
+            inisListAdapter.notifyDataSetChanged();
+        } catch (Exception e) {
+        }
+
     }
 
     @Override

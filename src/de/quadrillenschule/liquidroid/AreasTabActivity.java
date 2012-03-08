@@ -70,7 +70,9 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
     @Override
     public void onResume() {
         super.onResume();
-        refreshAreasList(false);
+        if (areasListAdapter == null) {
+            refreshAreasList(false);
+        }
     }
 
     @Override

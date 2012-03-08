@@ -13,7 +13,7 @@ import java.util.Date;
  *
  * @author andi
  */
-public class Initiative{
+public class Initiative {
 
     public int id = 0;
     public int area_id = 0;
@@ -33,14 +33,15 @@ public class Initiative{
     public Date issue_fully_frozen;
     public Date issue_closed;
     public Date current_draft_created;
-    public static final int ISSUE_ID_COMP = 0, ISSUE_CREATED_COMP = 1, ISSUE_NEXT_EVENT_COMP=2,ISSUE_LAST_EVENT_COMP =3;
+    public static final int ISSUE_ID_COMP = 0, ISSUE_CREATED_COMP = 1, ISSUE_NEXT_EVENT_COMP = 2, ISSUE_LAST_EVENT_COMP = 3;
     private LQFBInstance lqfbInstance;
     private Area area;
 
-    public Initiative(Area area,LQFBInstance lqfbInstance){
-    this.area=area;
-    this.lqfbInstance=lqfbInstance;
+    public Initiative(Area area, LQFBInstance lqfbInstance) {
+        this.area = area;
+        this.lqfbInstance = lqfbInstance;
     }
+
     public Date getDateForStartVoting() {
         Calendar cal = Calendar.getInstance();
         cal.setTime(issue_created);
@@ -67,12 +68,15 @@ public class Initiative{
         if (issue_half_frozen != null) {
             return lastFrozen;
         }
-        if ((Math.abs((created.getTime() - current_draft_created.getTime())) < 2000)) {
-            return lastErzeugt;
-        } else {
+        try {
+            if ((Math.abs((created.getTime() - current_draft_created.getTime())) < 2000)) {
+                return lastErzeugt;
+            } else {
+                return lastNeuerEntwurf;
+            }
+        } catch (NullPointerException e) {
             return lastNeuerEntwurf;
         }
-
     }
 
     public Date dateForLastEvent() {
@@ -153,6 +157,4 @@ public class Initiative{
     public Area getArea() {
         return area;
     }
-
-
 }

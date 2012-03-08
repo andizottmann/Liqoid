@@ -21,7 +21,7 @@ public class UpcomingTabActivity extends InitiativesTabActivity {
         } else {
             allInis.sort(Initiative.ISSUE_NEXT_EVENT_COMP);
         }
-        inisListAdapter.notifyDataSetChanged();
+       try {inisListAdapter.notifyDataSetChanged();} catch (Exception e){}
     }
 
     @Override

@@ -2,8 +2,8 @@
 <resources>
     <string name="app_name">Liqoid</string>
     <string name="dataage">Datenalter</string>
-    <string name="tab_upcoming">Anstehend</string>
-    <string name="tab_recent">Neueste</string>
+    <string name="tab_upcoming">Anstehende Ereignisse</string>
+    <string name="tab_recent">Neueste Ereignisse</string>
     <string name="tab_inis">Themen</string>
     <string name="tab_areas">Gebiete</string>
     <string name="menu_refresh">Aktualisieren</string>
@@ -14,4 +14,6 @@
     <string name="instances_prompt">Wähle eine LQFB Instanz</string>
     <string name="reversesort">Umsortieren</string>
     <string name="share">Teilen</string>
+    <string name="updating">Aktualisiere</string>
+
 </resources>
