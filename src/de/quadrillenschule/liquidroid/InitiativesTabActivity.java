@@ -30,7 +30,7 @@ import java.util.Date;
  *
  * @author andi
  */
-public class InitiativesTabActivity extends Activity  {
+public class InitiativesTabActivity extends Activity {
 
     AllInitiativenListAdapter inisListAdapter;
     MultiInstanceInitiativen allInis;
@@ -49,7 +49,7 @@ public class InitiativesTabActivity extends Activity  {
         GestureOverlayView gestures = (GestureOverlayView) findViewById(R.id.allinisgestures);
         gestures.setGestureVisible(false);
         gestures.addOnGesturePerformedListener((LiqoidMainActivity) getParent());
-  
+
     }
 
     @Override
@@ -83,24 +83,26 @@ public class InitiativesTabActivity extends Activity  {
         }
 
         void updateAreas() {
-            LQFBInstance myinstance = ((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance();
-            if (myinstance.willDownloadAreas(((LiqoidApplication) getApplication()).cachedAPI1Queries, download)) {
-                handler.sendEmptyMessage(DOWNLOADING);
-            }
-            int retrycounter = 0;
-            int maxretries = 1;
-
-            while ((retrycounter <= maxretries) && (myinstance.downloadAreas(((LiqoidApplication) getApplication()).cachedAPI1Queries, download)) < 0) {
-
-                handler.sendEmptyMessage(DOWNLOAD_ERROR);
-                try {
-                    this.sleep((2 ^ retrycounter) * 1000);
-                    retrycounter++;
-                } catch (InterruptedException ex) {
+            for (LQFBInstance myInstance : ((LiqoidApplication) getApplication()).lqfbInstances) {
+                //    LQFBInstance myinstance = ((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance();
+                if (myInstance.willDownloadAreas(((LiqoidApplication) getApplication()).cachedAPI1Queries, download)) {
+                    handler.sendEmptyMessage(DOWNLOADING);
                 }
-                handler.sendEmptyMessage(DOWNLOAD_RETRY);
+                int retrycounter = 0;
+                int maxretries = 1;
+
+                while ((retrycounter <= maxretries) && (myInstance.downloadAreas(((LiqoidApplication) getApplication()).cachedAPI1Queries, download)) < 0) {
+
+                    handler.sendEmptyMessage(DOWNLOAD_ERROR);
+                    try {
+                        this.sleep((2 ^ retrycounter) * 1000);
+                        retrycounter++;
+                    } catch (InterruptedException ex) {
+                    }
+                    handler.sendEmptyMessage(DOWNLOAD_RETRY);
+                }
+                handler.sendEmptyMessage(FINISH_OK);
             }
-            handler.sendEmptyMessage(FINISH_OK);
         }
 
         @Override
@@ -254,5 +256,4 @@ public class InitiativesTabActivity extends Activity  {
                 return super.onOptionsItemSelected(item);
         }
     }
-
 }
