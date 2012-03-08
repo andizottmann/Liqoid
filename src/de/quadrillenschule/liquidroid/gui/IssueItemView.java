@@ -49,7 +49,7 @@ public class IssueItemView extends LinearLayout implements OnClickListener {
         statusLine.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
         DateFormat formatter = new SimpleDateFormat("yy-MM-dd HH:mm");
 
-        statusLine.setText("  " + initiative.state + "     Created: " + formatter.format(initiative.issue_created));
+        statusLine.setText("  " + initiative.state + "     Created: " + formatter.format(initiative.issue_created)+" "+initiative.getLqfbInstance().getShortName());
         statusLine.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
         statusLine.setTextColor(Color.parseColor("#108020"));
         statusLine.setBackgroundColor(Color.argb(255, 245, 245, 245));

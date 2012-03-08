@@ -24,13 +24,15 @@ public class LQFBInstance {
     private String developerkey = "";
     public Areas areas;
     private String apiversion = "";
+    private String shortName="";
     private AreasFromAPIParser areaParser;
     private InitiativenFromAPIParser iniParser;
     public static final String AREA_API = "area";
     SharedPreferences instancePrefs;
 
-    public LQFBInstance(LiqoidApplication la, String prefsName, String name, String apiUrl, String webUrl, String developerkey, String apiversion) {
+    public LQFBInstance(LiqoidApplication la, String shortName,String prefsName, String name, String apiUrl, String webUrl, String developerkey, String apiversion) {
         this.prefsName = prefsName;
+        this.shortName=shortName;
         this.name = name;
         this.apiUrl = apiUrl;
         this.webUrl = webUrl;
@@ -188,5 +190,12 @@ public class LQFBInstance {
      */
     public void setPrefsName(String prefsName) {
         this.prefsName = prefsName;
+    }
+
+    /**
+     * @return the shortName
+     */
+    public String getShortName() {
+        return shortName;
     }
 }
