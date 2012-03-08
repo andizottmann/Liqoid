@@ -5,24 +5,29 @@
 
 package de.quadrillenschule.liquidroid;
 
-import android.app.Activity;
-import android.os.Bundle;
-import android.widget.TextView;
+import de.quadrillenschule.liquidroid.gui.InitiativenListAdapter;
+import de.quadrillenschule.liquidroid.gui.RecentInitiativenListAdapter;
+import de.quadrillenschule.liquidroid.gui.UpcomingInitiativenListAdapter;
+import de.quadrillenschule.liquidroid.model.Initiative;
 
 /**
  *
  * @author andi
  */
-public class RecentTabActivity extends Activity {
+public class RecentTabActivity  extends InitiativesTabActivity {
 
-    /** Called when the activity is first created. */
     @Override
-    public void onCreate(Bundle icicle) {
-        super.onCreate(icicle);
-
-        TextView textview = new TextView(this);
-        textview.setText("This is the Recent events tab");
-        setContentView(textview);
+    protected void sortList() {
+        if (!sortNewestFirst) {
+            allInis.reverse(Initiative.ISSUE_LAST_EVENT_COMP);
+        } else {
+            allInis.sort(Initiative.ISSUE_LAST_EVENT_COMP);
+        }
+        inisListAdapter.notifyDataSetChanged();
     }
 
+    @Override
+     protected InitiativenListAdapter getInitiativenListAdapter() {
+        return new RecentInitiativenListAdapter(this, allInis, R.id.initiativenList);
+    }
 }
