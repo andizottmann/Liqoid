@@ -5,7 +5,9 @@
 package de.quadrillenschule.liquidroid;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.gesture.GestureOverlayView;
@@ -20,7 +22,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.ListView;
@@ -131,7 +132,18 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
             case R.id.refresh_areaslist:
                 refreshAreasList(true);
                 return true;
+            case R.id.about:
 
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setMessage(getString(R.string.fullcredits)).setCancelable(false).setNegativeButton(":)", new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+                AlertDialog alert = builder.create();
+                alert.show();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

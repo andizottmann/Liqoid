@@ -18,4 +18,6 @@
     <string name="filterfavorites">Filter Favs</string>
     <string name="about">About Liqoid</string>
 
+    <string name="fullcredits">Hello this is Liqoid V 0.1 pre!\n Developer: @andizottmann\n All CC-BY-SA 3.0 DE</string>
+
 </resources>

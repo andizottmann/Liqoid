@@ -284,7 +284,7 @@ public class InitiativesTabActivity extends Activity {
             case R.id.about:
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setMessage("Hello, this is Liqoid!").setCancelable(false).setNegativeButton(":)", new DialogInterface.OnClickListener() {
+                builder.setMessage(getString(R.string.fullcredits)).setCancelable(false).setNegativeButton(":)", new DialogInterface.OnClickListener() {
 
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
