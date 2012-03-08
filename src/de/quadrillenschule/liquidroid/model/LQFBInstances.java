@@ -6,11 +6,7 @@ package de.quadrillenschule.liquidroid.model;
 
 import android.content.SharedPreferences;
 import de.quadrillenschule.liquidroid.LiqoidApplication;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.util.ArrayList;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
 
 /**
  *

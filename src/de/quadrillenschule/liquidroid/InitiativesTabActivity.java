@@ -61,7 +61,7 @@ public class InitiativesTabActivity extends Activity {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        refreshInisList(false);
+  //      refreshInisList(false);
     }
 
     public void refreshInisList(boolean download) {
