@@ -16,6 +16,7 @@ public class LQFBInstances extends ArrayList<LQFBInstance> {
 
     ArrayList<LQFBInstance> instances;
     LiqoidApplication liqoidApplication;
+    public static boolean selectionUpdatesForRefresh=false;
 
     public LQFBInstances(LiqoidApplication liqoidApplication) {
         super();
@@ -72,4 +73,5 @@ public class LQFBInstances extends ArrayList<LQFBInstance> {
         editor.commit();
        
     }
+
 }

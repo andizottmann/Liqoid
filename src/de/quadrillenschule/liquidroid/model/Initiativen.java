@@ -88,6 +88,7 @@ public class Initiativen extends MultiInstanceInitiativen {
             if (this.getSelectedIssues().findByIssueID(issueid).size() == 0) {
                 //is not selected
                 selectedIssuesString = selectedIssuesString + ":" + issueid;
+                LQFBInstances.selectionUpdatesForRefresh = true;
             } else {
                 //is already selected - change noting
             }
@@ -97,7 +98,7 @@ public class Initiativen extends MultiInstanceInitiativen {
                 //is not selected do nothing
             } else {
                 //is selected, unselect
-
+                LQFBInstances.selectionUpdatesForRefresh = true;
                 String newselectedissues = "";
                 for (String snippet : selectedIssuesString.split(":")) {
                     if (!snippet.equals(issueid + "")) {
@@ -172,5 +173,4 @@ public class Initiativen extends MultiInstanceInitiativen {
         }
         return retval;
     }
-
 }

@@ -28,6 +28,7 @@ import de.quadrillenschule.liquidroid.model.Area;
 import de.quadrillenschule.liquidroid.model.Initiative;
 import de.quadrillenschule.liquidroid.model.Initiativen;
 import de.quadrillenschule.liquidroid.model.LQFBInstance;
+import de.quadrillenschule.liquidroid.model.LQFBInstances;
 import de.quadrillenschule.liquidroid.model.MultiInstanceInitiativen;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -64,7 +65,7 @@ public class InitiativesTabActivity extends Activity {
     @Override
     public void onResume() {
         super.onResume();
-        if (inisListAdapter == null) {
+        if ((inisListAdapter == null) || (LQFBInstances.selectionUpdatesForRefresh)) {
             refreshInisList(false);
         }
     }
@@ -72,10 +73,13 @@ public class InitiativesTabActivity extends Activity {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        //      refreshInisList(false);
+        if ((inisListAdapter == null) || (LQFBInstances.selectionUpdatesForRefresh)) {
+            refreshInisList(false);
+        }
     }
 
     public void refreshInisList(boolean download) {
+        LQFBInstances.selectionUpdatesForRefresh = false;
         RefreshInisListThread ralt = new RefreshInisListThread(download, this);
         ralt.start();
     }
@@ -113,7 +117,7 @@ public class InitiativesTabActivity extends Activity {
                     instancedownload = false;
                 }
 
-                while ((retrycounter <= maxretries) && (myInstance.downloadAreas(((LiqoidApplication) getApplication()).cachedAPI1Queries, instancedownload,myInstance.pauseDownload)) < 0) {
+                while ((retrycounter <= maxretries) && (myInstance.downloadAreas(((LiqoidApplication) getApplication()).cachedAPI1Queries, instancedownload, myInstance.pauseDownload)) < 0) {
 
                     if (doesDownload) {
                         handler.sendEmptyMessage(DOWNLOAD_ERROR);
@@ -163,7 +167,7 @@ public class InitiativesTabActivity extends Activity {
                         instancedownload = false;
                     }
 
-                    while ((retrycounter <= maxretries) && (myInstance.downloadInitiativen(a, ((LiqoidApplication) getApplication()).cachedAPI1Queries, instancedownload,myInstance.pauseDownload) < 0)) {
+                    while ((retrycounter <= maxretries) && (myInstance.downloadInitiativen(a, ((LiqoidApplication) getApplication()).cachedAPI1Queries, instancedownload, myInstance.pauseDownload) < 0)) {
                         if (doesDownload) {
                             handler.sendEmptyMessage(DOWNLOAD_ERROR);
                         }

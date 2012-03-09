@@ -5,6 +5,7 @@
 package de.quadrillenschule.liquidroid.model;
 
 import android.content.SharedPreferences;
+import de.quadrillenschule.liquidroid.LiqoidApplication;
 import java.util.ArrayList;
 
 /**
@@ -25,9 +26,9 @@ public class Areas extends ArrayList<Area> {
         String[] selectedareas_str = instancePrefs.getString("selectedareas", "").split(":");
         ArrayList<Integer> selectedAreas = new ArrayList<Integer>();
         for (String s : selectedareas_str) {
-            if (!s.equals("")){
+            if (!s.equals("")) {
                 selectedAreas.add(Integer.parseInt(s));
-            } 
+            }
         }
 
         for (Integer i : selectedAreas) {
@@ -60,6 +61,7 @@ public class Areas extends ArrayList<Area> {
             if (getSelectedAreas().getById(myarea.getId()) == null) {
                 //is not selected
                 selectedAreasString = selectedAreasString + ":" + myarea.getId();
+                LQFBInstances.selectionUpdatesForRefresh = true;
             } else {
                 //is already selected - change noting
             }
@@ -72,25 +74,23 @@ public class Areas extends ArrayList<Area> {
 
                 String newselectedareas = ":";
                 for (String snippet : selectedAreasString.split(":")) {
-                    if (!snippet.equals(myarea.getId() + "")&&(!snippet.equals(""))) {
+                    if (!snippet.equals(myarea.getId() + "") && (!snippet.equals(""))) {
                         newselectedareas += snippet + ":";
                     }
                 }
-           /*     int len = newselectedareas.length();
-                if (len >= 0) {
-                    selectedAreasString = newselectedareas.substring(0, len);
-                }*/
-                selectedAreasString=newselectedareas;
+                LQFBInstances.selectionUpdatesForRefresh = true;
+
+                selectedAreasString = newselectedareas;
             }
 
         }
         SharedPreferences.Editor editor = instancePrefs.edit();
-        selectedAreasString=selectedAreasString.replaceAll("::", ":");
-        if (selectedAreasString.startsWith(":")){
-        selectedAreasString=selectedAreasString.substring(1);
+        selectedAreasString = selectedAreasString.replaceAll("::", ":");
+        if (selectedAreasString.startsWith(":")) {
+            selectedAreasString = selectedAreasString.substring(1);
         }
-          if (selectedAreasString.endsWith(":")){
-        selectedAreasString=selectedAreasString.substring(0,selectedAreasString.length()-1);
+        if (selectedAreasString.endsWith(":")) {
+            selectedAreasString = selectedAreasString.substring(0, selectedAreasString.length() - 1);
         }
         editor.putString("selectedareas", selectedAreasString);
         editor.commit();
