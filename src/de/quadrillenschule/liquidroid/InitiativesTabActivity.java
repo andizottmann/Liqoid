@@ -54,18 +54,27 @@ public class InitiativesTabActivity extends Activity {
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-        allInis = new MultiInstanceInitiativen();//new Initiativen(getSharedPreferences(((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance().getPrefsName(), MODE_PRIVATE));
+        allInis = new MultiInstanceInitiativen();
         setContentView(R.layout.initiativentab);
         GestureOverlayView gestures = (GestureOverlayView) findViewById(R.id.allinisgestures);
         gestures.setGestureVisible(false);
         gestures.addOnGesturePerformedListener((LiqoidMainActivity) getParent());
-
+        if ((inisListAdapter == null) && dataIntegrityCheck()) {
+            createInisListAdapter();
+        } else {
+            LQFBInstances.selectionUpdatesForRefresh = true;
+        }
+        ;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if ((inisListAdapter == null) || (LQFBInstances.selectionUpdatesForRefresh)) {
+        if (dataIntegrityCheck() && (inisListAdapter == null)) {
+            createInisListAdapter();
+
+        }
+        if (LQFBInstances.selectionUpdatesForRefresh) {
             refreshInisList(false);
         }
     }
@@ -73,9 +82,47 @@ public class InitiativesTabActivity extends Activity {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        if ((inisListAdapter == null) || (LQFBInstances.selectionUpdatesForRefresh)) {
-            refreshInisList(false);
+        if (dataIntegrityCheck() && (inisListAdapter == null)) {
+            createInisListAdapter();
+
+        }/*
+        if (LQFBInstances.selectionUpdatesForRefresh) {
+        refreshInisList(false);
+        }*/
+    }
+
+    void createInisListAdapter() {
+        allInis = new MultiInstanceInitiativen();
+        for (LQFBInstance myInstance : ((LiqoidApplication) getApplication()).lqfbInstances) {
+            for (Area a : myInstance.areas.getSelectedAreas()) {
+                for (Initiative i : a.getInitiativen()) {
+                    allInis.add(i);
+                }
+            }
         }
+        inisListAdapter = getInitiativenListAdapter();
+        filterList();
+        sortList();
+        final ListView listview = (ListView) findViewById(R.id.initiativenList);
+        listview.setAdapter(inisListAdapter);
+        inisListAdapter.notifyDataSetChanged();
+
+
+    }
+
+    boolean dataIntegrityCheck() {
+        try {
+            for (LQFBInstance myInstance : ((LiqoidApplication) getApplication()).lqfbInstances) {
+                for (Area a : myInstance.areas) {
+                    if (a.getInitiativen().size() > 0) {
+                        return true;
+                    }
+                }
+            }
+        } catch (NullPointerException npe) {
+            return false;
+        }
+        return false;
     }
 
     public void refreshInisList(boolean download) {

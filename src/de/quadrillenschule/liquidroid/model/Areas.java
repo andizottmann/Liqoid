@@ -73,6 +73,10 @@ public class Areas extends ArrayList<Area> {
                 //is selected, unselect
 
                 String newselectedareas = ":";
+                if (!selectedAreasString.contains(":")) {
+                    //must be lastone
+                    selectedAreasString = "";
+                }
                 for (String snippet : selectedAreasString.split(":")) {
                     if (!snippet.equals(myarea.getId() + "") && (!snippet.equals(""))) {
                         newselectedareas += snippet + ":";
