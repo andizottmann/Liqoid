@@ -4,8 +4,8 @@
     <string name="dataage">Datenalter</string>
     <string name="tab_upcoming">Anstehende Ereignisse</string>
     <string name="tab_recent">Neueste Ereignisse</string>
-    <string name="tab_inis">Themen</string>
-    <string name="tab_areas">Gebiete</string>
+    <string name="tab_inis">Themen wählen</string>
+    <string name="tab_areas">Gebiete wählen</string>
     <string name="menu_refresh">Aktualisieren</string>
     <string name="downloading">Lade vom LQFB Server</string>
     <string name="download_ok">Download ok</string>
