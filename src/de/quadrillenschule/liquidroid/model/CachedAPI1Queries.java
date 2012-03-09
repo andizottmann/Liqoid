@@ -97,7 +97,7 @@ public class CachedAPI1Queries {
         return !cacheExists(url);
     }
 
-    public InputStream queryInputStream(String api, String parameters, String apiUrl, String developerkey, boolean forceNetwork) throws IOException, FileNotFoundException {
+    public InputStream queryInputStream(String api, String parameters, String apiUrl, String developerkey, boolean forceNetwork, boolean noDownload) throws IOException, FileNotFoundException {
         url = apiUrl + api + ".html?key=" + developerkey + parameters;
         this.api = api;
         if (forceNetwork) {
@@ -106,6 +106,7 @@ public class CachedAPI1Queries {
         if (cacheExists(url)) {
             return cacheInputStream(url);
         }
+        if (noDownload){return null;}
         return networkInputStream(url);
     }
 

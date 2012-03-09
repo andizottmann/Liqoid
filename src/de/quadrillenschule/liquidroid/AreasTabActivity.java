@@ -43,7 +43,8 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
     private AreasListAdapter areasListAdapter;
     private ProgressDialog progressDialog;
     private View contextMenuView;
-    private boolean pauseDownload = false;
+    private LQFBInstance currentDownloadInstance = null;
+    //  private boolean pauseDownload = false;
     ArrayAdapter adapter;
 
     /** Called when the activity is first created. */
@@ -151,7 +152,9 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
 
     public void refreshAreasList(boolean force) {
         if (force) {
-            pauseDownload = false;
+            for (LQFBInstance li : ((LiqoidApplication) getApplication()).lqfbInstances) {
+                li.pauseDownload = false;
+            }
         }
         RefreshAreasListThread ralt = new RefreshAreasListThread(force, this);
         ralt.start();
@@ -172,15 +175,18 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
         public void run() {
 
             LQFBInstance myinstance = ((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance();
+            currentDownloadInstance = myinstance;
             if (myinstance.willDownloadAreas(((LiqoidApplication) getApplication()).cachedAPI1Queries, download)) {
                 handler.sendEmptyMessage(DOWNLOADING);
             }
             int retrycounter = 0;
             int maxretries = 4;
-            if (pauseDownload) {
+            boolean instancedownload=download;
+            if (myinstance.pauseDownload) {
                 maxretries = 0;
+                instancedownload=false;
             }
-            while ((retrycounter <= maxretries) && (myinstance.downloadAreas(((LiqoidApplication) getApplication()).cachedAPI1Queries, download)) < 0) {
+            while ((retrycounter <= maxretries) && (myinstance.downloadAreas(((LiqoidApplication) getApplication()).cachedAPI1Queries, instancedownload,myinstance.pauseDownload)) < 0) {
 
                 handler.sendEmptyMessage(DOWNLOAD_ERROR);
                 try {
@@ -192,7 +198,7 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
             }
 
             if (retrycounter >= maxretries) {
-                pauseDownload = true;
+                myinstance.pauseDownload = true;
             }
             handler.sendEmptyMessage(0);
             areasListAdapter = new AreasListAdapter(parent, myinstance.areas, R.id.areasList);
@@ -211,16 +217,21 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
             DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String dataagestr = formatter.format(new Date(dataage));
             String prefix = "";
-            if (pauseDownload) {
-                prefix = "Offline - ";
+            if (currentDownloadInstance != null) {
+                if (currentDownloadInstance.pauseDownload) {
+                    prefix = "Offline - ";
+                }
             }
+
             ((LiqoidApplication) getApplication()).statusLineText(prefix + getApplicationContext().getString(R.string.dataage) + ": " + dataagestr);
 
-            //update progressdialog
-            if ((msg.what == DOWNLOADING) && (!pauseDownload)) {
-                progressDialog = ProgressDialog.show(AreasTabActivity.this, "",
-                        getApplicationContext().getString(R.string.downloading) + "\n" + ((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance().getName() + "...", true);
+            if (currentDownloadInstance != null) {
+                //update progressdialog
+                if ((msg.what == DOWNLOADING) && (!currentDownloadInstance.pauseDownload)) {
+                    progressDialog = ProgressDialog.show(AreasTabActivity.this, "",
+                            getApplicationContext().getString(R.string.downloading) + "\n" + ((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance().getName() + "...", true);
 
+                }
             }
             if (msg.what == FINISH_OK) {
                 try {

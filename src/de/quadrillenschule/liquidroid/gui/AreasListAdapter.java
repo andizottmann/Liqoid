@@ -52,6 +52,7 @@ public class AreasListAdapter extends ArrayAdapter<Area> {
                 } catch (Exception e) {
                     //its not a vibrator :/
                 }
+
             }
         });
 

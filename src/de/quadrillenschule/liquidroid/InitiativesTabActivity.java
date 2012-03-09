@@ -42,11 +42,12 @@ public class InitiativesTabActivity extends Activity {
     InitiativenListAdapter inisListAdapter;
     MultiInstanceInitiativen allInis;
     ProgressDialog progressDialog;
-    private boolean pauseDownload = false;
+    //   private boolean pauseDownload = false;
     long overallDataAge = 0;
     protected boolean sortNewestFirst = true;
     protected boolean filterOnlySelected = false;
     private String currentlyDownloadedArea = "", currentlyDownloadedInstance = "";
+    private LQFBInstance currentInstance;
 
     /** Called when the activity is first created. */
     @Override
@@ -88,12 +89,15 @@ public class InitiativesTabActivity extends Activity {
             this.download = download;
             this.parent = parent;
             if (download) {
-                pauseDownload = false;
+                for (LQFBInstance myInstance : ((LiqoidApplication) getApplication()).lqfbInstances) {
+                    myInstance.pauseDownload = false;
+                }
             }
         }
 
         void updateAreas() {
             for (LQFBInstance myInstance : ((LiqoidApplication) getApplication()).lqfbInstances) {
+                currentInstance = myInstance;
                 //    LQFBInstance myinstance = ((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance();
                 boolean doesDownload = false;
                 if (myInstance.willDownloadAreas(((LiqoidApplication) getApplication()).cachedAPI1Queries, download)) {
@@ -103,8 +107,13 @@ public class InitiativesTabActivity extends Activity {
                 }
                 int retrycounter = 0;
                 int maxretries = 1;
+                boolean instancedownload = download;
+                if (myInstance.pauseDownload) {
+                    maxretries = 0;
+                    instancedownload = false;
+                }
 
-                while ((retrycounter <= maxretries) && (myInstance.downloadAreas(((LiqoidApplication) getApplication()).cachedAPI1Queries, download)) < 0) {
+                while ((retrycounter <= maxretries) && (myInstance.downloadAreas(((LiqoidApplication) getApplication()).cachedAPI1Queries, instancedownload,myInstance.pauseDownload)) < 0) {
 
                     if (doesDownload) {
                         handler.sendEmptyMessage(DOWNLOAD_ERROR);
@@ -117,6 +126,9 @@ public class InitiativesTabActivity extends Activity {
                     if (doesDownload) {
                         handler.sendEmptyMessage(DOWNLOAD_RETRY);
                     }
+                }
+                if (retrycounter >= maxretries) {
+                    myInstance.pauseDownload = true;
                 }
             }
         }
@@ -145,11 +157,13 @@ public class InitiativesTabActivity extends Activity {
                     }
                     int retrycounter = 0;
                     int maxretries = 4;
-                    if (pauseDownload) {
+                    boolean instancedownload = download;
+                    if (myInstance.pauseDownload) {
                         maxretries = 0;
+                        instancedownload = false;
                     }
 
-                    while ((retrycounter <= maxretries) && (myInstance.downloadInitiativen(a, ((LiqoidApplication) getApplication()).cachedAPI1Queries, download) < 0)) {
+                    while ((retrycounter <= maxretries) && (myInstance.downloadInitiativen(a, ((LiqoidApplication) getApplication()).cachedAPI1Queries, instancedownload,myInstance.pauseDownload) < 0)) {
                         if (doesDownload) {
                             handler.sendEmptyMessage(DOWNLOAD_ERROR);
                         }
@@ -165,7 +179,7 @@ public class InitiativesTabActivity extends Activity {
 
                     }
                     if (retrycounter >= maxretries) {
-                        pauseDownload = true;
+                        myInstance.pauseDownload = true;
                     }
                     if (overallDataAge > ((LiqoidApplication) getApplication()).cachedAPI1Queries.dataage) {
                         overallDataAge = ((LiqoidApplication) getApplication()).cachedAPI1Queries.dataage;
@@ -197,8 +211,10 @@ public class InitiativesTabActivity extends Activity {
             DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String dataagestr = formatter.format(new Date(dataage));
             String prefix = "";
-            if (pauseDownload) {
-                prefix = "Offline - ";
+            if (currentInstance != null) {
+                if (currentInstance.pauseDownload) {
+                    prefix = "Offline - ";
+                }
             }
             ((LiqoidApplication) getApplication()).statusLineText(prefix + getApplicationContext().getString(R.string.dataage) + ": " + dataagestr);
 
@@ -225,12 +241,14 @@ public class InitiativesTabActivity extends Activity {
                 listview.setAdapter(inisListAdapter);
                 findViewById(R.id.initiativenList).refreshDrawableState();
             }
-            if ((progressDialog != null) && (!pauseDownload)) {
-                if (msg.what == DOWNLOAD_ERROR) {
-                    progressDialog.setMessage(getApplicationContext().getString(R.string.download_error));
-                }
-                if (msg.what == DOWNLOAD_RETRY) {
-                    progressDialog.setMessage(getApplicationContext().getString(R.string.downloading) + "\n" + currentlyDownloadedArea + " @ " + currentlyDownloadedInstance);
+            if (currentInstance != null) {
+                if ((progressDialog != null) && (!currentInstance.pauseDownload)) {
+                    if (msg.what == DOWNLOAD_ERROR) {
+                        progressDialog.setMessage(getApplicationContext().getString(R.string.download_error));
+                    }
+                    if (msg.what == DOWNLOAD_RETRY) {
+                        progressDialog.setMessage(getApplicationContext().getString(R.string.downloading) + "\n" + currentlyDownloadedArea + " @ " + currentlyDownloadedInstance);
+                    }
                 }
             }
         }

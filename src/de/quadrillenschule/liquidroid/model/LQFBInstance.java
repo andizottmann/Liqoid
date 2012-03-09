@@ -28,6 +28,7 @@ public class LQFBInstance {
     private AreasFromAPIParser areaParser;
     private InitiativenFromAPIParser iniParser;
     public static final String AREA_API = "area";
+    public boolean pauseDownload=false;
     SharedPreferences instancePrefs;
 
     public LQFBInstance(LiqoidApplication la, String shortName,String prefsName, String name, String apiUrl, String webUrl, String developerkey, String apiversion) {
@@ -55,14 +56,14 @@ public class LQFBInstance {
         }
     }
 
-    public int downloadAreas(CachedAPI1Queries cachedAPI1Queries, boolean forceNetwork) {
+    public int downloadAreas(CachedAPI1Queries cachedAPI1Queries, boolean forceNetwork,boolean noDownload) {
         SAXParserFactory factory = SAXParserFactory.newInstance();
         SAXParser saxparser;
 
         areaParser = new AreasFromAPIParser(instancePrefs);
         try {
             saxparser = factory.newSAXParser();
-            saxparser.parse(cachedAPI1Queries.queryInputStream("area", "", apiUrl, developerkey, forceNetwork), areaParser);
+            saxparser.parse(cachedAPI1Queries.queryInputStream("area", "", apiUrl, developerkey, forceNetwork,noDownload), areaParser);
             //   cachedAPI1Queries.storeInCache(areaParser.docBuff.toString());
             areas = areaParser.areas;
 
@@ -89,7 +90,7 @@ public class LQFBInstance {
         return retval;
     }
 
-    public int downloadInitiativen(Area area, CachedAPI1Queries cachedAPI1Queries, boolean forceNetwork) {
+    public int downloadInitiativen(Area area, CachedAPI1Queries cachedAPI1Queries, boolean forceNetwork, boolean noDownload) {
         SAXParserFactory factory = SAXParserFactory.newInstance();
         SAXParser saxparser;
 
@@ -99,7 +100,7 @@ public class LQFBInstance {
         for (String state : states) {
             try {
                 saxparser = factory.newSAXParser();
-                saxparser.parse(cachedAPI1Queries.queryInputStream("initiative", "&area_id=" + area.getId() + "&state=" + state, apiUrl, developerkey, forceNetwork), iniParser);
+                saxparser.parse(cachedAPI1Queries.queryInputStream("initiative", "&area_id=" + area.getId() + "&state=" + state, apiUrl, developerkey, forceNetwork,noDownload), iniParser);
             } catch (Exception e) {
                 return -1;
             }
