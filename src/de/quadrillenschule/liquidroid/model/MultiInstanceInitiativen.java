@@ -116,6 +116,10 @@ public class MultiInstanceInitiativen extends ArrayList<Initiative> {
             c = new SortByNextEventComparator();
             ((SortByNextEventComparator) c).orderNormal = false;
         }
+         if (comparator == Initiative.ISSUE_LAST_EVENT_COMP) {
+            c = new SortByLastEventComparator();
+            ((SortByLastEventComparator) c).orderNormal = false;
+        }
         Collections.sort(this, c);
     }
 
