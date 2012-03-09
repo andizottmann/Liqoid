@@ -100,6 +100,10 @@ public class Initiativen extends MultiInstanceInitiativen {
                 //is selected, unselect
                 LQFBInstances.selectionUpdatesForRefresh = true;
                 String newselectedissues = "";
+                if (!selectedIssuesString.contains(":")){
+                //must be lastone
+                    selectedIssuesString="";
+                }
                 for (String snippet : selectedIssuesString.split(":")) {
                     if (!snippet.equals(issueid + "")) {
                         newselectedissues += snippet + ":";
