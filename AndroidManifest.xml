@@ -4,7 +4,13 @@
       android:versionCode="1"
       android:versionName="0.1"
       android:installLocation="auto">
-
+    <uses-sdk android:minSdkVersion="4"
+          android:targetSdkVersion="10"/>
+    <supports-screens
+            android:smallScreens="true"
+            android:normalScreens="true"
+            android:largeScreens="true"
+            android:anyDensity="true" />
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.VIBRATE"/>
 
@@ -19,7 +25,7 @@
                   android:icon="@drawable/lqfb"
                   android:theme="@android:style/Theme.NoTitleBar"
           >
-    <intent-filter>
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
