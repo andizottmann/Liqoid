@@ -14,6 +14,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
+import android.widget.ImageSwitcher;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -23,6 +24,7 @@ import de.quadrillenschule.liquidroid.model.Initiativen;
 import de.quadrillenschule.liquidroid.model.MultiInstanceInitiativen;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import android.R;
 
 /**
  *
@@ -34,12 +36,12 @@ public class IssueItemView extends LinearLayout implements OnClickListener {
     public Initiative initiative;
     CheckBox myCheckBox;
     TextView statusLine;
-    Button colorView;
+    ImageView colorView;
     LinearLayout contentContainer;
 
     public IssueItemView(InitiativesTabActivity activity, Initiative initiative) {
         super(activity);
-        setOrientation(VERTICAL);
+        setOrientation(HORIZONTAL);
         this.activity = activity;
         this.initiative = initiative;
 
@@ -60,25 +62,36 @@ public class IssueItemView extends LinearLayout implements OnClickListener {
         statusLine.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
         statusLine.setTextColor(Color.parseColor("#108020"));
         statusLine.setBackgroundColor(Color.argb(255, 245, 245, 245));
-        this.addView(statusLine);
-        colorView=new Button(activity);
-        colorView.setText("  \n ");
-        colorView.setBackgroundResource(activity.getImageResourceForColor(InitiativesTabActivity.GREY_COLOR));
-        colorView.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 
-        //contentContainer = new LinearLayout(activity);
-      //  contentContainer.setOrientation(HORIZONTAL);
-         this.addView(myCheckBox);
-    //    contentContainer.addView(colorView);
-  //      contentContainer.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
-  //      this.addView(contentContainer);
+
+        contentContainer = new LinearLayout(activity);
+        contentContainer.setOrientation(VERTICAL);
+        this.addView(activity.getImageViewForcolor(itemSpecificColorcode()));
+        contentContainer.addView(statusLine);
+
+        contentContainer.addView(myCheckBox);
+        contentContainer.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.MATCH_PARENT));
+
+        this.addView(contentContainer);
+    }
+
+    protected int itemSpecificColorcode() {
+        long delta = System.currentTimeMillis() - initiative.issue_created.getTime();
+        long oneday = 1000 * 60 * 60 * 24;
+        if (delta < oneday) {
+            return (activity.RED_COLOR);
+        }
+        if (delta < oneday * 5) {
+            return (activity.ORANGE_COLOR);
+        }
+
+        return activity.GREY_COLOR;
     }
 
     protected String getStatusText() {
         DateFormat formatter = new SimpleDateFormat("yy-MM-dd HH:mm");
         return "  " + initiative.state + "     Created: " + formatter.format(initiative.issue_created) + " " + initiative.getLqfbInstance().getShortName();
     }
-
 
     public void onClick(View arg0) {
         int issueid = initiative.issue_id;

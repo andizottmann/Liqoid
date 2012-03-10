@@ -16,7 +16,7 @@ public class UpcomingTabActivity extends InitiativesTabActivity {
 
     @Override
     protected void filterList() {
-        if (!filterOnlySelected) {
+        if (filterOnlySelected) {
             allInis.removeNonSelected();
         }
     }

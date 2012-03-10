@@ -16,7 +16,7 @@ public class RecentTabActivity extends InitiativesTabActivity {
 
     @Override
     protected void filterList() {
-        if (!filterOnlySelected) {
+        if (filterOnlySelected) {
             allInis.removeNonSelected();
         }
     }

@@ -25,4 +25,18 @@ public class UpcomingEventsIssueItemView extends IssueItemView {
         DateFormat formatter = new SimpleDateFormat("yy-MM-dd HH:mm");
         return "  " + initiative.nextEvent() + " " + formatter.format(initiative.getDateForNextEvent()) + " " + initiative.getLqfbInstance().getShortName();
     }
+
+    @Override
+       protected int itemSpecificColorcode() {
+        long delta = initiative.getDateForNextEvent().getTime() - System.currentTimeMillis();
+        long oneday = 1000 * 60 * 60 * 24;
+        if (delta < oneday) {
+            return (activity.RED_COLOR);
+        }
+        if (delta < oneday * 5) {
+            return (activity.ORANGE_COLOR);
+        }
+
+        return activity.GREY_COLOR;
+    }
 }

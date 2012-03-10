@@ -11,6 +11,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.gesture.GestureOverlayView;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -21,6 +23,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
 import android.widget.ListView;
 import de.quadrillenschule.liquidroid.gui.InitiativenListAdapter;
@@ -417,9 +420,19 @@ public class InitiativesTabActivity extends Activity {
     }
     public static final int GREY_COLOR = 0, ORANGE_COLOR = 1, RED_COLOR = 2;
 
-  
+    public ImageView getImageViewForcolor(int colorcode) {
+        ImageView colorView = new ImageView(this);
+        colorView.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT));
+        colorView.setAdjustViewBounds(true);
+        colorView.setBackgroundColor(Color.argb(255, 245, 245, 245));
+        colorView.setImageResource(getImageResourceForColor(colorcode));
 
-   public int getImageResourceForColor(int colorcode) {
+        colorView.setScaleType(ImageView.ScaleType.FIT_START);
+        return colorView;
+    }
+
+    public int getImageResourceForColor(int colorcode) {
+
         switch (colorcode) {
             case ORANGE_COLOR:
                 return R.drawable.seek_thumb_pressed;

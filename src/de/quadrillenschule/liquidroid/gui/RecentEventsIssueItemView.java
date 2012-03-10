@@ -25,4 +25,18 @@ public class RecentEventsIssueItemView extends IssueItemView {
         DateFormat formatter = new SimpleDateFormat("yy-MM-dd HH:mm");
         return "  " + initiative.lastEvent() + " " + formatter.format(initiative.dateForLastEvent()) + " " + initiative.getLqfbInstance().getShortName();
     }
+
+     @Override
+       protected int itemSpecificColorcode() {
+        long delta =  System.currentTimeMillis()- initiative.dateForLastEvent().getTime();
+        long oneday = 1000 * 60 * 60 * 24;
+        if (delta < oneday) {
+            return (activity.RED_COLOR);
+        }
+        if (delta < oneday * 5) {
+            return (activity.ORANGE_COLOR);
+        }
+
+        return activity.GREY_COLOR;
+    }
 }
