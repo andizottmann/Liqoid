@@ -390,8 +390,8 @@ public class InitiativesTabActivity extends Activity {
         switch (item.getItemId()) {
             case R.id.open_browser_ini:
                 try {
-                    String issueid = ((IssueItemView) contextMenuView.getParent()).initiative.issue_id + "";
-                    String url = ((IssueItemView) contextMenuView.getParent()).initiative.getLqfbInstance().getWebUrl() + "issue/show/" + issueid + ".html";
+                    String issueid = ((IssueItemView) contextMenuView.getParent().getParent()).initiative.issue_id + "";
+                    String url = ((IssueItemView) contextMenuView.getParent().getParent()).initiative.getLqfbInstance().getWebUrl() + "issue/show/" + issueid + ".html";
                     Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                     myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
 
@@ -402,8 +402,8 @@ public class InitiativesTabActivity extends Activity {
                 return true;
             case R.id.share_ini:
                 try {
-                    String issueid = ((IssueItemView) contextMenuView.getParent()).initiative.issue_id + "";
-                    String url = ((IssueItemView) contextMenuView.getParent()).initiative.getLqfbInstance().getWebUrl() + "issue/show/" + issueid + ".html";
+                    String issueid = ((IssueItemView) contextMenuView.getParent().getParent()).initiative.issue_id + "";
+                    String url = ((IssueItemView) contextMenuView.getParent().getParent()).initiative.getLqfbInstance().getWebUrl() + "issue/show/" + issueid + ".html";
                     Intent intent = new Intent(android.content.Intent.ACTION_SEND);
                     intent.setType("text/plain");
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
