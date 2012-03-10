@@ -5,6 +5,7 @@
 package de.quadrillenschule.liquidroid.gui;
 
 import android.app.Activity;
+import de.quadrillenschule.liquidroid.InitiativesTabActivity;
 import de.quadrillenschule.liquidroid.model.Initiative;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -15,7 +16,7 @@ import java.text.SimpleDateFormat;
  */
 public class UpcomingEventsIssueItemView extends IssueItemView {
 
-    public UpcomingEventsIssueItemView(Activity activity, Initiative initiative) {
+    public UpcomingEventsIssueItemView(InitiativesTabActivity activity, Initiative initiative) {
         super(activity, initiative);
     }
 

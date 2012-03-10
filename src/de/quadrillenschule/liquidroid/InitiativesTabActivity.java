@@ -21,6 +21,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ListView;
 import de.quadrillenschule.liquidroid.gui.InitiativenListAdapter;
 import de.quadrillenschule.liquidroid.gui.IssueItemView;
@@ -412,6 +413,20 @@ public class InitiativesTabActivity extends Activity {
 
             default:
                 return super.onContextItemSelected(item);
+        }
+    }
+    public static final int GREY_COLOR = 0, ORANGE_COLOR = 1, RED_COLOR = 2;
+
+  
+
+   public int getImageResourceForColor(int colorcode) {
+        switch (colorcode) {
+            case ORANGE_COLOR:
+                return R.drawable.seek_thumb_pressed;
+            case RED_COLOR:
+                return R.drawable.seek_thumb_selected;
+            default:
+                return R.drawable.seek_thumb_normal;
         }
     }
 }

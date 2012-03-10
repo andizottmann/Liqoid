@@ -11,9 +11,13 @@ import android.os.Vibrator;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import de.quadrillenschule.liquidroid.InitiativesTabActivity;
 import de.quadrillenschule.liquidroid.model.Initiative;
 import de.quadrillenschule.liquidroid.model.Initiativen;
 import de.quadrillenschule.liquidroid.model.MultiInstanceInitiativen;
@@ -26,24 +30,27 @@ import java.text.SimpleDateFormat;
  */
 public class IssueItemView extends LinearLayout implements OnClickListener {
 
-    Activity activity;
+    InitiativesTabActivity activity;
     public Initiative initiative;
     CheckBox myCheckBox;
     TextView statusLine;
+    Button colorView;
+    LinearLayout contentContainer;
 
-    public IssueItemView(Activity activity, Initiative initiative) {
+    public IssueItemView(InitiativesTabActivity activity, Initiative initiative) {
         super(activity);
         setOrientation(VERTICAL);
         this.activity = activity;
         this.initiative = initiative;
+
         myCheckBox = new CheckBox(activity, null, android.R.attr.starStyle);
         myCheckBox.setTextColor(Color.BLACK);
         myCheckBox.setBackgroundColor(Color.argb(255, 245, 245, 245));
-
         myCheckBox.setText(initiative.name);
         myCheckBox.setChecked(initiative.getArea().getInitiativen().isIssueSelected(initiative.issue_id));
         myCheckBox.setOnClickListener(this);
         myCheckBox.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
+
         activity.registerForContextMenu(myCheckBox);
 
         statusLine = new TextView(activity);
@@ -54,13 +61,24 @@ public class IssueItemView extends LinearLayout implements OnClickListener {
         statusLine.setTextColor(Color.parseColor("#108020"));
         statusLine.setBackgroundColor(Color.argb(255, 245, 245, 245));
         this.addView(statusLine);
-        this.addView(myCheckBox);
+        colorView=new Button(activity);
+        colorView.setText("  \n ");
+        colorView.setBackgroundResource(activity.getImageResourceForColor(InitiativesTabActivity.GREY_COLOR));
+        colorView.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+
+        //contentContainer = new LinearLayout(activity);
+      //  contentContainer.setOrientation(HORIZONTAL);
+         this.addView(myCheckBox);
+    //    contentContainer.addView(colorView);
+  //      contentContainer.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
+  //      this.addView(contentContainer);
     }
 
     protected String getStatusText() {
         DateFormat formatter = new SimpleDateFormat("yy-MM-dd HH:mm");
         return "  " + initiative.state + "     Created: " + formatter.format(initiative.issue_created) + " " + initiative.getLqfbInstance().getShortName();
     }
+
 
     public void onClick(View arg0) {
         int issueid = initiative.issue_id;
