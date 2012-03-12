@@ -20,5 +20,6 @@
     <string name="calendar">Kalendereintrag für nächstes Ereignis</string>
     <string name="calendar_voting">Kalendereintrag für Abstimmungsbeginn</string>
     <string name="voting_begin">Abstimmungsbeginn</string>
+    <string name="noareasselected">Um Themen anzuzeigen,\nmusst Du vorher\nThemengebiete auswählen.</string>
 
 </resources>

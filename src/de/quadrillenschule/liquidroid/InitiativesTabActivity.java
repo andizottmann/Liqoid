@@ -296,6 +296,9 @@ public class InitiativesTabActivity extends Activity {
                 final ListView listview = (ListView) findViewById(R.id.initiativenList);
                 listview.setAdapter(inisListAdapter);
                 findViewById(R.id.initiativenList).refreshDrawableState();
+                if (allInis.size()==0){
+                ((LiqoidApplication)getApplication()).toast(getApplicationContext(),getString(R.string.noareasselected));
+                }
             }
             if (currentInstance != null) {
                 if ((progressDialog != null) && (!currentInstance.pauseDownload)) {
