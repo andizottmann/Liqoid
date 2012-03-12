@@ -4,27 +4,20 @@
  */
 package de.quadrillenschule.liquidroid.gui;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Vibrator;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.ImageButton;
-import android.widget.ImageSwitcher;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import de.quadrillenschule.liquidroid.InitiativesTabActivity;
 import de.quadrillenschule.liquidroid.model.Initiative;
-import de.quadrillenschule.liquidroid.model.Initiativen;
-import de.quadrillenschule.liquidroid.model.MultiInstanceInitiativen;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import android.R;
 
 /**
  *

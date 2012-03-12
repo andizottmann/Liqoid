@@ -45,11 +45,11 @@ public class LQFBInstances extends ArrayList<LQFBInstance> {
                     "http://lqfb.piraten-lsa.de/lsa/api/",
                     "http://lqfb.piraten-lsa.de/lsa/",
                     "jXKWm5rFLQXQ8f6LMf92", "1.x"));
-            this.add(new LQFBInstance(liqoidApplication,"TEST1","DE_TESTINSTANZ_VALID",
+         /*   this.add(new LQFBInstance(liqoidApplication,"TEST1","DE_TESTINSTANZ_VALID",
                     "Testinstanz (valid URL)",
                     "http://dev.liquidfeedback.org/test/api/",
                     "http://dev.liquidfeedback.org/test/",
-                    "GTR8MjH6x98w6mztGB7J", "1.x"));
+                    "GTR8MjH6x98w6mztGB7J", "1.x"));*/
           /*  this.add(new LQFBInstance(liqoidApplication,"TEST2","DE_TESTINSTANZ_INVALID",
                     "Testinstanz (invalid URL)",
                     "https://lqfb.piratenptei.de/pp/api/",

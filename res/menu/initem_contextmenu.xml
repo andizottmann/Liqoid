@@ -6,5 +6,11 @@
            <item android:id="@+id/share_ini"
           android:icon="@drawable/ic_menu_refresh"
           android:title="@string/share"/>
+    <item android:id="@+id/calendar"
+          android:icon="@drawable/ic_menu_refresh"
+          android:title="@string/calendar"/>
 
+    <item android:id="@+id/calendar_voting"
+          android:icon="@drawable/ic_menu_refresh"
+          android:title="@string/calendar_voting"/>
 </menu>

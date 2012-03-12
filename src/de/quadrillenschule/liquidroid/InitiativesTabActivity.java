@@ -36,6 +36,7 @@ import de.quadrillenschule.liquidroid.model.LQFBInstances;
 import de.quadrillenschule.liquidroid.model.MultiInstanceInitiativen;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -413,10 +414,39 @@ public class InitiativesTabActivity extends Activity {
                     return false;
                 }
                 return true;
-
+            case R.id.calendar:
+                try {
+                    Initiative ini = ((IssueItemView) contextMenuView.getParent().getParent()).initiative;
+                    Intent intent = new Intent(Intent.ACTION_EDIT);
+                    intent.setType("vnd.android.cursor.item/event");
+                    intent.putExtra("beginTime", relevantCalendarTime(ini));
+                    intent.putExtra("endTime", relevantCalendarTime(ini) + 1000 * 60 * 5);
+                    intent.putExtra("title", "LQFB " + ini.getLqfbInstance().getShortName() + " " + ini.nextEvent() + " " + ini.name);
+                    startActivity(intent);
+                } catch (Exception e) {
+                    return false;
+                }
+                return true;
+            case R.id.calendar_voting:
+                try {
+                    Initiative ini = ((IssueItemView) contextMenuView.getParent().getParent()).initiative;
+                    Intent intent = new Intent(Intent.ACTION_EDIT);
+                    intent.setType("vnd.android.cursor.item/event");
+                    intent.putExtra("beginTime", ini.getDateForStartVoting().getTime());
+                    intent.putExtra("endTime", ini.getDateForStartVoting().getTime() + 1000 * 60 * 5);
+                    intent.putExtra("title", "LQFB " + ini.getLqfbInstance().getShortName()+" " +getString(R.string.voting_begin)+ " " + ini.name);
+                    startActivity(intent);
+                } catch (Exception e) {
+                    return false;
+                }
+                return true;
             default:
                 return super.onContextItemSelected(item);
         }
+    }
+
+    public long relevantCalendarTime(Initiative i) {
+        return i.getDateForNextEvent().getTime();
     }
     public static final int GREY_COLOR = 0, ORANGE_COLOR = 1, RED_COLOR = 2;
 

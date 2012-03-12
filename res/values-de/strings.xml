@@ -17,4 +17,8 @@
     <string name="updating">Aktualisiere</string>
     <string name="filterfavorites">Favoriten Filtern</string>
     <string name="about">Über Liqoid</string>
+    <string name="calendar">Kalendereintrag für nächstes Ereignis</string>
+    <string name="calendar_voting">Kalendereintrag für Abstimmungsbeginn</string>
+    <string name="voting_begin">Abstimmungsbeginn</string>
+
 </resources>
