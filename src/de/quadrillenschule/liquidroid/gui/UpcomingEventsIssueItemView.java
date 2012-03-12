@@ -27,16 +27,18 @@ public class UpcomingEventsIssueItemView extends IssueItemView {
     }
 
     @Override
-       protected int itemSpecificColorcode() {
+    protected int itemSpecificColorcode() {
         long delta = initiative.getDateForNextEvent().getTime() - System.currentTimeMillis();
         long oneday = 1000 * 60 * 60 * 24;
         if (delta < oneday) {
             return (activity.RED_COLOR);
         }
-        if (delta < oneday * 5) {
+        if (delta < oneday * 3) {
             return (activity.ORANGE_COLOR);
         }
-
+        if (delta < oneday * 7) {
+            return (activity.YELLOW_COLOR);
+        }
         return activity.GREY_COLOR;
     }
 }

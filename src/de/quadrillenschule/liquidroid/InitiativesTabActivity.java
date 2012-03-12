@@ -196,7 +196,7 @@ public class InitiativesTabActivity extends Activity {
             updateAreas();
             overallDataAge = System.currentTimeMillis();
             //   inisListAdapter = null;
-          //  allInis = new Initiativen(getSharedPreferences(((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance().getPrefsName(), RESULT_OK));
+            //  allInis = new Initiativen(getSharedPreferences(((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance().getPrefsName(), RESULT_OK));
 
             for (LQFBInstance myInstance : ((LiqoidApplication) getApplication()).lqfbInstances) {
                 currentlyDownloadedInstance = myInstance.getShortName();
@@ -434,7 +434,7 @@ public class InitiativesTabActivity extends Activity {
                     intent.setType("vnd.android.cursor.item/event");
                     intent.putExtra("beginTime", ini.getDateForStartVoting().getTime());
                     intent.putExtra("endTime", ini.getDateForStartVoting().getTime() + 1000 * 60 * 5);
-                    intent.putExtra("title", "LQFB " + ini.getLqfbInstance().getShortName()+" " +getString(R.string.voting_begin)+ " " + ini.name);
+                    intent.putExtra("title", "LQFB " + ini.getLqfbInstance().getShortName() + " " + getString(R.string.voting_begin) + " " + ini.name);
                     startActivity(intent);
                 } catch (Exception e) {
                     return false;
@@ -448,7 +448,7 @@ public class InitiativesTabActivity extends Activity {
     public long relevantCalendarTime(Initiative i) {
         return i.getDateForNextEvent().getTime();
     }
-    public static final int GREY_COLOR = 0, ORANGE_COLOR = 1, RED_COLOR = 2;
+    public static final int GREY_COLOR = 0, ORANGE_COLOR = 1, RED_COLOR = 2, YELLOW_COLOR = 3;
 
     public ImageView getImageViewForcolor(int colorcode) {
         ImageView colorView = new ImageView(this);
@@ -468,6 +468,8 @@ public class InitiativesTabActivity extends Activity {
                 return R.drawable.seek_thumb_pressed;
             case RED_COLOR:
                 return R.drawable.seek_thumb_selected;
+            case YELLOW_COLOR:
+                return R.drawable.seek_thumb_yellow;
             default:
                 return R.drawable.seek_thumb_normal;
         }

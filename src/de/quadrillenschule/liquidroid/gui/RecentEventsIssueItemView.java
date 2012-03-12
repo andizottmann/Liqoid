@@ -26,15 +26,18 @@ public class RecentEventsIssueItemView extends IssueItemView {
         return "  " + initiative.lastEvent() + " " + formatter.format(initiative.dateForLastEvent()) + " " + initiative.getLqfbInstance().getShortName();
     }
 
-     @Override
-       protected int itemSpecificColorcode() {
-        long delta =  System.currentTimeMillis()- initiative.dateForLastEvent().getTime();
+    @Override
+    protected int itemSpecificColorcode() {
+        long delta = System.currentTimeMillis() - initiative.dateForLastEvent().getTime();
         long oneday = 1000 * 60 * 60 * 24;
         if (delta < oneday) {
             return (activity.RED_COLOR);
         }
-        if (delta < oneday * 5) {
+        if (delta < oneday * 3) {
             return (activity.ORANGE_COLOR);
+        }
+        if (delta < oneday * 7) {
+            return (activity.YELLOW_COLOR);
         }
 
         return activity.GREY_COLOR;

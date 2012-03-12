@@ -74,10 +74,12 @@ public class IssueItemView extends LinearLayout implements OnClickListener {
         if (delta < oneday) {
             return (activity.RED_COLOR);
         }
-        if (delta < oneday * 5) {
+        if (delta < oneday * 3) {
             return (activity.ORANGE_COLOR);
         }
-
+        if (delta < oneday * 7) {
+            return (activity.YELLOW_COLOR);
+        }
         return activity.GREY_COLOR;
     }
 
