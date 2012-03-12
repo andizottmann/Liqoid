@@ -196,7 +196,7 @@ public class InitiativesTabActivity extends Activity {
             updateAreas();
             overallDataAge = System.currentTimeMillis();
             //   inisListAdapter = null;
-            allInis = new Initiativen(getSharedPreferences(((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance().getPrefsName(), RESULT_OK));
+          //  allInis = new Initiativen(getSharedPreferences(((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance().getPrefsName(), RESULT_OK));
 
             for (LQFBInstance myInstance : ((LiqoidApplication) getApplication()).lqfbInstances) {
                 currentlyDownloadedInstance = myInstance.getShortName();

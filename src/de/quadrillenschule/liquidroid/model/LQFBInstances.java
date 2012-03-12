@@ -49,8 +49,8 @@ public class LQFBInstances extends ArrayList<LQFBInstance> {
                     "Testinstanz (valid URL)",
                     "http://dev.liquidfeedback.org/test/api/",
                     "http://dev.liquidfeedback.org/test/",
-                    "GTR8MjH6x98w6mztGB7J", "1.x"));*/
-          /*  this.add(new LQFBInstance(liqoidApplication,"TEST2","DE_TESTINSTANZ_INVALID",
+                    "GTR8MjH6x98w6mztGB7J", "1.x"));
+           this.add(new LQFBInstance(liqoidApplication,"TEST2","DE_TESTINSTANZ_INVALID",
                     "Testinstanz (invalid URL)",
                     "https://lqfb.piratenptei.de/pp/api/",
                     "https://lqfb.piratenptei.de/pp/",

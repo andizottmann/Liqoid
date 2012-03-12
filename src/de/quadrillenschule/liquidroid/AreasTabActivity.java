@@ -173,41 +173,42 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
 
         @Override
         public void run() {
+            handler.sendEmptyMessage(START_DOWNLOAD);
 
-            LQFBInstance myinstance = ((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance();
-            currentDownloadInstance = myinstance;
-            if (myinstance.willDownloadAreas(((LiqoidApplication) getApplication()).cachedAPI1Queries, download)) {
-                handler.sendEmptyMessage(DOWNLOADING);
-            }
-            int retrycounter = 0;
-            int maxretries = 4;
-            boolean instancedownload=download;
-            if (myinstance.pauseDownload) {
-                maxretries = 0;
-                instancedownload=false;
-            }
-            while ((retrycounter <= maxretries) && (myinstance.downloadAreas(((LiqoidApplication) getApplication()).cachedAPI1Queries, instancedownload,myinstance.pauseDownload)) < 0) {
-
-                handler.sendEmptyMessage(DOWNLOAD_ERROR);
-                try {
-                    this.sleep((2 ^ retrycounter) * 1000);
-                    retrycounter++;
-                } catch (InterruptedException ex) {
+            for (LQFBInstance myinstance : ((LiqoidApplication) getApplication()).lqfbInstances) {
+                currentDownloadInstance = myinstance;
+                if (myinstance.willDownloadAreas(((LiqoidApplication) getApplication()).cachedAPI1Queries, download)) {
+                    handler.sendEmptyMessage(DOWNLOADING);
                 }
-                handler.sendEmptyMessage(DOWNLOAD_RETRY);
-            }
+                int retrycounter = 0;
+                int maxretries = 4;
+                boolean instancedownload = download;
+                if (myinstance.pauseDownload) {
+                    maxretries = 0;
+                    instancedownload = false;
+                }
+                while ((retrycounter <= maxretries) && (myinstance.downloadAreas(((LiqoidApplication) getApplication()).cachedAPI1Queries, instancedownload, myinstance.pauseDownload)) < 0) {
 
-            if (retrycounter >= maxretries) {
-                myinstance.pauseDownload = true;
+                    handler.sendEmptyMessage(DOWNLOAD_ERROR);
+                    try {
+                        this.sleep((2 ^ retrycounter) * 1000);
+                        retrycounter++;
+                    } catch (InterruptedException ex) {
+                    }
+                    handler.sendEmptyMessage(DOWNLOAD_RETRY);
+                }
+
+                if (retrycounter >= maxretries) {
+                    myinstance.pauseDownload = true;
+                }
             }
-            handler.sendEmptyMessage(0);
-            areasListAdapter = new AreasListAdapter(parent, myinstance.areas, R.id.areasList);
+            areasListAdapter = new AreasListAdapter(parent, ((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance().areas, R.id.areasList);
 
             findViewById(R.id.areasList).refreshDrawableState();
             handler.sendEmptyMessage(0);
         }
     }
-    private static int FINISH_OK = 0, DOWNLOADING = 1, DOWNLOAD_ERROR = -1, DOWNLOAD_RETRY = 2;
+    private static int FINISH_OK = 0, DOWNLOADING = 1, DOWNLOAD_ERROR = -1, DOWNLOAD_RETRY = 2, START_DOWNLOAD = 3;
     private Handler handler = new Handler() {
 
         @Override
@@ -224,12 +225,16 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
             }
 
             ((LiqoidApplication) getApplication()).statusLineText(prefix + getApplicationContext().getString(R.string.dataage) + ": " + dataagestr);
+            if ((msg.what == START_DOWNLOAD)) {
+                progressDialog = ProgressDialog.show(AreasTabActivity.this, "",
+                        getApplicationContext().getString(R.string.updating) + "...", true);
 
+            }
             if (currentDownloadInstance != null) {
                 //update progressdialog
                 if ((msg.what == DOWNLOADING) && (!currentDownloadInstance.pauseDownload)) {
-                    progressDialog = ProgressDialog.show(AreasTabActivity.this, "",
-                            getApplicationContext().getString(R.string.downloading) + "\n" + ((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance().getName() + "...", true);
+                    progressDialog.setMessage(
+                            getApplicationContext().getString(R.string.downloading) + "\n" + ((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance().getName() + "...");
 
                 }
             }
