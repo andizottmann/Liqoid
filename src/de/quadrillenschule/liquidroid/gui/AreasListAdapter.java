@@ -47,8 +47,10 @@ public class AreasListAdapter extends ArrayAdapter<Area> {
                 areas.setSelectedArea(myarea, value);
 
                 try {
-                    Vibrator v = (Vibrator) activity.getSystemService(Context.VIBRATOR_SERVICE);
-                    v.vibrate(30);
+                    if (((LiqoidApplication) activity.getApplication()).getGlobalPreferences().getBoolean("vibrate", true)) {
+                        Vibrator v = (Vibrator) activity.getSystemService(Context.VIBRATOR_SERVICE);
+                        v.vibrate(30);
+                    }
                 } catch (Exception e) {
                     //its not a vibrator :/
                 }

@@ -67,13 +67,13 @@ public class LQFBInstances extends ArrayList<LQFBInstance> {
 
     public LQFBInstance getSelectedInstance() {
 
-        SharedPreferences prefs = liqoidApplication.getSharedPreferences("liqoid", android.content.Context.MODE_PRIVATE);
+        SharedPreferences prefs = liqoidApplication.getGlobalPreferences();
         return this.get(prefs.getInt("selectedinstance", 0));
 
     }
 
     public void setSelectedInstance(int id) {
-        SharedPreferences prefs = liqoidApplication.getSharedPreferences("liqoid", android.content.Context.MODE_PRIVATE);
+        SharedPreferences prefs = liqoidApplication.getGlobalPreferences();
         SharedPreferences.Editor editor = prefs.edit();
         editor.putInt("selectedinstance", id);
         editor.commit();

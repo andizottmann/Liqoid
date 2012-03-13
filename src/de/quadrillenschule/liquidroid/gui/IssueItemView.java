@@ -5,6 +5,7 @@
 package de.quadrillenschule.liquidroid.gui;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Vibrator;
 import android.util.TypedValue;
@@ -15,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import de.quadrillenschule.liquidroid.InitiativesTabActivity;
+import de.quadrillenschule.liquidroid.LiqoidApplication;
 import de.quadrillenschule.liquidroid.model.Initiative;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -71,13 +73,14 @@ public class IssueItemView extends LinearLayout implements OnClickListener {
     protected int itemSpecificColorcode() {
         long delta = System.currentTimeMillis() - initiative.issue_created.getTime();
         long oneday = 1000 * 60 * 60 * 24;
-        if (delta < oneday) {
+        SharedPreferences gp = ((LiqoidApplication) activity.getApplication()).getGlobalPreferences();
+        if (delta < (gp.getLong(LiqoidApplication.REDLIMIT_PREF, oneday))) {
             return (activity.RED_COLOR);
         }
-        if (delta < oneday * 3) {
+        if (delta < (gp.getLong(LiqoidApplication.ORANGELIMIT_PREF, oneday * 3))) {
             return (activity.ORANGE_COLOR);
         }
-        if (delta < oneday * 7) {
+        if (delta < (gp.getLong(LiqoidApplication.YELLOWLIMIT_PREF, oneday * 5))) {
             return (activity.YELLOW_COLOR);
         }
         return activity.GREY_COLOR;
@@ -93,8 +96,10 @@ public class IssueItemView extends LinearLayout implements OnClickListener {
         initiative.getArea().getInitiativen().setSelectedIssue(issueid, !initiative.getArea().getInitiativen().isIssueSelected(issueid));
 
         try {
-            Vibrator v = (Vibrator) activity.getSystemService(Context.VIBRATOR_SERVICE);
-            v.vibrate(30);
+            if (((LiqoidApplication) activity.getApplication()).getGlobalPreferences().getBoolean("vibrate", true)) {
+                Vibrator v = (Vibrator) activity.getSystemService(Context.VIBRATOR_SERVICE);
+                v.vibrate(30);
+            }
         } catch (Exception e) {
             //its not a vibrator :/
         }

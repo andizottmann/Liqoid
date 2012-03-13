@@ -4,8 +4,9 @@
  */
 package de.quadrillenschule.liquidroid.gui;
 
-import android.app.Activity;
+import android.content.SharedPreferences;
 import de.quadrillenschule.liquidroid.InitiativesTabActivity;
+import de.quadrillenschule.liquidroid.LiqoidApplication;
 import de.quadrillenschule.liquidroid.model.Initiative;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -30,13 +31,14 @@ public class UpcomingEventsIssueItemView extends IssueItemView {
     protected int itemSpecificColorcode() {
         long delta = initiative.getDateForNextEvent().getTime() - System.currentTimeMillis();
         long oneday = 1000 * 60 * 60 * 24;
-        if (delta < oneday) {
+           SharedPreferences gp=((LiqoidApplication)activity.getApplication()).getGlobalPreferences();
+        if (delta < (gp.getLong(LiqoidApplication.REDLIMIT_PREF, oneday))) {
             return (activity.RED_COLOR);
         }
-        if (delta < oneday * 3) {
+        if (delta < (gp.getLong(LiqoidApplication.ORANGELIMIT_PREF, oneday*3))) {
             return (activity.ORANGE_COLOR);
         }
-        if (delta < oneday * 7) {
+        if (delta < (gp.getLong(LiqoidApplication.YELLOWLIMIT_PREF, oneday*5))) {
             return (activity.YELLOW_COLOR);
         }
         return activity.GREY_COLOR;
