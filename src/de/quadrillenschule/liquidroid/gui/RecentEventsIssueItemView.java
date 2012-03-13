@@ -31,14 +31,14 @@ public class RecentEventsIssueItemView extends IssueItemView {
     protected int itemSpecificColorcode() {
         long delta = System.currentTimeMillis() - initiative.dateForLastEvent().getTime();
         long oneday = 1000 * 60 * 60 * 24;
-            SharedPreferences gp=((LiqoidApplication)activity.getApplication()).getGlobalPreferences();
-        if (delta < (gp.getLong(LiqoidApplication.REDLIMIT_PREF, oneday))) {
+        SharedPreferences gp = ((LiqoidApplication) activity.getApplication()).getGlobalPreferences();
+        if (delta < Long.parseLong(gp.getString(LiqoidApplication.REDLIMIT_PREF, oneday + ""))) {
             return (activity.RED_COLOR);
         }
-        if (delta < (gp.getLong(LiqoidApplication.ORANGELIMIT_PREF, oneday*3))) {
+        if (delta < Long.parseLong(gp.getString(LiqoidApplication.ORANGELIMIT_PREF, oneday * 3 + ""))) {
             return (activity.ORANGE_COLOR);
         }
-        if (delta < (gp.getLong(LiqoidApplication.YELLOWLIMIT_PREF, oneday*5))) {
+        if (delta < Long.parseLong(gp.getString(LiqoidApplication.YELLOWLIMIT_PREF, oneday * 5 + ""))) {
             return (activity.YELLOW_COLOR);
         }
         return activity.GREY_COLOR;
