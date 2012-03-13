@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+
+    <string-array name="limitInDays">
+        <item name="0.1">One hour</item>
+        <item name="0.2">2 hours</item>
+        <item name="0.6">6 hours</item>
+        <item name="0.12">12 hours</item>
+        <item name="1">One day</item>
+        <item name="2">2 days</item>
+        <item name="3">3 days</item>
+        <item name="5">5 days</item>
+        <item name="7">7 days</item>
+    </string-array>
+
+    <string-array name="limitInDaysValues">
+        <item name="0.1">3600000</item>
+        <item name="0.2">7200000</item>
+        <item name="0.6">21600000</item>
+        <item name="0.12">43200000</item>
+        <item name="1">86400000</item>
+        <item name="2">172800000</item>
+        <item name="3">259200000</item>
+        <item name="4">345600000</item>
+        <item name="5">432000000</item>
+    </string-array>
+
+</resources>

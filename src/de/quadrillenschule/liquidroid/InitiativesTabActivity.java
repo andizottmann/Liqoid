@@ -296,8 +296,8 @@ public class InitiativesTabActivity extends Activity {
                 final ListView listview = (ListView) findViewById(R.id.initiativenList);
                 listview.setAdapter(inisListAdapter);
                 findViewById(R.id.initiativenList).refreshDrawableState();
-                if (allInis.size()==0){
-                ((LiqoidApplication)getApplication()).toast(getApplicationContext(),getString(R.string.noareasselected));
+                if (allInis.size() == 0) {
+                    ((LiqoidApplication) getApplication()).toast(getApplicationContext(), getString(R.string.noareasselected));
                 }
             }
             if (currentInstance != null) {
@@ -345,6 +345,9 @@ public class InitiativesTabActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
         switch (item.getItemId()) {
+            case R.id.prefs:
+                startActivity(new Intent(this, GlobalPrefsActivity.class));
+                return true;
             case R.id.refresh_inislist:
                 refreshInisList(true);
                 return true;

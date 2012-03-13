@@ -7,30 +7,31 @@
 
         <CheckBoxPreference
             android:key="vibrate"
-            android:summary="Enable or disable short vibrate when selecting items"
-            android:title="Enable vibrate"
+            android:summary="Vibration wenn Gebiete und Instanzen ausgewählt werden"
+            android:title="Vibration"
             android:defaultValue="true"
         />
+          </PreferenceCategory>
+<PreferenceCategory
+        android:title="Themen markieren"
+        android:key="second_category">
         <ListPreference
             android:key="redlimit"
-            android:title="Limit for orange indicator"
-            android:summary="Define when issues are indicated."
-            android:defaultValue="86400000"
+            android:title="Orange markieren ab"
+             android:defaultValue="86400000"
             android:entries="@array/limitInDays"
             android:entryValues="@array/limitInDaysValues"
         />
  <ListPreference
             android:key="orangelimit"
-            android:title="Limit for yellow indicator"
-            android:summary="Define when issues are indicated."
+            android:title="Gelb markieren ab"
             android:defaultValue="259200000"
             android:entries="@array/limitInDays"
             android:entryValues="@array/limitInDaysValues"
         />
          <ListPreference
             android:key="yellowlimit"
-            android:title="Limit for amber indicator"
-            android:summary="Define when issues are indicated."
+            android:title="Senfgelb markieren ab"
             android:defaultValue="432000000"
             android:entries="@array/limitInDays"
             android:entryValues="@array/limitInDaysValues"

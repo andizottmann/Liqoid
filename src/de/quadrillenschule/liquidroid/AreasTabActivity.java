@@ -132,7 +132,6 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
         switch (item.getItemId()) {
               case R.id.prefs:
                 startActivity(new Intent(this, GlobalPrefsActivity.class));
-
                 return true;
             case R.id.refresh_areaslist:
                 refreshAreasList(true);
