@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:title="User Interface"
+        android:key="first_category">
+
+        <CheckBoxPreference
+            android:key="vibrate"
+            android:summary="Enable or disable short vibrate when selecting items"
+            android:title="Enable vibrate"
+            android:defaultValue="true"
+        />
+        
+
+    </PreferenceCategory>
+
+
+</PreferenceScreen>

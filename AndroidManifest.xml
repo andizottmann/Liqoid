@@ -59,6 +59,7 @@
     android:theme="@android:style/Theme.NoTitleBar"
 
           />
+        <activity android:name="GlobalPrefsActivity" />
 
 
     </application>

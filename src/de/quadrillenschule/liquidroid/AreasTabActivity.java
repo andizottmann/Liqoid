@@ -130,6 +130,10 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
         switch (item.getItemId()) {
+              case R.id.prefs:
+                startActivity(new Intent(this, GlobalPrefsActivity.class));
+
+                return true;
             case R.id.refresh_areaslist:
                 refreshAreasList(true);
                 return true;

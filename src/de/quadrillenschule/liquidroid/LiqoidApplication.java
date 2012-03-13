@@ -7,6 +7,7 @@ package de.quadrillenschule.liquidroid;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.widget.TextView;
 import android.widget.Toast;
 import de.quadrillenschule.liquidroid.model.CachedAPI1Queries;
@@ -61,7 +62,8 @@ public class LiqoidApplication extends Application {
     }
 
     public SharedPreferences getGlobalPreferences() {
-        return getSharedPreferences("liqoid", android.content.Context.MODE_PRIVATE);
+        return PreferenceManager.getDefaultSharedPreferences(this);
+      //  return getSharedPreferences("liqoid", android.content.Context.MODE_PRIVATE);
     }
     public static final String VIBRATE_PREF = "vibrate", REDLIMIT_PREF = "redlimit", ORANGELIMIT_PREF = "orangelimit", YELLOWLIMIT_PREF = "yellowlimit";
 
