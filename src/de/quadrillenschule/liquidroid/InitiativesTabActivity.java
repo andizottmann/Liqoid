@@ -12,7 +12,6 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.gesture.GestureOverlayView;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -30,30 +29,27 @@ import de.quadrillenschule.liquidroid.gui.InitiativenListAdapter;
 import de.quadrillenschule.liquidroid.gui.IssueItemView;
 import de.quadrillenschule.liquidroid.model.Area;
 import de.quadrillenschule.liquidroid.model.Initiative;
-import de.quadrillenschule.liquidroid.model.Initiativen;
 import de.quadrillenschule.liquidroid.model.LQFBInstance;
 import de.quadrillenschule.liquidroid.model.LQFBInstances;
 import de.quadrillenschule.liquidroid.model.MultiInstanceInitiativen;
+import de.quadrillenschule.liquidroid.model.RefreshInisListThread;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 
 /**
  *
  * @author andi
  */
-public class InitiativesTabActivity extends Activity {
+public class InitiativesTabActivity extends Activity implements RefreshInisListThread.RefreshInisListListener {
 
-    InitiativenListAdapter inisListAdapter;
-    MultiInstanceInitiativen allInis;
+    public InitiativenListAdapter inisListAdapter;
+    public MultiInstanceInitiativen allInis;
     ProgressDialog progressDialog;
     //   private boolean pauseDownload = false;
-    long overallDataAge = 0;
     protected boolean sortNewestFirst = true;
     protected boolean filterOnlySelected = false;
-    private String currentlyDownloadedArea = "", currentlyDownloadedInstance = "";
-    private LQFBInstance currentInstance;
+    public RefreshInisListThread ralt;
 
     /** Called when the activity is first created. */
     @Override
@@ -132,161 +128,39 @@ public class InitiativesTabActivity extends Activity {
 
     public void refreshInisList(boolean download) {
         LQFBInstances.selectionUpdatesForRefresh = false;
-        RefreshInisListThread ralt = new RefreshInisListThread(download, this);
+        ralt = new RefreshInisListThread(download, this, handler, (LiqoidApplication) this.getApplication());
         ralt.start();
     }
-
-    private class RefreshInisListThread extends Thread {
-
-        boolean download;
-        InitiativesTabActivity parent;
-
-        public RefreshInisListThread(boolean download, InitiativesTabActivity parent) {
-            this.download = download;
-            this.parent = parent;
-            if (download) {
-                for (LQFBInstance myInstance : ((LiqoidApplication) getApplication()).lqfbInstances) {
-                    myInstance.pauseDownload = false;
-                }
-            }
-        }
-
-        void updateAreas() {
-            for (LQFBInstance myInstance : ((LiqoidApplication) getApplication()).lqfbInstances) {
-                currentInstance = myInstance;
-                //    LQFBInstance myinstance = ((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance();
-                boolean doesDownload = false;
-                if (myInstance.willDownloadAreas(((LiqoidApplication) getApplication()).cachedAPI1Queries, download)) {
-                    currentlyDownloadedInstance = myInstance.getShortName();
-                    handler.sendEmptyMessage(DOWNLOADING_INSTANCE);
-                    doesDownload = true;
-                }
-                int retrycounter = 0;
-                int maxretries = 1;
-                boolean instancedownload = download;
-                if (myInstance.pauseDownload) {
-                    maxretries = 0;
-                    instancedownload = false;
-                }
-
-                while ((retrycounter <= maxretries) && (myInstance.downloadAreas(((LiqoidApplication) getApplication()).cachedAPI1Queries, instancedownload, myInstance.pauseDownload)) < 0) {
-
-                    if (doesDownload) {
-                        handler.sendEmptyMessage(DOWNLOAD_ERROR);
-                    }
-                    try {
-                        this.sleep((2 ^ retrycounter) * 1000);
-                        retrycounter++;
-                    } catch (InterruptedException ex) {
-                    }
-                    if (doesDownload) {
-                        handler.sendEmptyMessage(DOWNLOAD_RETRY);
-                    }
-                }
-                if (retrycounter >= maxretries) {
-                    myInstance.pauseDownload = true;
-                }
-            }
-        }
-
-        @Override
-        public void run() {
-            handler.sendEmptyMessage(UPDATING);
-
-            updateAreas();
-            overallDataAge = System.currentTimeMillis();
-            //   inisListAdapter = null;
-            //  allInis = new Initiativen(getSharedPreferences(((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance().getPrefsName(), RESULT_OK));
-
-            for (LQFBInstance myInstance : ((LiqoidApplication) getApplication()).lqfbInstances) {
-                currentlyDownloadedInstance = myInstance.getShortName();
-
-                for (Area a : myInstance.areas.getSelectedAreas()) {
-                    currentlyDownloadedArea = a.getName();
-                    boolean doesDownload = false;
-                    if (myInstance.willDownloadInitiativen(a, ((LiqoidApplication) getApplication()).cachedAPI1Queries, download)) {
-                        handler.sendEmptyMessage(DOWNLOADING);
-                        doesDownload = true;
-                    }
-                    if (doesDownload) {
-                        handler.sendEmptyMessage(DOWNLOAD_RETRY);
-                    }
-                    int retrycounter = 0;
-                    int maxretries = 4;
-                    boolean instancedownload = download;
-                    if (myInstance.pauseDownload) {
-                        maxretries = 0;
-                        instancedownload = false;
-                    }
-
-                    while ((retrycounter <= maxretries) && (myInstance.downloadInitiativen(a, ((LiqoidApplication) getApplication()).cachedAPI1Queries, instancedownload, myInstance.pauseDownload) < 0)) {
-                        if (doesDownload) {
-                            handler.sendEmptyMessage(DOWNLOAD_ERROR);
-                        }
-                        try {
-                            this.sleep((2 ^ retrycounter) * 1000);
-                            retrycounter++;
-
-                        } catch (InterruptedException ex) {
-                        }
-                        if (doesDownload) {
-                            handler.sendEmptyMessage(DOWNLOAD_RETRY);
-                        }
-
-                    }
-                    if (retrycounter >= maxretries) {
-                        myInstance.pauseDownload = true;
-                    }
-                    if (overallDataAge > ((LiqoidApplication) getApplication()).cachedAPI1Queries.dataage) {
-                        overallDataAge = ((LiqoidApplication) getApplication()).cachedAPI1Queries.dataage;
-                    }
-                }
-                for (Area a : myInstance.areas.getSelectedAreas()) {
-                    for (Initiative i : a.getInitiativen()) {
-                        allInis.add(i);
-                    }
-                }
-            }
-            inisListAdapter = getInitiativenListAdapter();
-            filterList();
-            sortList();
-            inisListAdapter.notifyDataSetChanged();
-            handler.sendEmptyMessage(FINISH_OK);
-
-
-        }
-    }
-    private static int FINISH_OK = 0, DOWNLOADING = 1, DOWNLOAD_ERROR = -1, DOWNLOAD_RETRY = 2, UPDATING = 4, DOWNLOADING_INSTANCE = 5;
-    private Handler handler = new Handler() {
+    public Handler handler = new Handler() {
 
         @Override
         public void handleMessage(Message msg) {
 
             //Setting the status line text
-            long dataage = overallDataAge;
+            long dataage = ralt.overallDataAge;
             DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String dataagestr = formatter.format(new Date(dataage));
             String prefix = "";
-            if (currentInstance != null) {
-                if (currentInstance.pauseDownload) {
+            if (ralt.currentInstance != null) {
+                if (ralt.currentInstance.pauseDownload) {
                     prefix = "Offline - ";
                 }
             }
             ((LiqoidApplication) getApplication()).statusLineText(prefix + getApplicationContext().getString(R.string.dataage) + ": " + dataagestr);
 
             //Updating status of progressdialog
-            if ((msg.what == DOWNLOADING)) {
-                progressDialog.setMessage(getApplicationContext().getString(R.string.downloading) + "\n" + currentlyDownloadedArea + "...");
+            if ((msg.what == RefreshInisListThread.DOWNLOADING)) {
+                progressDialog.setMessage(getApplicationContext().getString(R.string.downloading) + "\n" + ralt.currentlyDownloadedArea + "...");
             }
-            if ((msg.what == DOWNLOADING_INSTANCE)) {
-                progressDialog.setMessage(getApplicationContext().getString(R.string.downloading) + "\n" + currentlyDownloadedInstance + "...");
+            if ((msg.what == RefreshInisListThread.DOWNLOADING_INSTANCE)) {
+                progressDialog.setMessage(getApplicationContext().getString(R.string.downloading) + "\n" + ralt.currentlyDownloadedInstance + "...");
             }
-            if (msg.what == UPDATING) {
+            if (msg.what == RefreshInisListThread.UPDATING) {
 
                 progressDialog = ProgressDialog.show(InitiativesTabActivity.this, "",
                         getApplicationContext().getString(R.string.updating) + "...", true);
             }
-            if (msg.what == FINISH_OK) {
+            if (msg.what == RefreshInisListThread.FINISH_OK) {
                 try {
                     progressDialog.dismiss();
                 } catch (Exception e) {
@@ -300,13 +174,13 @@ public class InitiativesTabActivity extends Activity {
                     ((LiqoidApplication) getApplication()).toast(getApplicationContext(), getString(R.string.noareasselected));
                 }
             }
-            if (currentInstance != null) {
-                if ((progressDialog != null) && (!currentInstance.pauseDownload)) {
-                    if (msg.what == DOWNLOAD_ERROR) {
+            if (ralt.currentInstance != null) {
+                if ((progressDialog != null) && (!ralt.currentInstance.pauseDownload)) {
+                    if (msg.what == RefreshInisListThread.DOWNLOAD_ERROR) {
                         progressDialog.setMessage(getApplicationContext().getString(R.string.download_error));
                     }
-                    if (msg.what == DOWNLOAD_RETRY) {
-                        progressDialog.setMessage(getApplicationContext().getString(R.string.downloading) + "\n" + currentlyDownloadedArea + " @ " + currentlyDownloadedInstance);
+                    if (msg.what == RefreshInisListThread.DOWNLOAD_RETRY) {
+                        progressDialog.setMessage(getApplicationContext().getString(R.string.downloading) + "\n" + ralt.currentlyDownloadedArea + " @ " + ralt.currentlyDownloadedInstance);
                     }
                 }
             }
@@ -321,13 +195,13 @@ public class InitiativesTabActivity extends Activity {
         return true;
     }
 
-    protected void filterList() {
+    public void filterList() {
         if (filterOnlySelected) {
             allInis.removeNonSelected();
         }
     }
 
-    protected void sortList() {
+    public void sortList() {
 
         if (sortNewestFirst) {
             allInis.reverse(Initiative.ISSUE_CREATED_COMP);
@@ -378,7 +252,7 @@ public class InitiativesTabActivity extends Activity {
         }
     }
 
-    protected InitiativenListAdapter getInitiativenListAdapter() {
+    public InitiativenListAdapter getInitiativenListAdapter() {
         return new InitiativenListAdapter(this, allInis, R.id.initiativenList);
     }
     private View contextMenuView;
@@ -479,5 +353,14 @@ public class InitiativesTabActivity extends Activity {
             default:
                 return R.drawable.seek_thumb_normal;
         }
+    }
+
+    public void finishedRefreshInisList(MultiInstanceInitiativen newInis) {
+        allInis = newInis;
+        inisListAdapter = getInitiativenListAdapter();
+        filterList();
+        sortList();
+        inisListAdapter.notifyDataSetChanged();
+
     }
 }

@@ -63,25 +63,8 @@ public class LiqoidApplication extends Application {
 
     public SharedPreferences getGlobalPreferences() {
         return PreferenceManager.getDefaultSharedPreferences(this);
-      //  return getSharedPreferences("liqoid", android.content.Context.MODE_PRIVATE);
-    }
-    public static final String VIBRATE_PREF = "vibrate", REDLIMIT_PREF = "redlimit", ORANGELIMIT_PREF = "orangelimit", YELLOWLIMIT_PREF = "yellowlimit";
-
-    public void setDefaultGlobalPreferencesIfNotExists() {
-        long oneday = 1000 * 60 * 60 * 24;
-        if (!getGlobalPreferences().contains(VIBRATE_PREF)) {
-            getGlobalPreferences().edit().putBoolean(VIBRATE_PREF, true).commit();
-        }
-        if (!getGlobalPreferences().contains(REDLIMIT_PREF)) {
-            getGlobalPreferences().edit().putLong(REDLIMIT_PREF, oneday).commit();
-        }
-        if (!getGlobalPreferences().contains(ORANGELIMIT_PREF)) {
-            getGlobalPreferences().edit().putLong(ORANGELIMIT_PREF, oneday * 3).commit();
-        }
-        if (!getGlobalPreferences().contains(YELLOWLIMIT_PREF)) {
-            getGlobalPreferences().edit().putLong(YELLOWLIMIT_PREF, oneday * 5).commit();
-        }
-    }
+     }
+    public static final String REDLIMIT_PREF = "redlimit", ORANGELIMIT_PREF = "orangelimit", YELLOWLIMIT_PREF = "yellowlimit";
 
     public void toast(Context context, CharSequence charseq) {
         Toast mytoast = Toast.makeText(context, charseq, Toast.LENGTH_LONG);

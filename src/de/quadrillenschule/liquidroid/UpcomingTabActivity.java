@@ -15,23 +15,27 @@ import de.quadrillenschule.liquidroid.model.Initiative;
 public class UpcomingTabActivity extends InitiativesTabActivity {
 
     @Override
-    protected void filterList() {
+    public void filterList() {
         if (filterOnlySelected) {
             allInis.removeNonSelected();
         }
     }
+
     @Override
-    protected void sortList() {
+    public void sortList() {
         if (!sortNewestFirst) {
             allInis.reverse(Initiative.ISSUE_NEXT_EVENT_COMP);
         } else {
             allInis.sort(Initiative.ISSUE_NEXT_EVENT_COMP);
         }
-       try {inisListAdapter.notifyDataSetChanged();} catch (Exception e){}
+        try {
+            inisListAdapter.notifyDataSetChanged();
+        } catch (Exception e) {
+        }
     }
 
     @Override
-     protected InitiativenListAdapter getInitiativenListAdapter() {
+    public InitiativenListAdapter getInitiativenListAdapter() {
         return new UpcomingInitiativenListAdapter(this, allInis, R.id.initiativenList);
     }
 }
