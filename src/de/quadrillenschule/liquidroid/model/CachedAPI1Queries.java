@@ -104,9 +104,9 @@ public class CachedAPI1Queries {
 
         return !cacheExists(apiUrl);
     }
-    public static long MIN_CACHE_AGE = 30 * 1000 * 60, MAX_CACHE_AGE = 1000 * 60 * 60 * 24 * 3;
+    public static long MIN_CACHE_AGE = 1 * 1000 * 60, MAX_CACHE_AGE = 1000 * 60 * 60 * 24 * 3;
 
-    public boolean needsDownload(String apiUrl, LQFBInstance instance) {
+    public boolean needsDownload(String apiUrl, LQFBInstance instance, String state) {
         long now = System.currentTimeMillis();
         File cachefile = new File(cacheFolder, apiUrl.hashCode() + ".xml");
         if (!cachefile.exists()) {
@@ -119,11 +119,14 @@ public class CachedAPI1Queries {
             return true;
         }
 
-        /*if (hasNewerInis(instance.getMaxIni(), instance, apiUrl)) {
-            return true;
-        }*/
+        if (state.equals("new")) {
+            if (hasNewerInis(instance.getMaxIni(), instance, apiUrl)) {
+                return true;
+            }
+        }
 
-        return true;
+
+        return false;
     }
 
     public boolean hasNewerInis(int oldmax, LQFBInstance instance, String api) {
@@ -146,10 +149,10 @@ public class CachedAPI1Queries {
 
     }
 
-    public InputStream queryInputStream(LQFBInstance instance, String api, String parameters, String apiUrl, String developerkey, boolean forceNetwork, boolean noDownload) throws IOException, FileNotFoundException {
+    public InputStream queryInputStream(LQFBInstance instance, String api, String parameters, String apiUrl, String developerkey, String state, boolean forceNetwork, boolean noDownload) throws IOException, FileNotFoundException {
         url = apiUrl + api + ".html?key=" + developerkey + parameters;
         this.api = api;
-        if ((forceNetwork) && (needsDownload(url, instance))) {
+        if ((forceNetwork) && (needsDownload(url, instance, state))) {
             return networkInputStream(url);
         }
         if (cacheExists(url)) {

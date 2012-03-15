@@ -7,7 +7,6 @@ package de.quadrillenschule.liquidroid.model;
 import android.app.Application;
 import android.content.SharedPreferences;
 import de.quadrillenschule.liquidroid.LiqoidApplication;
-import java.io.FileNotFoundException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
@@ -49,11 +48,8 @@ public class LQFBInstance {
     }
 
     public boolean willDownloadAreas(CachedAPI1Queries cachedAPI1Queries, boolean forceNetwork) {
-        try {
-            return cachedAPI1Queries.willDownload(cachedAPI1Queries.getApiURL("area", "", apiUrl, developerkey), forceNetwork);
-        } catch (FileNotFoundException e) {
-            return true;
-        }
+            return !cachedAPI1Queries.cacheExists(cachedAPI1Queries.getApiURL("area", "", apiUrl, developerkey));
+       
     }
 
     public int downloadAreas(CachedAPI1Queries cachedAPI1Queries, boolean forceNetwork, boolean noDownload) {
@@ -63,7 +59,7 @@ public class LQFBInstance {
         areaParser = new AreasFromAPIParser(instancePrefs);
         try {
             saxparser = factory.newSAXParser();
-            saxparser.parse(cachedAPI1Queries.queryInputStream(this,"area", "", apiUrl, developerkey, forceNetwork, noDownload), areaParser);
+            saxparser.parse(cachedAPI1Queries.queryInputStream(this,"area", "", apiUrl, developerkey,"" ,forceNetwork, noDownload), areaParser);
             //   cachedAPI1Queries.storeInCache(areaParser.docBuff.toString());
             areas = areaParser.areas;
 
@@ -79,13 +75,10 @@ public class LQFBInstance {
         boolean retval = false;
         for (String state : states) {
 
-            try {
-                if (cachedAPI1Queries.willDownload(cachedAPI1Queries.getApiURL("initiative", "&area_id=" + area.getId() + "&state=" + state, apiUrl, developerkey), forceNetwork)) {
+                if (!cachedAPI1Queries.cacheExists(cachedAPI1Queries.getApiURL("initiative", "&area_id=" + area.getId() + "&state=" + state, apiUrl, developerkey))) {
                     retval = true;
                 }
-            } catch (FileNotFoundException e) {
-                return true;
-            }
+           
         }
         return retval;
     }
@@ -100,7 +93,7 @@ public class LQFBInstance {
         for (String state : states) {
             try {
                 saxparser = factory.newSAXParser();
-                saxparser.parse(cachedAPI1Queries.queryInputStream(this,"initiative", "&area_id=" + area.getId() + "&state=" + state, apiUrl, developerkey, forceNetwork, noDownload), iniParser);
+                saxparser.parse(cachedAPI1Queries.queryInputStream(this,"initiative", "&area_id=" + area.getId() + "&state=" + state, apiUrl, developerkey, state, forceNetwork, noDownload), iniParser);
             } catch (Exception e) {
                 return -1;
             }

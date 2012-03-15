@@ -4,9 +4,7 @@
  */
 package de.quadrillenschule.liquidroid.model;
 
-import android.app.Application;
 import android.os.Handler;
-import de.quadrillenschule.liquidroid.InitiativesTabActivity;
 import de.quadrillenschule.liquidroid.LiqoidApplication;
 
 /**
@@ -135,9 +133,6 @@ public class RefreshInisListThread extends Thread {
         }
         mylistener.finishedRefreshInisList(allInititiativen);
         progressHandler.sendEmptyMessage(FINISH_OK);
-
-
-
     }
 
     public interface RefreshInisListListener {
