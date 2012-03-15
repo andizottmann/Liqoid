@@ -24,16 +24,16 @@ public class LQFBInstance {
     private String developerkey = "";
     public Areas areas;
     private String apiversion = "";
-    private String shortName="";
+    private String shortName = "";
     private AreasFromAPIParser areaParser;
     private InitiativenFromAPIParser iniParser;
     public static final String AREA_API = "area";
-    public boolean pauseDownload=false;
+    public boolean pauseDownload = false;
     SharedPreferences instancePrefs;
 
-    public LQFBInstance(LiqoidApplication la, String shortName,String prefsName, String name, String apiUrl, String webUrl, String developerkey, String apiversion) {
+    public LQFBInstance(LiqoidApplication la, String shortName, String prefsName, String name, String apiUrl, String webUrl, String developerkey, String apiversion) {
         this.prefsName = prefsName;
-        this.shortName=shortName;
+        this.shortName = shortName;
         this.name = name;
         this.apiUrl = apiUrl;
         this.webUrl = webUrl;
@@ -50,20 +50,20 @@ public class LQFBInstance {
 
     public boolean willDownloadAreas(CachedAPI1Queries cachedAPI1Queries, boolean forceNetwork) {
         try {
-            return cachedAPI1Queries.willDownloadQuery("area", "", apiUrl, developerkey, forceNetwork);
+            return cachedAPI1Queries.willDownload(cachedAPI1Queries.getApiURL("area", "", apiUrl, developerkey), forceNetwork);
         } catch (FileNotFoundException e) {
             return true;
         }
     }
 
-    public int downloadAreas(CachedAPI1Queries cachedAPI1Queries, boolean forceNetwork,boolean noDownload) {
+    public int downloadAreas(CachedAPI1Queries cachedAPI1Queries, boolean forceNetwork, boolean noDownload) {
         SAXParserFactory factory = SAXParserFactory.newInstance();
         SAXParser saxparser;
 
         areaParser = new AreasFromAPIParser(instancePrefs);
         try {
             saxparser = factory.newSAXParser();
-            saxparser.parse(cachedAPI1Queries.queryInputStream("area", "", apiUrl, developerkey, forceNetwork,noDownload), areaParser);
+            saxparser.parse(cachedAPI1Queries.queryInputStream(this,"area", "", apiUrl, developerkey, forceNetwork, noDownload), areaParser);
             //   cachedAPI1Queries.storeInCache(areaParser.docBuff.toString());
             areas = areaParser.areas;
 
@@ -74,19 +74,19 @@ public class LQFBInstance {
         return 0;
     }
 
-     public boolean willDownloadInitiativen(Area area,CachedAPI1Queries cachedAPI1Queries, boolean forceNetwork) {
-         String[] states = {"new", "accepted", "frozen", "voting"};
-        boolean retval=false;
-         for (String state : states) {
+    public boolean willDownloadInitiativen(Area area, CachedAPI1Queries cachedAPI1Queries, boolean forceNetwork) {
+        String[] states = {"new", "accepted", "frozen", "voting"};
+        boolean retval = false;
+        for (String state : states) {
 
-         try {
-            if (cachedAPI1Queries.willDownloadQuery("initiative", "&area_id=" + area.getId() + "&state=" + state, apiUrl, developerkey, forceNetwork)){
-            retval=true;
+            try {
+                if (cachedAPI1Queries.willDownload(cachedAPI1Queries.getApiURL("initiative", "&area_id=" + area.getId() + "&state=" + state, apiUrl, developerkey), forceNetwork)) {
+                    retval = true;
+                }
+            } catch (FileNotFoundException e) {
+                return true;
             }
-        } catch (FileNotFoundException e) {
-            return true;
         }
-         }
         return retval;
     }
 
@@ -95,12 +95,12 @@ public class LQFBInstance {
         SAXParser saxparser;
 
         area.getInitiativen().clear();
-        iniParser = new InitiativenFromAPIParser(area,this);
+        iniParser = new InitiativenFromAPIParser(area, this);
         String[] states = {"new", "accepted", "frozen", "voting"};
         for (String state : states) {
             try {
                 saxparser = factory.newSAXParser();
-                saxparser.parse(cachedAPI1Queries.queryInputStream("initiative", "&area_id=" + area.getId() + "&state=" + state, apiUrl, developerkey, forceNetwork,noDownload), iniParser);
+                saxparser.parse(cachedAPI1Queries.queryInputStream(this,"initiative", "&area_id=" + area.getId() + "&state=" + state, apiUrl, developerkey, forceNetwork, noDownload), iniParser);
             } catch (Exception e) {
                 return -1;
             }
@@ -198,5 +198,20 @@ public class LQFBInstance {
      */
     public String getShortName() {
         return shortName;
+    }
+
+    /**
+     * @return the maxIni
+     */
+    public int getMaxIni() {
+       return instancePrefs.getInt("max_ini", 0);
+       
+    }
+
+    /**
+     * @param maxIni the maxIni to set
+     */
+    public void setMaxIni(int maxIni) {
+       instancePrefs.edit().putInt("max_ini", maxIni);
     }
 }

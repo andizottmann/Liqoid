@@ -17,6 +17,8 @@ import java.io.StringWriter;
 import java.io.Writer;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.conn.scheme.Scheme;
@@ -91,22 +93,71 @@ public class CachedAPI1Queries {
         return myfile.exists();
     }
 
-    public boolean willDownloadQuery(String api, String parameters, String apiUrl, String developerkey, boolean forceNetwork) throws FileNotFoundException {
-       if (forceNetwork){return true;}
-        url = apiUrl + api + ".html?key=" + developerkey + parameters;
-        return !cacheExists(url);
+    public String getApiURL(String api, String parameters, String apiUrl, String developerkey) {
+        return apiUrl + api + ".html?key=" + developerkey + parameters;
     }
 
-    public InputStream queryInputStream(String api, String parameters, String apiUrl, String developerkey, boolean forceNetwork, boolean noDownload) throws IOException, FileNotFoundException {
+    public boolean willDownload(String apiUrl, boolean forceNetwork) throws FileNotFoundException {
+        if (forceNetwork) {
+            return true;
+        }
+
+        return !cacheExists(apiUrl);
+    }
+    public static long MIN_CACHE_AGE = 30 * 1000 * 60, MAX_CACHE_AGE = 1000 * 60 * 60 * 24 * 3;
+
+    public boolean needsDownload(String apiUrl, LQFBInstance instance) {
+        long now = System.currentTimeMillis();
+        File cachefile = new File(cacheFolder, apiUrl.hashCode() + ".xml");
+        if (!cachefile.exists()) {
+            return true;
+        }
+        if (now - cachefile.lastModified() < MIN_CACHE_AGE) {
+            return false;
+        }
+        if (now - cachefile.lastModified() > MAX_CACHE_AGE) {
+            return true;
+        }
+
+        /*if (hasNewerInis(instance.getMaxIni(), instance, apiUrl)) {
+            return true;
+        }*/
+
+        return true;
+    }
+
+    public boolean hasNewerInis(int oldmax, LQFBInstance instance, String api) {
+        SAXParserFactory factory = SAXParserFactory.newInstance();
+        SAXParser saxparser;
+        Area tempArea = new Area(instance.instancePrefs);
+        InitiativenFromAPIParser iniParser = new InitiativenFromAPIParser(tempArea, instance);
+
+        try {
+            saxparser = factory.newSAXParser();
+            saxparser.parse(networkInputStream(api + "&min_id=" + oldmax), iniParser);
+        } catch (Exception e) {
+            return false;
+        }
+        if (tempArea.getInitiativen().size() > 1) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
+    public InputStream queryInputStream(LQFBInstance instance, String api, String parameters, String apiUrl, String developerkey, boolean forceNetwork, boolean noDownload) throws IOException, FileNotFoundException {
         url = apiUrl + api + ".html?key=" + developerkey + parameters;
         this.api = api;
-        if (forceNetwork) {
+        if ((forceNetwork) && (needsDownload(url, instance))) {
             return networkInputStream(url);
         }
         if (cacheExists(url)) {
             return cacheInputStream(url);
         }
-        if (noDownload){return null;}
+        if (noDownload) {
+            return null;
+        }
         return networkInputStream(url);
     }
 

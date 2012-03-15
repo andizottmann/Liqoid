@@ -25,10 +25,10 @@ public class InitiativenFromAPIParser extends DefaultHandler {
 
     public InitiativenFromAPIParser(Area area, LQFBInstance lqfbInstance) {
         super();
-        this.area=area;
+        this.area = area;
         charBuff = new StringBuffer();
         inis = area.getInitiativen();
-        this.lqfbInstance=lqfbInstance;
+        this.lqfbInstance = lqfbInstance;
     }
 
     @Override
@@ -42,7 +42,7 @@ public class InitiativenFromAPIParser extends DefaultHandler {
 
         if (qName.equals("initiative")) {
 
-            currentInitiative = new Initiative(area,lqfbInstance);
+            currentInitiative = new Initiative(area, lqfbInstance);
 
 
         }
@@ -89,12 +89,15 @@ public class InitiativenFromAPIParser extends DefaultHandler {
     public void endElement(String uri, String localName, String qName) {
         if (qName.equals("id")) {
             currentInitiative.id = Integer.parseInt(charBuff.toString());
+            if (lqfbInstance.getMaxIni() < currentInitiative.id) {
+                lqfbInstance.setMaxIni(currentInitiative.id);
+            }
         }
 
         if (qName.equals("initiative")) {
             if (currentInitiative != null) {
-                     inis.add(currentInitiative);
-             
+                inis.add(currentInitiative);
+
             }
 
 
