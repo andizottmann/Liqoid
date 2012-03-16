@@ -59,7 +59,7 @@ public class LQFBInstance {
         areaParser = new AreasFromAPIParser(instancePrefs);
         try {
             saxparser = factory.newSAXParser();
-            saxparser.parse(cachedAPI1Queries.queryInputStream(this,"area", "", apiUrl, developerkey,"" ,forceNetwork, noDownload), areaParser);
+            saxparser.parse(cachedAPI1Queries.queryInputStream(this,null,"area", "", apiUrl, developerkey,"" ,forceNetwork, noDownload), areaParser);
             //   cachedAPI1Queries.storeInCache(areaParser.docBuff.toString());
             areas = areaParser.areas;
 
@@ -93,7 +93,7 @@ public class LQFBInstance {
         for (String state : states) {
             try {
                 saxparser = factory.newSAXParser();
-                saxparser.parse(cachedAPI1Queries.queryInputStream(this,"initiative", "&area_id=" + area.getId() + "&state=" + state, apiUrl, developerkey, state, forceNetwork, noDownload), iniParser);
+                saxparser.parse(cachedAPI1Queries.queryInputStream(this,area,"initiative", "&area_id=" + area.getId() + "&state=" + state, apiUrl, developerkey, state, forceNetwork, noDownload), iniParser);
             } catch (Exception e) {
                 return -1;
             }
@@ -205,6 +205,7 @@ public class LQFBInstance {
      * @param maxIni the maxIni to set
      */
     public void setMaxIni(int maxIni) {
-       instancePrefs.edit().putInt("max_ini", maxIni);
+        if (maxIni>getMaxIni())
+       instancePrefs.edit().putInt("max_ini", maxIni).commit();
     }
 }

@@ -63,7 +63,7 @@ public class CachedAPI1Queries {
         }
     }
 
-    public void storeInCache(InputStream is) {
+    public void storeInCache(InputStream is, String url) {
         if (wasReadFromNetwork) {
             File myfile = new File(cacheFolder, url.hashCode() + ".xml");
             try {
@@ -106,7 +106,7 @@ public class CachedAPI1Queries {
     }
     public static long MIN_CACHE_AGE = 1 * 1000 * 60, MAX_CACHE_AGE = 1000 * 60 * 60 * 24 * 3;
 
-    public boolean needsDownload(String apiUrl, LQFBInstance instance, String state) {
+    public boolean needsDownload(String apiUrl,LQFBInstance instance, Area area,String state) {
         long now = System.currentTimeMillis();
         File cachefile = new File(cacheFolder, apiUrl.hashCode() + ".xml");
         if (!cachefile.exists()) {
@@ -117,6 +117,14 @@ public class CachedAPI1Queries {
         }
         if (now - cachefile.lastModified() > MAX_CACHE_AGE) {
             return true;
+        }
+
+        if (area != null) {
+            for (Initiative i : area.getInitiativen()) {
+                if ((now - i.getDateForNextEvent().getTime()) > 0) {
+                    return true;
+                }
+            }
         }
 
         if (state.equals("new")) {
@@ -135,24 +143,29 @@ public class CachedAPI1Queries {
         Area tempArea = new Area(instance.instancePrefs);
         InitiativenFromAPIParser iniParser = new InitiativenFromAPIParser(tempArea, instance);
 
+
         try {
             saxparser = factory.newSAXParser();
             saxparser.parse(networkInputStream(api + "&min_id=" + oldmax), iniParser);
         } catch (Exception e) {
             return false;
         }
-        if (tempArea.getInitiativen().size() > 1) {
+
+        if (iniParser.inis.size() > 1) {
             return true;
         } else {
+            if ((oldmax == 0) && (iniParser.inis.size() > 0)) {
+                return true;
+            }
             return false;
         }
 
     }
 
-    public InputStream queryInputStream(LQFBInstance instance, String api, String parameters, String apiUrl, String developerkey, String state, boolean forceNetwork, boolean noDownload) throws IOException, FileNotFoundException {
+    public InputStream queryInputStream(LQFBInstance instance, Area area, String api, String parameters, String apiUrl, String developerkey, String state, boolean forceNetwork, boolean noDownload) throws IOException, FileNotFoundException {
         url = apiUrl + api + ".html?key=" + developerkey + parameters;
         this.api = api;
-        if ((forceNetwork) && (needsDownload(url, instance, state))) {
+        if ((forceNetwork) && (needsDownload(url, instance, area, state))) {
             return networkInputStream(url);
         }
         if (cacheExists(url)) {
@@ -193,7 +206,7 @@ public class CachedAPI1Queries {
         wasReadFromNetwork = true;
         dataage = System.currentTimeMillis();
 
-        storeInCache(response.getEntity().getContent());
+        storeInCache(response.getEntity().getContent(), url);
         return cacheInputStream(url);
     }
 }

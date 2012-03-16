@@ -89,18 +89,12 @@ public class InitiativenFromAPIParser extends DefaultHandler {
     public void endElement(String uri, String localName, String qName) {
         if (qName.equals("id")) {
             currentInitiative.id = Integer.parseInt(charBuff.toString());
-            if (lqfbInstance.getMaxIni() < currentInitiative.id) {
-                lqfbInstance.setMaxIni(currentInitiative.id);
-            }
+            lqfbInstance.setMaxIni(currentInitiative.id);
         }
-
         if (qName.equals("initiative")) {
             if (currentInitiative != null) {
                 inis.add(currentInitiative);
-
             }
-
-
         }
         if (qName.equals("name")) {
             currentInitiative.name = charBuff.toString();

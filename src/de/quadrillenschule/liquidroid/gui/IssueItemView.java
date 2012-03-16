@@ -88,7 +88,7 @@ public class IssueItemView extends LinearLayout implements OnClickListener {
 
     protected String getStatusText() {
         DateFormat formatter = new SimpleDateFormat("yy-MM-dd HH:mm");
-        return "  " + initiative.state + "     Created: " + formatter.format(initiative.issue_created) + " " + initiative.getLqfbInstance().getShortName();
+        return initiative.state + "     Created: " + formatter.format(initiative.issue_created) + " " + initiative.getLqfbInstance().getShortName();
     }
 
     public void onClick(View arg0) {
