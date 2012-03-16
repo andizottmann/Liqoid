@@ -104,9 +104,9 @@ public class CachedAPI1Queries {
 
         return !cacheExists(apiUrl);
     }
-    public static long MIN_CACHE_AGE = 1 * 1000 * 60, MAX_CACHE_AGE = 1000 * 60 * 60 * 24 * 3;
+    public static long MIN_CACHE_AGE = 3 * 1000 * 60, MAX_CACHE_AGE = 1000 * 60 * 60 * 24 * 3, MAX_FAV_CACHE_AGE = 1000 * 60 * 60 * 4;
 
-    public boolean needsDownload(String apiUrl,LQFBInstance instance, Area area,String state) {
+    public boolean needsDownload(String apiUrl, LQFBInstance instance, Area area, String state) {
         long now = System.currentTimeMillis();
         File cachefile = new File(cacheFolder, apiUrl.hashCode() + ".xml");
         if (!cachefile.exists()) {
@@ -122,6 +122,9 @@ public class CachedAPI1Queries {
         if (area != null) {
             for (Initiative i : area.getInitiativen()) {
                 if ((now - i.getDateForNextEvent().getTime()) > 0) {
+                    return true;
+                }
+                if ((area.getInitiativen().isIssueSelected(i.issue_id)) && (now - cachefile.lastModified() > MAX_FAV_CACHE_AGE)) {
                     return true;
                 }
             }
