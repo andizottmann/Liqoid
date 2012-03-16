@@ -4,10 +4,12 @@
  */
 package de.quadrillenschule.liquidroid.gui;
 
+import android.R;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Vibrator;
+import android.text.Html;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -53,7 +55,7 @@ public class IssueItemView extends LinearLayout implements OnClickListener {
         statusLine = new TextView(activity);
         statusLine.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
 
-        statusLine.setText(getStatusText());
+        statusLine.setText(Html.fromHtml(getStatusText()));
         statusLine.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
         statusLine.setTextColor(Color.parseColor("#108020"));
         statusLine.setBackgroundColor(Color.argb(255, 245, 245, 245));
@@ -87,8 +89,8 @@ public class IssueItemView extends LinearLayout implements OnClickListener {
     }
 
     protected String getStatusText() {
-        DateFormat formatter = new SimpleDateFormat("yy-MM-dd HH:mm");
-        return initiative.state + "     Created: " + formatter.format(initiative.issue_created) + " " + initiative.getLqfbInstance().getShortName();
+        DateFormat formatter = new SimpleDateFormat(activity.getDateFormat());
+        return " <font color=black> "+initiative.state + "</font>  Created: " + formatter.format(initiative.issue_created) + " <font color=blue>" + initiative.getLqfbInstance().getShortName()+"</font>";
     }
 
     public void onClick(View arg0) {

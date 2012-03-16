@@ -140,7 +140,7 @@ public class InitiativesTabActivity extends Activity implements RefreshInisListT
             long dataage = ralt.overallDataAge;
             DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String dataagestr = formatter.format(new Date(dataage));
-            String prefix ="";
+            String prefix = "";
             if (ralt.currentInstance != null) {
                 if (ralt.currentInstance.pauseDownload) {
                     prefix += "Offline - ";
@@ -361,6 +361,9 @@ public class InitiativesTabActivity extends Activity implements RefreshInisListT
         filterList();
         sortList();
         inisListAdapter.notifyDataSetChanged();
+    }
 
+    public String getDateFormat() {
+        return getString(R.string.dateformat);
     }
 }

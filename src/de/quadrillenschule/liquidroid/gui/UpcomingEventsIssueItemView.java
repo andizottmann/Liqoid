@@ -23,8 +23,8 @@ public class UpcomingEventsIssueItemView extends IssueItemView {
 
     @Override
     protected String getStatusText() {
-        DateFormat formatter = new SimpleDateFormat("yy-MM-dd HH:mm");
-        return "  " + initiative.nextEvent() + " " + formatter.format(initiative.getDateForNextEvent()) + " " + initiative.getLqfbInstance().getShortName();
+        DateFormat formatter = new SimpleDateFormat(activity.getDateFormat());
+        return " <font color=black> " + initiative.nextEvent() + "</font>  " + formatter.format(initiative.getDateForNextEvent()) + "  <font color=blue>  " + initiative.getLqfbInstance().getShortName()+"</font>";
     }
 
     @Override

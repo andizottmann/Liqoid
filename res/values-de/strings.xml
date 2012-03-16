@@ -22,6 +22,7 @@
     <string name="voting_begin">Abstimmungsbeginn</string>
     <string name="noareasselected">Um Themen anzuzeigen,\nmusst Du vorher\nThemengebiete auswählen.</string>
     <string name="prefs">Einstellungen</string>
+    <string name="dateformat">dd.MM.yy HH:mm</string>
 
 
 </resources>
