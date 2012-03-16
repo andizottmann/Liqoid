@@ -13,18 +13,18 @@ import java.util.Comparator;
  *
  * @author andi
  */
-public class Initiativen extends MultiInstanceInitiativen {
+public class Issues extends MultiInstanceInitiativen {
 
     private ArrayList<Integer> existingIssueIds = new ArrayList<Integer>();
     SharedPreferences instancePrefs;
 
-    public Initiativen(SharedPreferences instancePrefs) {
+    public Issues(SharedPreferences instancePrefs) {
         super();
         this.instancePrefs = instancePrefs;
     }
 
-    public Initiativen getSelectedIssues() {
-        Initiativen retval = new Initiativen(instancePrefs);
+    public Issues getSelectedIssues() {
+        Issues retval = new Issues(instancePrefs);
         String[] selectedissues_str = instancePrefs.getString("selectedissues", "0").split(":");
         ArrayList<Integer> selectedIssues = new ArrayList<Integer>();
         for (String s : selectedissues_str) {
@@ -60,7 +60,7 @@ public class Initiativen extends MultiInstanceInitiativen {
     }
 
     public boolean isIssueSelected(int issueid) {
-        Initiativen myinis = findByIssueID(issueid);
+        Issues myinis = findByIssueID(issueid);
         if (myinis.size() <= 0) {
             return false;
         }
@@ -100,9 +100,9 @@ public class Initiativen extends MultiInstanceInitiativen {
                 //is selected, unselect
                 LQFBInstances.selectionUpdatesForRefresh = true;
                 String newselectedissues = "";
-                if (!selectedIssuesString.contains(":")){
-                //must be lastone
-                    selectedIssuesString="";
+                if (!selectedIssuesString.contains(":")) {
+                    //must be lastone
+                    selectedIssuesString = "";
                 }
                 for (String snippet : selectedIssuesString.split(":")) {
                     if (!snippet.equals(issueid + "")) {
@@ -135,14 +135,10 @@ public class Initiativen extends MultiInstanceInitiativen {
         if (!existingIssueIds.contains((Integer) ini.issue_id)) {
             existingIssueIds.add((Integer) ini.issue_id);
             return super.add(ini);
+        } else {
+            this.findByIssueID((Integer)ini.issue_id).get(0).getConcurrentInis().add(ini);
         }
-        processDuplicate(ini);
         return false;
-    }
-
-    private void processDuplicate(Initiative ini) {
-        Initiative existing = findByIssueID(ini.issue_id).get(0);
-
     }
 
     @Override
@@ -158,8 +154,8 @@ public class Initiativen extends MultiInstanceInitiativen {
         return super.remove(i);
     }
 
-    public Initiativen findByIssueID(int find) {
-        Initiativen retval = new Initiativen(instancePrefs);
+    public Issues findByIssueID(int find) {
+        Issues retval = new Issues(instancePrefs);
         for (Initiative i : this) {
             if (i.issue_id == find) {
                 retval.add(i);
@@ -168,8 +164,8 @@ public class Initiativen extends MultiInstanceInitiativen {
         return retval;
     }
 
-    public Initiativen findByName(String name) {
-        Initiativen retval = new Initiativen(instancePrefs);
+    public Issues findByName(String name) {
+        Issues retval = new Issues(instancePrefs);
         for (Initiative i : this) {
             if (i.name == name) {
                 retval.add(i);

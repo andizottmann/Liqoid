@@ -4,8 +4,7 @@
  */
 package de.quadrillenschule.liquidroid.model;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -36,6 +35,7 @@ public class Initiative {
     public static final int ISSUE_ID_COMP = 0, ISSUE_CREATED_COMP = 1, ISSUE_NEXT_EVENT_COMP = 2, ISSUE_LAST_EVENT_COMP = 3;
     private LQFBInstance lqfbInstance;
     private Area area;
+    private ArrayList<Initiative> concurrentInis=new ArrayList();
 
     public Initiative(Area area, LQFBInstance lqfbInstance) {
         this.area = area;
@@ -156,5 +156,19 @@ public class Initiative {
      */
     public Area getArea() {
         return area;
+    }
+
+    /**
+     * @return the concurrentInis
+     */
+    public ArrayList<Initiative> getConcurrentInis() {
+        return concurrentInis;
+    }
+
+    /**
+     * @param concurrentInis the concurrentInis to set
+     */
+    public void setConcurrentInis(ArrayList<Initiative> concurrentInis) {
+        this.concurrentInis = concurrentInis;
     }
 }

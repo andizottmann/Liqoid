@@ -19,11 +19,11 @@ public class Area {
     private int member_weight = -1;
     private int autoreject_weight = -1;
     private boolean active = false;
-    private Initiativen initiativen;
+    private Issues initiativen;
     SharedPreferences instancePrefs;
 
     public Area(SharedPreferences instancePrefs) {
-        initiativen = new Initiativen(instancePrefs);
+        initiativen = new Issues(instancePrefs);
     }
 
     /**
@@ -127,14 +127,14 @@ public class Area {
     /**
      * @return the initiativen
      */
-    public Initiativen getInitiativen() {
+    public Issues getInitiativen() {
         return initiativen;
     }
 
     /**
      * @param initiativen the initiativen to set
      */
-    public void setInitiativen(Initiativen initiativen) {
+    public void setInitiativen(Issues initiativen) {
         this.initiativen = initiativen;
     }
 }

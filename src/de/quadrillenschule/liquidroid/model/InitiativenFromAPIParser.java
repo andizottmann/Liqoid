@@ -17,7 +17,7 @@ import org.xml.sax.helpers.DefaultHandler;
  */
 public class InitiativenFromAPIParser extends DefaultHandler {
 
-    public Initiativen inis;
+    public Issues inis;
     Initiative currentInitiative;
     StringBuffer charBuff;
     Area area;

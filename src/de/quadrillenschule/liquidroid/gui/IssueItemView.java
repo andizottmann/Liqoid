@@ -13,6 +13,8 @@ import android.text.Html;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -35,6 +37,7 @@ public class IssueItemView extends LinearLayout implements OnClickListener {
     TextView statusLine;
     ImageView colorView;
     LinearLayout contentContainer;
+    Button contextMenuButton;
 
     public IssueItemView(InitiativesTabActivity activity, Initiative initiative) {
         super(activity);
@@ -63,12 +66,22 @@ public class IssueItemView extends LinearLayout implements OnClickListener {
 
         contentContainer = new LinearLayout(activity);
         contentContainer.setOrientation(VERTICAL);
-        this.addView(activity.getImageViewForcolor(itemSpecificColorcode()));
-        contentContainer.addView(statusLine);
+        contextMenuButton = new Button(activity);
+        contextMenuButton.setText("I");
+        //   activity.registerForContextMenu(contextMenuButton);
+        contextMenuButton.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT));
 
+        contextMenuButton.setOnClickListener(new OnClickListener() {
+
+            public void onClick(View arg0) {
+                expand();
+            }
+        });
+        contentContainer.addView(statusLine);
         contentContainer.addView(myCheckBox);
         contentContainer.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.MATCH_PARENT));
-
+        this.addView(contextMenuButton);
+        this.addView(activity.getImageViewForcolor(itemSpecificColorcode()));
         this.addView(contentContainer);
     }
 
@@ -90,7 +103,12 @@ public class IssueItemView extends LinearLayout implements OnClickListener {
 
     protected String getStatusText() {
         DateFormat formatter = new SimpleDateFormat(activity.getDateFormat());
-        return " <font color=black> "+initiative.state + "</font>  Created: " + formatter.format(initiative.issue_created) + " <font color=blue>" + initiative.getLqfbInstance().getShortName()+"</font>";
+        return " <font color=black> " + initiative.state + "</font>  <font color=red> Created: " + formatter.format(initiative.issue_created) + " </font> <font color=blue>" + initiative.getLqfbInstance().getShortName() + "</font> Inis: " + (int) (initiative.getConcurrentInis().size() + 1);
+    }
+
+    protected String getStatusTextExpand() {
+        DateFormat formatter = new SimpleDateFormat(activity.getDateFormat());
+        return " <font color=black> " + initiative.state + "</font> <br> <font color=red> Created: " + formatter.format(initiative.issue_created) + " </font> <font color=blue>" + initiative.getLqfbInstance().getShortName() + "</font> Inis: " + (int) (initiative.getConcurrentInis().size() + 1);
     }
 
     public void onClick(View arg0) {
@@ -104,6 +122,17 @@ public class IssueItemView extends LinearLayout implements OnClickListener {
             }
         } catch (Exception e) {
             //its not a vibrator :/
+        }
+    }
+    private boolean expandview = false;
+
+    public void expand() {
+        if (expandview) {
+            statusLine.setText(Html.fromHtml(getStatusText()));
+            expandview = false;
+        } else {
+            statusLine.setText(Html.fromHtml(getStatusTextExpand()));
+            expandview = true;
         }
     }
 }
