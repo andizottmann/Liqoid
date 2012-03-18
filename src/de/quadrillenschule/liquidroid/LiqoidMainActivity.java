@@ -9,15 +9,19 @@ import android.gesture.GestureLibrary;
 import android.gesture.GestureOverlayView;
 import android.gesture.Prediction;
 import android.os.Bundle;
+import android.view.View;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.widget.TabHost;
 import android.widget.TextView;
 import java.util.ArrayList;
 
-public class LiqoidMainActivity extends TabActivity implements GestureOverlayView.OnGesturePerformedListener{
+public class LiqoidMainActivity extends TabActivity implements GestureOverlayView.OnGesturePerformedListener, TabHost.OnTabChangeListener {
 
     TabHost tabHost;
     GestureLibrary gestureLibrary;
-  
+
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -57,8 +61,11 @@ public class LiqoidMainActivity extends TabActivity implements GestureOverlayVie
         tabHost.addTab(spec);
 
         tabHost.setCurrentTab(3);
+        lastTab = 3;
+        lastTabView = tabHost.getCurrentView();
 
-      
+        tabHost.setOnTabChangedListener(this);
+
         ((LiqoidApplication) getApplication()).statusLine = ((TextView) findViewById(R.id.statusline));
     }
 
@@ -68,8 +75,73 @@ public class LiqoidMainActivity extends TabActivity implements GestureOverlayVie
         //    ((LiqoidApplication) getApplication()).fireLQFBInstanceChangedEvent();
 
     }
+    private long ANIMATION_DURATION = 600;
 
-   
+    public Animation inFromRightAnimation() {
+
+        Animation inFromRight = new TranslateAnimation(
+                Animation.RELATIVE_TO_PARENT, +1.0f,
+                Animation.RELATIVE_TO_PARENT, 0.0f,
+                Animation.RELATIVE_TO_PARENT, 0.0f,
+                Animation.RELATIVE_TO_PARENT, 0.0f);
+        inFromRight.setDuration(ANIMATION_DURATION);
+        inFromRight.setInterpolator(new AccelerateInterpolator());
+        return inFromRight;
+    }
+
+    public Animation inFromLeftAnimation() {
+        Animation outtoLeft = new TranslateAnimation(
+                Animation.RELATIVE_TO_PARENT, -1.0f,
+                Animation.RELATIVE_TO_PARENT, 0.0f,
+                Animation.RELATIVE_TO_PARENT, 0.0f,
+                Animation.RELATIVE_TO_PARENT, 0.0f);
+        outtoLeft.setDuration(ANIMATION_DURATION);
+        outtoLeft.setInterpolator(new AccelerateInterpolator());
+        return outtoLeft;
+    }
+
+    public Animation outToRightAnimation() {
+
+        Animation inFromRight = new TranslateAnimation(
+                Animation.RELATIVE_TO_PARENT, 0.0f,
+                Animation.RELATIVE_TO_PARENT, 1.0f,
+                Animation.RELATIVE_TO_PARENT, 0.0f,
+                Animation.RELATIVE_TO_PARENT, 0.0f);
+        inFromRight.setDuration(ANIMATION_DURATION);
+        inFromRight.setInterpolator(new AccelerateInterpolator());
+        return inFromRight;
+    }
+
+    public Animation outToLeftAnimation() {
+        Animation outtoLeft = new TranslateAnimation(
+                Animation.RELATIVE_TO_PARENT, 0.0f,
+                Animation.RELATIVE_TO_PARENT, -1.0f,
+                Animation.RELATIVE_TO_PARENT, 0.0f,
+                Animation.RELATIVE_TO_PARENT, 0.0f);
+        outtoLeft.setDuration(ANIMATION_DURATION);
+        outtoLeft.setInterpolator(new AccelerateInterpolator());
+        return outtoLeft;
+    }
+    private int lastTab = 3;
+    private View lastTabView;
+
+    public void onTabChanged(String tabId) {
+        // tab1Layout.setAnimation(outToLeftAnimation());
+        if (lastTab == tabHost.getCurrentTab()) {
+            return;
+        }
+        if (lastTab > tabHost.getCurrentTab()) {
+            tabHost.getCurrentView().setAnimation(inFromLeftAnimation());
+            lastTabView.setAnimation(outToRightAnimation());
+
+        } else {
+            tabHost.getCurrentView().setAnimation(inFromRightAnimation());
+            lastTabView.setAnimation(outToLeftAnimation());
+
+        }
+        lastTab = tabHost.getCurrentTab();
+        lastTabView = tabHost.getCurrentView();
+    }
 
     public void onGesturePerformed(GestureOverlayView overlay, Gesture gesture) {
         ArrayList<Prediction> predictions = gestureLibrary.recognize(gesture);
@@ -100,6 +172,4 @@ public class LiqoidMainActivity extends TabActivity implements GestureOverlayVie
             }
         }
     }
-
-
 }
