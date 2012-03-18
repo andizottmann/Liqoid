@@ -4,7 +4,7 @@
     <string name="dataage">Data from</string>
     <string name="tab_upcoming">Upcoming</string>
     <string name="tab_recent">Recent</string>
-    <string name="tab_inis">Issues</string>
+    <string name="tab_inis">Newest Issues</string>
     <string name="tab_areas">Areas</string>
     <string name="menu_refresh">Refresh</string>
     <string name="downloading">Downloading from LQFB server</string>

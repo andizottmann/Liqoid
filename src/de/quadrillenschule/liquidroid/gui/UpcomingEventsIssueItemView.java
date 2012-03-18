@@ -5,6 +5,7 @@
 package de.quadrillenschule.liquidroid.gui;
 
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import de.quadrillenschule.liquidroid.InitiativesTabActivity;
 import de.quadrillenschule.liquidroid.LiqoidApplication;
 import de.quadrillenschule.liquidroid.model.Initiative;
@@ -24,7 +25,7 @@ public class UpcomingEventsIssueItemView extends IssueItemView {
     @Override
     protected String getStatusText() {
         DateFormat formatter = new SimpleDateFormat(activity.getDateFormat());
-        return " <font color=black> " + initiative.nextEvent() + "</font>  " + formatter.format(initiative.getDateForNextEvent()) + "  <font color=blue>  " + initiative.getLqfbInstance().getShortName()+"</font>";
+        return "<b><font color=black> " + initiative.nextEvent() + "</font></b>  <font color=blue>" + formatter.format(initiative.getDateForNextEvent()) + "</font>  <b><font color=black>  " + initiative.getLqfbInstance().getShortName() + "</font></b>";
     }
 
     @Override
@@ -33,14 +34,14 @@ public class UpcomingEventsIssueItemView extends IssueItemView {
         long oneday = 1000 * 60 * 60 * 24;
         SharedPreferences gp = ((LiqoidApplication) activity.getApplication()).getGlobalPreferences();
         if (delta < Long.parseLong(gp.getString(LiqoidApplication.REDLIMIT_PREF, oneday + ""))) {
-            return (activity.RED_COLOR);
+            return Color.argb(255, 255, 100, 100);
         }
         if (delta < Long.parseLong(gp.getString(LiqoidApplication.ORANGELIMIT_PREF, oneday * 3 + ""))) {
-            return (activity.ORANGE_COLOR);
+            return Color.argb(255, 255, 140, 100);
         }
         if (delta < Long.parseLong(gp.getString(LiqoidApplication.YELLOWLIMIT_PREF, oneday * 5 + ""))) {
-            return (activity.YELLOW_COLOR);
+            return Color.argb(255, 255, 255, 160);
         }
-        return activity.GREY_COLOR;
+        return Color.LTGRAY;
     }
 }

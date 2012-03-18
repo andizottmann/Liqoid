@@ -330,30 +330,8 @@ public class InitiativesTabActivity extends Activity implements RefreshInisListT
     }
     public static final int GREY_COLOR = 0, ORANGE_COLOR = 1, RED_COLOR = 2, YELLOW_COLOR = 3;
 
-    public ImageView getImageViewForcolor(int colorcode) {
-        ImageView colorView = new ImageView(this);
-        colorView.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT));
-        colorView.setAdjustViewBounds(true);
-        colorView.setBackgroundColor(Color.argb(255, 245, 245, 245));
-        colorView.setImageResource(getImageResourceForColor(colorcode));
+   
 
-        colorView.setScaleType(ImageView.ScaleType.FIT_START);
-        return colorView;
-    }
-
-    public int getImageResourceForColor(int colorcode) {
-
-        switch (colorcode) {
-            case ORANGE_COLOR:
-                return R.drawable.seek_thumb_pressed;
-            case RED_COLOR:
-                return R.drawable.seek_thumb_selected;
-            case YELLOW_COLOR:
-                return R.drawable.seek_thumb_yellow;
-            default:
-                return R.drawable.seek_thumb_normal;
-        }
-    }
 
     public void finishedRefreshInisList(MultiInstanceInitiativen newInis) {
         allInis = newInis;

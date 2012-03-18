@@ -37,7 +37,7 @@ public class IssueItemView extends LinearLayout implements OnClickListener {
     TextView statusLine;
     ImageView colorView;
     LinearLayout contentContainer;
-    Button contextMenuButton;
+    Button expandButton;
 
     public IssueItemView(InitiativesTabActivity activity, Initiative initiative) {
         super(activity);
@@ -57,31 +57,31 @@ public class IssueItemView extends LinearLayout implements OnClickListener {
 
         statusLine = new TextView(activity);
         statusLine.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
-
         statusLine.setText(Html.fromHtml(getStatusText()));
         statusLine.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
         statusLine.setTextColor(Color.parseColor("#108020"));
         statusLine.setBackgroundColor(Color.argb(255, 245, 245, 245));
 
-
-        contentContainer = new LinearLayout(activity);
-        contentContainer.setOrientation(VERTICAL);
-        contextMenuButton = new Button(activity);
-        contextMenuButton.setText("I");
-        //   activity.registerForContextMenu(contextMenuButton);
-        contextMenuButton.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT));
-
-        contextMenuButton.setOnClickListener(new OnClickListener() {
+        expandButton = new Button(activity);
+        expandButton.setText(((int) initiative.getConcurrentInis().size() + 1) + "\n  ");
+        expandButton.setBackgroundColor(itemSpecificColorcode());
+        expandButton.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT));
+        expandButton.setOnClickListener(new OnClickListener() {
 
             public void onClick(View arg0) {
                 expand();
             }
         });
+        contentContainer = new LinearLayout(activity);
+        contentContainer.setOrientation(VERTICAL);
+        contentContainer.setBackgroundColor(Color.argb(255, 245, 245, 245));
         contentContainer.addView(statusLine);
         contentContainer.addView(myCheckBox);
-        contentContainer.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.MATCH_PARENT));
-        this.addView(contextMenuButton);
-        this.addView(activity.getImageViewForcolor(itemSpecificColorcode()));
+        LayoutParams lp = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.MATCH_PARENT);
+        contentContainer.setLayoutParams(lp);
+        contentContainer.setPadding(8, 1, 1, 1);
+
+        this.addView(expandButton);
         this.addView(contentContainer);
     }
 
@@ -90,25 +90,20 @@ public class IssueItemView extends LinearLayout implements OnClickListener {
         long oneday = 1000 * 60 * 60 * 24;
         SharedPreferences gp = ((LiqoidApplication) activity.getApplication()).getGlobalPreferences();
         if (delta < Long.parseLong(gp.getString(LiqoidApplication.REDLIMIT_PREF, oneday + ""))) {
-            return (activity.RED_COLOR);
+            return Color.argb(255, 255, 100, 100);
         }
         if (delta < Long.parseLong(gp.getString(LiqoidApplication.ORANGELIMIT_PREF, oneday * 3 + ""))) {
-            return (activity.ORANGE_COLOR);
+            return Color.argb(255, 255, 140, 100);
         }
         if (delta < Long.parseLong(gp.getString(LiqoidApplication.YELLOWLIMIT_PREF, oneday * 5 + ""))) {
-            return (activity.YELLOW_COLOR);
+            return Color.argb(255, 255, 255, 160);
         }
-        return activity.GREY_COLOR;
+        return Color.LTGRAY;
     }
 
     protected String getStatusText() {
         DateFormat formatter = new SimpleDateFormat(activity.getDateFormat());
-        return " <font color=black> " + initiative.state + "</font>  <font color=red> Created: " + formatter.format(initiative.issue_created) + " </font> <font color=blue>" + initiative.getLqfbInstance().getShortName() + "</font> Inis: " + (int) (initiative.getConcurrentInis().size() + 1);
-    }
-
-    protected String getStatusTextExpand() {
-        DateFormat formatter = new SimpleDateFormat(activity.getDateFormat());
-        return " <font color=black> " + initiative.state + "</font> <br> <font color=red> Created: " + formatter.format(initiative.issue_created) + " </font> <font color=blue>" + initiative.getLqfbInstance().getShortName() + "</font> Inis: " + (int) (initiative.getConcurrentInis().size() + 1);
+        return " <b><font color=black> " + initiative.state + "</font></b> <font color=blue>" + formatter.format(initiative.issue_created) + "</font> <b><font color=black>" + initiative.getLqfbInstance().getShortName() + "</font></b>";
     }
 
     public void onClick(View arg0) {
@@ -129,9 +124,22 @@ public class IssueItemView extends LinearLayout implements OnClickListener {
     public void expand() {
         if (expandview) {
             statusLine.setText(Html.fromHtml(getStatusText()));
+            expandButton.setText(((int) initiative.getConcurrentInis().size() + 1) + "\n  ");
+
             expandview = false;
         } else {
-            statusLine.setText(Html.fromHtml(getStatusTextExpand()));
+            String string = "";
+            string += "Area: <font color=black><b>" + initiative.getArea().getName() + "</b><br></font>";
+            string += "Members: <font color=black><b>" + initiative.getArea().getMember_weight() + "</b><br><br></font>";
+
+            string += "Supporter: <font color=black><b>" + initiative.supporter_count + "</b> &nbsp; " + initiative.name + "</font>";
+            for (Initiative i : initiative.getConcurrentInis()) {
+                string += "<br><br>Supporter: <font color=black><b>" + i.supporter_count + "</b> &nbsp; " + i.name + "</font>";
+            }
+            statusLine.setText(Html.fromHtml(getStatusText() + "<br>" + string+"<br>"));
+
+            expandButton.setText(((int) initiative.getConcurrentInis().size() + 1) + "\n  ");
+
             expandview = true;
         }
     }
