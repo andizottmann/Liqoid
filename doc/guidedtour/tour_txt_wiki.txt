@@ -1,0 +1,56 @@
+=Liqoid Guided Tour=
+
+Hier kannst Du das aktuelle Liqoid herunterladen: [https://github.com/andizottmann/Liqoid/blob/master/bin/Liqoid-debug.apk Liqoid Debug binary].
+
+
+----
+Installiert? Los gehts!
+
+
+[[Bild:Tour_001.png]]
+
+Nach dem starten wählst Du diejenigen Themengebiete aus, die Dich interessieren. Bitte beachte, dass das herunterladen vom Server umso länger dauert, je mehr Themengebiete ausgewählt sind. In Klammern wird die im jeweiligen Themengebiete Anzahl favorisierter Themen angezeigt.
+----
+[[Bild:Tour_002.png]]
+
+Im Instanzenwähler im oberen Bereich kannst Du zwischen verschiedenen Instanzen wechseln und dort die jeweiligen Themengebiete auswählen. Du kannst Themengebiete quer über alle Instanzen auswählen.
+
+----
+[[Bild:Tour_004.png]]
+ 
+Nachdem Du einige Themengebiete ausgewählt hast drücke den Tab "Neueste Themen" oder wechsle den Tab mit einer Wischgeste. Die Themengebiete werden jetzt erstmalig komplett vom Server geladen. Achte dabei auf eine gute Netzverbindung! Alle Daten werden in einem Liqoid-eigenen-Cache gespeichert und im folgenden muss nur noch selten und auf einzelne Themengebiete beschränkt aktualisiert werden.Leider lassen sich dennoch manchmal etwas längere Ladezeiten nicht verhindern.
+----
+[[Bild:Tour_005.png]]
+ 
+Schliesslich werden die Themen der ausgewählten Instanzen und Themengebiete in einer Liste dargestellt. 
+* Die Themen sind in diesem View nach Ihrer Erstellung sortiert. Die neuesten Themen findest Du ganz oben. So kannst Du stets sehen, wenn neue Themengebiete auf "Deinen" Themengebieten reingekommen sind. 
+* Du kannst die Liste ganz normal scrollen und Themen, welche Dich interessieren, favorisieren, indem Du sie mit dem Stern markierst.
+* Der linke Balken zeigt Dir an, wieviele Alternativinitiatven es zu dem jeweiligen Thema gibt. Drückst Du den Balken, dann werden auch die Alternativthemen angezeigt.
+* Die Farbe des linken Balkens zeigt Dir, wie aktuell die Änderung ist. Die Schwellenwerte für die Farben kannst Du im Einstellungen-Menü einsehen und ändern.
+----
+[[Bild:Tour_006.png]]
+
+Klickt man auf den linken Balken so erweitert sich das aktuelle Thema. Zusatzinfos und Alternativinis werden dann angezeigt.
+----
+[[Bild:Tour_007.png]]
+
+Ein Blick ins Menü: Hier kannst Du manuell eine Aktualisierung vornehmen, sowie die jeweilige Liste umsortieren und filtern.
+----
+[[Bild:Tour_008.png]]
+
+Im Tab "Neueste Ereignisse" findest Du aktuelle Änderungen zu allen Themen der ausgwählten Themengebiete. Das sind z.B. neue Alternativinis oder wenn ein Thema seinen Status gewechselt hat (zum Beispiel "Eingefroren" wurde oder nun zur Abstimmung ansteht. Auch hier wieder der farbige Balken mit Aufklappfunktion.
+----
+[[Bild:Tour_009.png]]
+
+Im Tab "Anstehende Ereignisse" werden für die Themen anstehende Ereignisse angezeigt. Natürlich geht das nur für vorhersehbare Dinge.
+----
+[[Bild:Tour_010.png]]
+
+In jedem der Views gilt: Ein langer "Klick" öffnet ein Kontextmenü. Hier kannst Du z.B. das Thema im Browser öffnen, via social media einen link weiterreichen oder auch Kalendereinträge für anstehende Ereignisse machen.
+
+
+
+
+
+
+

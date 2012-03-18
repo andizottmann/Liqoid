@@ -60,7 +60,7 @@ public class InitiativesTabActivity extends Activity implements RefreshInisListT
         GestureOverlayView gestures = (GestureOverlayView) findViewById(R.id.allinisgestures);
         gestures.setGestureVisible(false);
         gestures.addOnGesturePerformedListener((LiqoidMainActivity) getParent());
-        if ((inisListAdapter == null) && dataIntegrityCheck()) {
+        if ((inisListAdapter == null) && ((LiqoidApplication)getApplication()).dataIntegrityCheck()) {
             createInisListAdapter();
         } else {
             LQFBInstances.selectionUpdatesForRefresh = true;
@@ -71,7 +71,7 @@ public class InitiativesTabActivity extends Activity implements RefreshInisListT
     @Override
     public void onResume() {
         super.onResume();
-        if (dataIntegrityCheck() && (inisListAdapter == null)) {
+        if (((LiqoidApplication)getApplication()).dataIntegrityCheck() && (inisListAdapter == null)) {
             createInisListAdapter();
 
         }
@@ -83,7 +83,7 @@ public class InitiativesTabActivity extends Activity implements RefreshInisListT
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        if (dataIntegrityCheck() && (inisListAdapter == null)) {
+        if (((LiqoidApplication)getApplication()).dataIntegrityCheck() && (inisListAdapter == null)) {
             createInisListAdapter();
 
         }/*
@@ -111,20 +111,7 @@ public class InitiativesTabActivity extends Activity implements RefreshInisListT
 
     }
 
-    boolean dataIntegrityCheck() {
-        try {
-            for (LQFBInstance myInstance : ((LiqoidApplication) getApplication()).lqfbInstances) {
-                for (Area a : myInstance.areas) {
-                    if (a.getInitiativen().size() > 0) {
-                        return true;
-                    }
-                }
-            }
-        } catch (NullPointerException npe) {
-            return false;
-        }
-        return false;
-    }
+   
 
     public void refreshInisList(boolean download) {
         LQFBInstances.selectionUpdatesForRefresh = false;

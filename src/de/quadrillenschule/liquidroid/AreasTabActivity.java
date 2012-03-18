@@ -74,15 +74,21 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
     @Override
     public void onResume() {
         super.onResume();
-        if (areasListAdapter == null) {
+        if ((((LiqoidApplication) getApplication()).dataIntegrityCheck()) && (areasListAdapter == null)) {
+            lqfbInstanceChanged();
+        }
+        if (!(((LiqoidApplication) getApplication()).dataIntegrityCheck()) && (areasListAdapter == null)) {
             refreshAreasList(false);
         }
+
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        refreshAreasList(false);
+        if ((((LiqoidApplication) getApplication()).dataIntegrityCheck()) && (areasListAdapter == null)) {
+            lqfbInstanceChanged();
+        }
 
     }
 
@@ -173,7 +179,7 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
 
 
     }
-       private Handler handler = new Handler() {
+    private Handler handler = new Handler() {
 
         @Override
         public void handleMessage(Message msg) {
@@ -237,9 +243,9 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
     //Instances Spinner item selected
     public void onItemSelected(AdapterView<?> arg0, View arg1, int i, long arg3) {
         LQFBInstances ls = ((LiqoidApplication) getApplication()).lqfbInstances;
-       // if (ls.indexOf(ls.getSelectedInstance()) != i) {
-            ls.setSelectedInstance(i);
-            ((LiqoidApplication) getApplication()).fireLQFBInstanceChangedEvent();
-       // }
+        // if (ls.indexOf(ls.getSelectedInstance()) != i) {
+        ls.setSelectedInstance(i);
+        ((LiqoidApplication) getApplication()).fireLQFBInstanceChangedEvent();
+        // }
     }
 }

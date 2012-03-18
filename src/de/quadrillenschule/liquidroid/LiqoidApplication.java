@@ -10,7 +10,9 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.widget.TextView;
 import android.widget.Toast;
+import de.quadrillenschule.liquidroid.model.Area;
 import de.quadrillenschule.liquidroid.model.CachedAPI1Queries;
+import de.quadrillenschule.liquidroid.model.LQFBInstance;
 import de.quadrillenschule.liquidroid.model.LQFBInstances;
 import de.quadrillenschule.liquidroid.tools.CrashLog;
 import java.io.File;
@@ -60,7 +62,20 @@ public class LiqoidApplication extends Application {
 
         }
     }
-
+ boolean dataIntegrityCheck() {
+        try {
+            for (LQFBInstance myInstance:lqfbInstances) {
+                for (Area a : myInstance.areas) {
+                    if (a.getInitiativen().size() > 0) {
+                        return true;
+                    }
+                }
+            }
+        } catch (NullPointerException npe) {
+            return false;
+        }
+        return false;
+    }
     public SharedPreferences getGlobalPreferences() {
         return PreferenceManager.getDefaultSharedPreferences(this);
      }
