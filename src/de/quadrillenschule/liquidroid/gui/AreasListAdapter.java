@@ -37,7 +37,7 @@ public class AreasListAdapter extends ArrayAdapter<Area> {
 
         retval.setTextColor(Color.BLACK);
         retval.setBackgroundColor(Color.argb(255, 245, 245, 245));
-        retval.setText(areas.get(position).getName());
+        retval.setText(areas.get(position).getName()+" ("+areas.get(position).getInitiativen().getSelectedIssues().size()+")");
         retval.setChecked(areas.isSelected(position));
         retval.setOnClickListener(new View.OnClickListener() {
 

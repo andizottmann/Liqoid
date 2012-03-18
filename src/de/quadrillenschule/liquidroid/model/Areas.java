@@ -103,7 +103,7 @@ public class Areas extends ArrayList<Area> {
     public Area getByName(String searchname) {
 
         for (Area area : this) {
-            if (area.getName().startsWith(searchname)) {
+            if (searchname.startsWith(area.getName())){
                 return area;
             }
         }

@@ -4,7 +4,6 @@
  */
 package de.quadrillenschule.liquidroid.gui;
 
-import android.R;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -13,7 +12,6 @@ import android.text.Html;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnLongClickListener;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
@@ -63,8 +61,8 @@ public class IssueItemView extends LinearLayout implements OnClickListener {
         statusLine.setBackgroundColor(Color.argb(255, 245, 245, 245));
 
         expandButton = new Button(activity);
-        expandButton.setText(((int) initiative.getConcurrentInis().size() + 1) + "\n  ");
         expandButton.setBackgroundColor(itemSpecificColorcode());
+        expandButtonSetText();
         expandButton.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT));
         expandButton.setOnClickListener(new OnClickListener() {
 
@@ -121,11 +119,15 @@ public class IssueItemView extends LinearLayout implements OnClickListener {
     }
     private boolean expandview = false;
 
+    public void expandButtonSetText() {
+        expandButton.setText("Alt\n" + ((int) initiative.getConcurrentInis().size() + 1) + "\n  ");
+
+    }
+
     public void expand() {
         if (expandview) {
             statusLine.setText(Html.fromHtml(getStatusText()));
-            expandButton.setText(((int) initiative.getConcurrentInis().size() + 1) + "\n  ");
-
+            expandButtonSetText();
             expandview = false;
         } else {
             String string = "";
@@ -136,10 +138,9 @@ public class IssueItemView extends LinearLayout implements OnClickListener {
             for (Initiative i : initiative.getConcurrentInis()) {
                 string += "<br><br>Supporter: <font color=black><b>" + i.supporter_count + "</b> &nbsp; " + i.name + "</font>";
             }
-            statusLine.setText(Html.fromHtml(getStatusText() + "<br>" + string+"<br>"));
+            statusLine.setText(Html.fromHtml(getStatusText() + "<br>" + string + "<br>"));
 
-            expandButton.setText(((int) initiative.getConcurrentInis().size() + 1) + "\n  ");
-
+            expandButtonSetText();
             expandview = true;
         }
     }

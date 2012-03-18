@@ -30,6 +30,8 @@ import de.quadrillenschule.liquidroid.gui.AreasListAdapter;
 import de.quadrillenschule.liquidroid.gui.LQFBInstancesListAdapter;
 import de.quadrillenschule.liquidroid.model.LQFBInstance;
 import de.quadrillenschule.liquidroid.model.LQFBInstances;
+import de.quadrillenschule.liquidroid.model.MultiInstanceInitiativen;
+import de.quadrillenschule.liquidroid.model.RefreshInisListThread;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -38,7 +40,7 @@ import java.util.Date;
  *
  * @author andi
  */
-public class AreasTabActivity extends Activity implements LQFBInstanceChangeListener, AdapterView.OnItemSelectedListener {
+public class AreasTabActivity extends Activity implements LQFBInstanceChangeListener, AdapterView.OnItemSelectedListener, RefreshInisListThread.RefreshInisListListener {
 
     private AreasListAdapter areasListAdapter;
     private ProgressDialog progressDialog;
@@ -130,7 +132,7 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
         switch (item.getItemId()) {
-              case R.id.prefs:
+            case R.id.prefs:
                 startActivity(new Intent(this, GlobalPrefsActivity.class));
                 return true;
             case R.id.refresh_areaslist:
@@ -159,60 +161,19 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
                 li.pauseDownload = false;
             }
         }
-        RefreshAreasListThread ralt = new RefreshAreasListThread(force, this);
-        ralt.start();
+        RefreshInisListThread rilt = new RefreshInisListThread(force, this, handler, ((LiqoidApplication) getApplication()));
+        rilt.start();
+        //   RefreshAreasListThread ralt = new RefreshAreasListThread(force, this);
+        //  ralt.start();
     }
 
-    private class RefreshAreasListThread extends Thread {
+    public void finishedRefreshInisList(MultiInstanceInitiativen newInis) {
+        areasListAdapter = new AreasListAdapter(this, ((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance().areas, R.id.areasList);
 
-        boolean download;
-        AreasTabActivity parent;
 
-        public RefreshAreasListThread(boolean download, AreasTabActivity parent) {
-            this.download = download;
-            this.parent = parent;
 
-        }
-
-        @Override
-        public void run() {
-            handler.sendEmptyMessage(START_DOWNLOAD);
-
-            for (LQFBInstance myinstance : ((LiqoidApplication) getApplication()).lqfbInstances) {
-                currentDownloadInstance = myinstance;
-                if (myinstance.willDownloadAreas(((LiqoidApplication) getApplication()).cachedAPI1Queries, download)) {
-                    handler.sendEmptyMessage(DOWNLOADING);
-                }
-                int retrycounter = 0;
-                int maxretries = 4;
-                boolean instancedownload = download;
-                if (myinstance.pauseDownload) {
-                    maxretries = 0;
-                    instancedownload = false;
-                }
-                while ((retrycounter <= maxretries) && (myinstance.downloadAreas(((LiqoidApplication) getApplication()).cachedAPI1Queries, instancedownload, myinstance.pauseDownload)) < 0) {
-
-                    handler.sendEmptyMessage(DOWNLOAD_ERROR);
-                    try {
-                        this.sleep((2 ^ retrycounter) * 1000);
-                        retrycounter++;
-                    } catch (InterruptedException ex) {
-                    }
-                    handler.sendEmptyMessage(DOWNLOAD_RETRY);
-                }
-
-                if (retrycounter >= maxretries) {
-                    myinstance.pauseDownload = true;
-                }
-            }
-            areasListAdapter = new AreasListAdapter(parent, ((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance().areas, R.id.areasList);
-
-            findViewById(R.id.areasList).refreshDrawableState();
-            handler.sendEmptyMessage(0);
-        }
     }
-    private static int FINISH_OK = 0, DOWNLOADING = 1, DOWNLOAD_ERROR = -1, DOWNLOAD_RETRY = 2, START_DOWNLOAD = 3;
-    private Handler handler = new Handler() {
+       private Handler handler = new Handler() {
 
         @Override
         public void handleMessage(Message msg) {
@@ -228,20 +189,20 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
             }
 
             ((LiqoidApplication) getApplication()).statusLineText(prefix + getApplicationContext().getString(R.string.dataage) + ": " + dataagestr);
-            if ((msg.what == START_DOWNLOAD)) {
+            if ((msg.what == RefreshInisListThread.UPDATING)) {
                 progressDialog = ProgressDialog.show(AreasTabActivity.this, "",
                         getApplicationContext().getString(R.string.updating) + "...", true);
 
             }
             if (currentDownloadInstance != null) {
                 //update progressdialog
-                if ((msg.what == DOWNLOADING) && (!currentDownloadInstance.pauseDownload)) {
+                if ((msg.what == RefreshInisListThread.DOWNLOADING) && (!currentDownloadInstance.pauseDownload)) {
                     progressDialog.setMessage(
                             getApplicationContext().getString(R.string.downloading) + "\n" + ((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance().getName() + "...");
 
                 }
             }
-            if (msg.what == FINISH_OK) {
+            if (msg.what == RefreshInisListThread.FINISH_OK) {
                 try {
                     progressDialog.cancel();
                 } catch (Exception e) {
@@ -252,11 +213,11 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
                 listview.setAdapter(areasListAdapter);
             }
             if (progressDialog != null) {
-                if (msg.what == DOWNLOAD_ERROR) {
+                if (msg.what == RefreshInisListThread.DOWNLOAD_ERROR) {
                     progressDialog.setMessage(getApplicationContext().getString(R.string.download_error));
 
                 }
-                if (msg.what == DOWNLOAD_RETRY) {
+                if (msg.what == RefreshInisListThread.DOWNLOAD_RETRY) {
                     progressDialog.setMessage(getApplicationContext().getString(R.string.downloading));
 
                 }
@@ -266,15 +227,19 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
     };
 
     public void lqfbInstanceChanged() {
-        refreshAreasList(false);
+        //  refreshAreasList(false);
+        areasListAdapter = new AreasListAdapter(this, ((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance().areas, R.id.areasList);
+        final ListView listview = (ListView) findViewById(R.id.areasList);
+        listview.setAdapter(areasListAdapter);
+
     }
 
     //Instances Spinner item selected
     public void onItemSelected(AdapterView<?> arg0, View arg1, int i, long arg3) {
         LQFBInstances ls = ((LiqoidApplication) getApplication()).lqfbInstances;
-        if (ls.indexOf(ls.getSelectedInstance()) != i) {
+       // if (ls.indexOf(ls.getSelectedInstance()) != i) {
             ls.setSelectedInstance(i);
             ((LiqoidApplication) getApplication()).fireLQFBInstanceChangedEvent();
-        }
+       // }
     }
 }
