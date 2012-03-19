@@ -11,6 +11,6 @@ package de.quadrillenschule.liquidroid;
  */
 public interface LQFBInstanceChangeListener {
 
-    public void lqfbInstanceChanged();
+    public void onlyUpdateAreasListFromMemory();
 
 }

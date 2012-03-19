@@ -23,6 +23,12 @@
     <string name="noareasselected">Um Themen anzuzeigen,\nmusst Du vorher\nThemengebiete auswählen.</string>
     <string name="prefs">Einstellungen</string>
     <string name="dateformat">dd.MM.yy HH:mm</string>
+    <string name="projecthome">Zur Projektseite</string>
+    <string name="projecthomeurl">http://wiki.piratenpartei.de/Benutzer:Andizo/Liqoid</string>
+    <string name="userguide">Zur guided Tour</string>
+    <string name="userguideurl">http://wiki.piratenpartei.de/Benutzer:Andizo/Liqoid/GuidedTour</string>
+    <string name="addinstance">Deine Instanz hinzufügen</string>
+    <string name="addinstanceurl">http://wiki.piratenpartei.de/Benutzer:Andizo/Liqoid/Instanzen</string>
 
 
 </resources>

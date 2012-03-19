@@ -11,7 +11,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.gesture.GestureOverlayView;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -22,8 +21,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup.LayoutParams;
-import android.widget.ImageView;
 import android.widget.ListView;
 import de.quadrillenschule.liquidroid.gui.InitiativenListAdapter;
 import de.quadrillenschule.liquidroid.gui.IssueItemView;
@@ -60,18 +57,18 @@ public class InitiativesTabActivity extends Activity implements RefreshInisListT
         GestureOverlayView gestures = (GestureOverlayView) findViewById(R.id.allinisgestures);
         gestures.setGestureVisible(false);
         gestures.addOnGesturePerformedListener((LiqoidMainActivity) getParent());
-        if ((inisListAdapter == null) && ((LiqoidApplication)getApplication()).dataIntegrityCheck()) {
+      /*  if ((inisListAdapter == null) && ((LiqoidApplication) getApplication()).dataIntegrityCheck()) {
             createInisListAdapter();
         } else {
             LQFBInstances.selectionUpdatesForRefresh = true;
         }
-        ;
+        ;*/
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (((LiqoidApplication)getApplication()).dataIntegrityCheck() && (inisListAdapter == null)) {
+        if (((LiqoidApplication) getApplication()).dataIntegrityCheck() && (inisListAdapter == null)) {
             createInisListAdapter();
 
         }
@@ -83,7 +80,7 @@ public class InitiativesTabActivity extends Activity implements RefreshInisListT
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        if (((LiqoidApplication)getApplication()).dataIntegrityCheck() && (inisListAdapter == null)) {
+        if (((LiqoidApplication) getApplication()).dataIntegrityCheck() && (inisListAdapter == null)) {
             createInisListAdapter();
 
         }/*
@@ -110,8 +107,6 @@ public class InitiativesTabActivity extends Activity implements RefreshInisListT
 
 
     }
-
-   
 
     public void refreshInisList(boolean download) {
         LQFBInstances.selectionUpdatesForRefresh = false;
@@ -223,16 +218,8 @@ public class InitiativesTabActivity extends Activity implements RefreshInisListT
 
                 return true;
             case R.id.about:
+                ((LiqoidApplication) getApplication()).aboutDialog(this).show();
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setMessage(getString(R.string.fullcredits)).setCancelable(false).setNegativeButton(":)", new DialogInterface.OnClickListener() {
-
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
-                AlertDialog alert = builder.create();
-                alert.show();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -316,9 +303,6 @@ public class InitiativesTabActivity extends Activity implements RefreshInisListT
         return i.getDateForNextEvent().getTime();
     }
     public static final int GREY_COLOR = 0, ORANGE_COLOR = 1, RED_COLOR = 2, YELLOW_COLOR = 3;
-
-   
-
 
     public void finishedRefreshInisList(MultiInstanceInitiativen newInis) {
         allInis = newInis;

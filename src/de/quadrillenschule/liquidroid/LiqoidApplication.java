@@ -4,9 +4,14 @@
  */
 package de.quadrillenschule.liquidroid;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Application;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -58,7 +63,7 @@ public class LiqoidApplication extends Application {
 
     void fireLQFBInstanceChangedEvent() {
         for (LQFBInstanceChangeListener l : lqfbInstanceChangeListeners) {
-            l.lqfbInstanceChanged();
+            l.onlyUpdateAreasListFromMemory();
 
         }
     }
@@ -84,5 +89,31 @@ public class LiqoidApplication extends Application {
     public void toast(Context context, CharSequence charseq) {
         Toast mytoast = Toast.makeText(context, charseq, Toast.LENGTH_LONG);
         mytoast.show();
+    }
+
+    public AlertDialog aboutDialog(final Activity context){
+     AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setMessage(getString(R.string.fullcredits)).setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                }).setNeutralButton(R.string.projecthome, new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.projecthomeurl)));
+                        myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+                        context.startActivity(myIntent);
+                    }
+                }).setPositiveButton(R.string.userguide, new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.userguideurl)));
+                        myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+                        context.startActivity(myIntent);
+                    }
+                });
+                AlertDialog alert = builder.create();
+                return alert;
     }
 }

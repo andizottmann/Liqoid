@@ -23,7 +23,14 @@
     <string name="noareasselected">To view issues, you have to select areas first.</string>
     <string name="prefs">Settings</string>
     <string name="dateformat">yy-MM-dd HH:mm</string>
-    <string name="fullcredits">Hello this is Liqoid V 0.1.1!\n Developer: @andizottmann\n All CC-BY-SA 3.0 DE\n
+    <string name="projecthome">To project home</string>
+    <string name="projecthomeurl">http://wiki.piratenpartei.de/Benutzer:Andizo/Liqoid</string>
+    <string name="userguide">To guided tour</string>
+    <string name="userguideurl">http://wiki.piratenpartei.de/Benutzer:Andizo/Liqoid/GuidedTour</string>
+    <string name="addinstance">Add your instance</string>
+    <string name="addinstanceurl">http://wiki.piratenpartei.de/Benutzer:Andizo/Liqoid/Instanzen</string>
+    <string name="fullcredits">Hello this is Liqoid V 0.1.1!\n Developer: @andizottmann\n
+    All CC-BY-SA 3.0 DE\n
     Thanks to:\n@nlohmann @darkbln @viirus42 @LarsUlrich92 @Bocki_NBG  @threehoursleep @PiratenCup @mockfrog @Iceman
     @bridgerdier @hubx @larswestphal @Piratonym Tokamak  @mon3yp3nny
     </string>

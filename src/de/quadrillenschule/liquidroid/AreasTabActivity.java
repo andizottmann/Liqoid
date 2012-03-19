@@ -5,9 +5,7 @@
 package de.quadrillenschule.liquidroid;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.gesture.GestureOverlayView;
@@ -23,6 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -64,6 +63,17 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
         final Spinner instanceSpinner = (Spinner) findViewById(R.id.instanceSelector);
         adapter = new LQFBInstancesListAdapter(this, ((LiqoidApplication) getApplication()).lqfbInstances, android.R.layout.simple_spinner_item, this);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        //   TextView tv=new TextView(instanceSpinner.getContext());
+        ((Button) findViewById(R.id.addinstance)).setText(getApplication().getString(R.string.addinstance)+"...");
+        ((Button) findViewById(R.id.addinstance)).setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View arg0) {
+                Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getApplication().getString(R.string.addinstanceurl)));
+                    myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+                    startActivity(myIntent);
+            }
+        });
+        //   instanceSpinner.addView(tv);
         instanceSpinner.setAdapter(adapter);
         instanceSpinner.setOnItemSelectedListener(this);
         int i = ((LiqoidApplication) getApplication()).lqfbInstances.indexOf(((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance());
@@ -75,7 +85,7 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
     public void onResume() {
         super.onResume();
         if ((((LiqoidApplication) getApplication()).dataIntegrityCheck()) && (areasListAdapter == null)) {
-            lqfbInstanceChanged();
+            onlyUpdateAreasListFromMemory();
         }
         if (!(((LiqoidApplication) getApplication()).dataIntegrityCheck()) && (areasListAdapter == null)) {
             refreshAreasList(false);
@@ -87,7 +97,7 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         if ((((LiqoidApplication) getApplication()).dataIntegrityCheck()) && (areasListAdapter == null)) {
-            lqfbInstanceChanged();
+            onlyUpdateAreasListFromMemory();
         }
 
     }
@@ -115,7 +125,6 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
                     String url = ((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance().getWebUrl() + "area/show/" + areaid + ".html";
                     Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                     myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-
                     startActivity(myIntent);
                 } catch (Exception e) {
                     return false;
@@ -146,15 +155,8 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
                 return true;
             case R.id.about:
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setMessage(getString(R.string.fullcredits)).setCancelable(false).setNegativeButton(":)", new DialogInterface.OnClickListener() {
 
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
-                AlertDialog alert = builder.create();
-                alert.show();
+                ((LiqoidApplication) getApplication()).aboutDialog(this).show();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -232,7 +234,7 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
         }
     };
 
-    public void lqfbInstanceChanged() {
+    public void onlyUpdateAreasListFromMemory() {
         //  refreshAreasList(false);
         areasListAdapter = new AreasListAdapter(this, ((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance().areas, R.id.areasList);
         final ListView listview = (ListView) findViewById(R.id.areasList);
