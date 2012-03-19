@@ -6,6 +6,13 @@
 	android:orientation="vertical"
 	xmlns:android="http://schemas.android.com/apk/res/android">
 
+   
+    <Button
+        android:id="@+id/addinstance"
+        android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+        android:text=" "
+            />
     <Spinner
 	 android:id="@+id/instanceSelector"
 	android:layout_width="match_parent"
@@ -13,13 +20,6 @@
          android:prompt="@string/instances_prompt"
           android:padding="4dp"
           android:hapticFeedbackEnabled="true" />
-     <Button
-        android:id="@+id/addinstance"
-        android:layout_width="match_parent"
-	android:layout_height="wrap_content"
-        android:text=" "
-            />
-
   
     <android.gesture.GestureOverlayView
     xmlns:android="http://schemas.android.com/apk/res/android"

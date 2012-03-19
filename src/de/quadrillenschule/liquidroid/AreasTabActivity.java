@@ -9,6 +9,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.gesture.GestureOverlayView;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -65,6 +66,7 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         //   TextView tv=new TextView(instanceSpinner.getContext());
         ((Button) findViewById(R.id.addinstance)).setText(getApplication().getString(R.string.addinstance)+"...");
+         ((Button) findViewById(R.id.addinstance)).setBackgroundColor(Color.argb(255, 245, 245, 245));
         ((Button) findViewById(R.id.addinstance)).setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View arg0) {
@@ -73,7 +75,6 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
                     startActivity(myIntent);
             }
         });
-        //   instanceSpinner.addView(tv);
         instanceSpinner.setAdapter(adapter);
         instanceSpinner.setOnItemSelectedListener(this);
         int i = ((LiqoidApplication) getApplication()).lqfbInstances.indexOf(((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance());
