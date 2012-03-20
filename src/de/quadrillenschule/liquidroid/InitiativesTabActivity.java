@@ -133,6 +133,9 @@ public class InitiativesTabActivity extends Activity implements RefreshInisListT
                     prefix += "Offline - ";
                 }
             }
+            if (!ralt.dataComplete){
+            prefix+="Data NOT complete - ";
+            }
             ((LiqoidApplication) getApplication()).statusLineText(prefix + getApplicationContext().getString(R.string.dataage) + ": " + dataagestr);
 
             //Updating status of progressdialog

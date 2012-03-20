@@ -20,6 +20,7 @@ public class RefreshInisListThread extends Thread {
     public LQFBInstance currentInstance;
     public String currentlyDownloadedInstance = "", currentlyDownloadedArea = "";
     public long overallDataAge = 0;
+    public boolean dataComplete = true;
     public static int FINISH_OK = 0, DOWNLOADING = 1, DOWNLOAD_ERROR = -1, DOWNLOAD_RETRY = 2, UPDATING = 4, DOWNLOADING_INSTANCE = 5;
     RefreshInisListListener mylistener;
 
@@ -69,6 +70,7 @@ public class RefreshInisListThread extends Thread {
             }
             if (retrycounter >= maxretries) {
                 myInstance.pauseDownload = true;
+
             }
         }
     }
@@ -76,7 +78,7 @@ public class RefreshInisListThread extends Thread {
     @Override
     public void run() {
         progressHandler.sendEmptyMessage(UPDATING);
-
+        dataComplete = true;
         updateAreas();
         overallDataAge = System.currentTimeMillis();
         //   inisListAdapter = null;
@@ -119,7 +121,13 @@ public class RefreshInisListThread extends Thread {
 
                 }
                 if (retrycounter >= maxretries) {
+                    if (!myInstance.pauseDownload) {
+                        dataComplete = false;
+                    }
                     myInstance.pauseDownload = true;
+
+                } else {
+                    myInstance.pauseDownload = false;
                 }
                 if (overallDataAge > app.cachedAPI1Queries.dataage) {
                     overallDataAge = app.cachedAPI1Queries.dataage;
