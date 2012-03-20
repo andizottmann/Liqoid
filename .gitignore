@@ -2,5 +2,6 @@ bin/classes
 bin/res
 bin/*
 !bin/Liqoid-debug.apk
+!bin/Liqoid-release.apk
 gen/
 nbandroid/

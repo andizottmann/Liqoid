@@ -65,14 +65,14 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
         adapter = new LQFBInstancesListAdapter(this, ((LiqoidApplication) getApplication()).lqfbInstances, android.R.layout.simple_spinner_item, this);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         //   TextView tv=new TextView(instanceSpinner.getContext());
-        ((Button) findViewById(R.id.addinstance)).setText(getApplication().getString(R.string.addinstance)+"...");
-         ((Button) findViewById(R.id.addinstance)).setBackgroundColor(Color.argb(255, 245, 245, 245));
+        ((Button) findViewById(R.id.addinstance)).setText(getApplication().getString(R.string.addinstance) + "...");
+        ((Button) findViewById(R.id.addinstance)).setBackgroundColor(Color.argb(255, 245, 245, 245));
         ((Button) findViewById(R.id.addinstance)).setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View arg0) {
                 Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getApplication().getString(R.string.addinstanceurl)));
-                    myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-                    startActivity(myIntent);
+                myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+                startActivity(myIntent);
             }
         });
         instanceSpinner.setAdapter(adapter);

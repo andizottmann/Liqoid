@@ -72,6 +72,11 @@ public class InitiativesTabActivity extends Activity implements RefreshInisListT
             createInisListAdapter();
 
         }
+         if (!((LiqoidApplication) getApplication()).dataIntegrityCheck() && (inisListAdapter == null)) {
+           refreshInisList(false);
+           LQFBInstances.selectionUpdatesForRefresh=false;
+
+        }
         if (LQFBInstances.selectionUpdatesForRefresh) {
             refreshInisList(false);
         }
