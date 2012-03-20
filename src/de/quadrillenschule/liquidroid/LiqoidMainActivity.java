@@ -41,26 +41,25 @@ public class LiqoidMainActivity extends TabActivity implements GestureOverlayVie
 
         Intent intent;  // Reusable Intent for each tab
         intent = new Intent().setClass(this, UpcomingTabActivity.class);
-        spec = tabHost.newTabSpec("upcoming").setIndicator(res.getString(R.string.tab_upcoming),
-                res.getDrawable(R.drawable.ic_tab_upcoming)).setContent(intent);
+        spec = tabHost.newTabSpec("upcoming").setIndicator(res.getString(R.string.tab_upcoming)).setContent(intent);
         tabHost.addTab(spec);
 
         intent = new Intent().setClass(this, RecentTabActivity.class);
-        spec = tabHost.newTabSpec("recent").setIndicator(res.getString(R.string.tab_recent),
-                res.getDrawable(R.drawable.ic_tab_recent)).setContent(intent);
+        spec = tabHost.newTabSpec("recent").setIndicator(res.getString(R.string.tab_recent)).setContent(intent);
         tabHost.addTab(spec);
 
         intent = new Intent().setClass(this, InitiativesTabActivity.class);
-        spec = tabHost.newTabSpec("inis").setIndicator(res.getString(R.string.tab_inis),
-                res.getDrawable(R.drawable.ic_tab_inis)).setContent(intent);
+        spec = tabHost.newTabSpec("inis").setIndicator(res.getString(R.string.tab_inis)).setContent(intent);
         tabHost.addTab(spec);
 
         intent = new Intent().setClass(this, AreasTabActivity.class);
-        spec = tabHost.newTabSpec("areas").setIndicator(res.getString(R.string.tab_areas),
-                res.getDrawable(R.drawable.ic_tab_areas)).setContent(intent);
+        spec = tabHost.newTabSpec("areas").setIndicator(res.getString(R.string.tab_areas)).setContent(intent);
         tabHost.addTab(spec);
 
         tabHost.setCurrentTab(3);
+        for (int i=0;i<tabHost.getTabWidget().getChildCount();i++){
+        tabHost.getTabWidget().getChildAt(i).getLayoutParams().height =40;
+        }
         lastTab = 3;
         lastTabView = tabHost.getCurrentView();
 

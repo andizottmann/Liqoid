@@ -4,6 +4,8 @@
  */
 package de.quadrillenschule.liquidroid;
 
+import android.os.Bundle;
+import android.widget.TextView;
 import de.quadrillenschule.liquidroid.gui.InitiativenListAdapter;
 import de.quadrillenschule.liquidroid.gui.RecentInitiativenListAdapter;
 import de.quadrillenschule.liquidroid.model.Initiative;
@@ -13,7 +15,11 @@ import de.quadrillenschule.liquidroid.model.Initiative;
  * @author andi
  */
 public class RecentTabActivity extends InitiativesTabActivity {
-
+ @Override
+    public void onCreate(Bundle icicle) {
+        super.onCreate(icicle);
+        ((TextView) findViewById(R.id.tabinis_title)).setText(R.string.tab_recent);
+    }
     @Override
     public void filterList() {
         if (filterOnlySelected) {

@@ -20,6 +20,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.TextView;
 import de.quadrillenschule.liquidroid.gui.InitiativenListAdapter;
 import de.quadrillenschule.liquidroid.gui.IssueItemView;
 import de.quadrillenschule.liquidroid.model.Area;
@@ -55,7 +56,9 @@ public class InitiativesTabActivity extends Activity implements RefreshInisListT
         GestureOverlayView gestures = (GestureOverlayView) findViewById(R.id.allinisgestures);
         gestures.setGestureVisible(false);
         gestures.addOnGesturePerformedListener((LiqoidMainActivity) getParent());
-       
+        ((TextView) findViewById(R.id.tabinis_title)).setText(R.string.tab_inis);
+
+
     }
 
     @Override

@@ -4,5 +4,5 @@
     <!-- item android:drawable="@drawable/ic_menu_agenda_green"
           android:state_selected="true" / -->
     <!-- When not selected, use white-->
-    <item android:drawable="@drawable/ic_menu_agenda" />
+    <!-- item android:drawable="@drawable/ic_menu_agenda" /-->
 </selector>

@@ -14,6 +14,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.Html;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
@@ -65,7 +66,7 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
         adapter = new LQFBInstancesListAdapter(this, ((LiqoidApplication) getApplication()).lqfbInstances, android.R.layout.simple_spinner_item, this);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         //   TextView tv=new TextView(instanceSpinner.getContext());
-        ((Button) findViewById(R.id.addinstance)).setText(getApplication().getString(R.string.addinstance) + "...");
+        ((Button) findViewById(R.id.addinstance)).setText(Html.fromHtml("<u>"+getApplication().getString(R.string.addinstance) + "...</u>"));
         ((Button) findViewById(R.id.addinstance)).setBackgroundColor(Color.argb(255, 245, 245, 245));
         ((Button) findViewById(R.id.addinstance)).setOnClickListener(new View.OnClickListener() {
 

@@ -4,22 +4,33 @@
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent"
 	android:orientation="vertical"
+        android:background="#fff5f5f5"
 	xmlns:android="http://schemas.android.com/apk/res/android">
-
-   
-    <Button
-        android:id="@+id/addinstance"
+    <TextView
         android:layout_width="match_parent"
 	android:layout_height="wrap_content"
-        android:text=" "
-            />
+        android:text="@string/tab_areas"
+        android:textColor="#009010"
+         android:gravity="center_vertical|center_horizontal"
+        android:textSize="20dp"     
+                />
+
     <Spinner
 	 android:id="@+id/instanceSelector"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
          android:prompt="@string/instances_prompt"
-         
+
           android:hapticFeedbackEnabled="true" />
+    <Button
+        android:id="@+id/addinstance"
+        android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+        android:text=" "
+        android:textColor="#ff5050ff"
+      
+            />
+ 
   
     <android.gesture.GestureOverlayView
     xmlns:android="http://schemas.android.com/apk/res/android"
