@@ -29,6 +29,7 @@
     <string name="userguideurl">http://wiki.piratenpartei.de/Benutzer:Andizo/Liqoid/GuidedTour</string>
     <string name="addinstance">Deine Instanz hinzufügen</string>
     <string name="addinstanceurl">http://wiki.piratenpartei.de/Benutzer:Andizo/Liqoid/Instanzen</string>
+<string name="datanotcomplete">Daten NICHT vollständig</string>
 
 
 </resources>

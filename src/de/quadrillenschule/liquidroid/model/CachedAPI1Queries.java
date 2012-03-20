@@ -36,7 +36,6 @@ public class CachedAPI1Queries {
 
     File cacheFolder;
     public String url, api;
-    public boolean wasReadFromNetwork = false;
     public long dataage = 0;
 
     public CachedAPI1Queries(File cacheFolder) {
@@ -64,7 +63,7 @@ public class CachedAPI1Queries {
     }
 
     public void storeInCache(InputStream is, String url) {
-        if (wasReadFromNetwork) {
+     
             File myfile = new File(cacheFolder, url.hashCode() + ".xml");
             try {
                 String endswith = ">";
@@ -85,7 +84,7 @@ public class CachedAPI1Queries {
                 }
             } catch (Exception e) {
             }
-        }
+        
     }
 
     public boolean cacheExists(String purl) {
@@ -206,7 +205,6 @@ public class CachedAPI1Queries {
         }
         HttpPost httpPost = new HttpPost(url);
         HttpResponse response = (HttpResponse) httpClient.execute(httpPost);
-        wasReadFromNetwork = true;
         dataage = System.currentTimeMillis();
 
         storeInCache(response.getEntity().getContent(), url);

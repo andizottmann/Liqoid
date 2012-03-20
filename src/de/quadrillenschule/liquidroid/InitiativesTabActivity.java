@@ -5,9 +5,7 @@
 package de.quadrillenschule.liquidroid;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.gesture.GestureOverlayView;
@@ -57,12 +55,7 @@ public class InitiativesTabActivity extends Activity implements RefreshInisListT
         GestureOverlayView gestures = (GestureOverlayView) findViewById(R.id.allinisgestures);
         gestures.setGestureVisible(false);
         gestures.addOnGesturePerformedListener((LiqoidMainActivity) getParent());
-      /*  if ((inisListAdapter == null) && ((LiqoidApplication) getApplication()).dataIntegrityCheck()) {
-            createInisListAdapter();
-        } else {
-            LQFBInstances.selectionUpdatesForRefresh = true;
-        }
-        ;*/
+       
     }
 
     @Override
@@ -72,9 +65,9 @@ public class InitiativesTabActivity extends Activity implements RefreshInisListT
             createInisListAdapter();
 
         }
-         if (!((LiqoidApplication) getApplication()).dataIntegrityCheck() && (inisListAdapter == null)) {
-           refreshInisList(false);
-           LQFBInstances.selectionUpdatesForRefresh=false;
+        if (!((LiqoidApplication) getApplication()).dataIntegrityCheck() && (inisListAdapter == null)) {
+            refreshInisList(false);
+            LQFBInstances.selectionUpdatesForRefresh = false;
 
         }
         if (LQFBInstances.selectionUpdatesForRefresh) {
@@ -88,10 +81,7 @@ public class InitiativesTabActivity extends Activity implements RefreshInisListT
         if (((LiqoidApplication) getApplication()).dataIntegrityCheck() && (inisListAdapter == null)) {
             createInisListAdapter();
 
-        }/*
-        if (LQFBInstances.selectionUpdatesForRefresh) {
-        refreshInisList(false);
-        }*/
+        }
     }
 
     void createInisListAdapter() {
@@ -133,8 +123,8 @@ public class InitiativesTabActivity extends Activity implements RefreshInisListT
                     prefix += "Offline - ";
                 }
             }
-            if (!ralt.dataComplete){
-            prefix+="Data NOT complete - ";
+            if (!ralt.dataComplete) {
+                prefix += getString(R.string.datanotcomplete) + " - ";
             }
             ((LiqoidApplication) getApplication()).statusLineText(prefix + getApplicationContext().getString(R.string.dataage) + ": " + dataagestr);
 

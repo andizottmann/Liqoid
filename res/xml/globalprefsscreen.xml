@@ -13,7 +13,7 @@
         />
         <ListPreference
             android:key="redlimit"
-            android:title="Limit for orange indicator"
+            android:title="Limit for red indicator"
             android:summary="Define when issues are indicated."
             android:defaultValue="86400000"
             android:entries="@array/limitInDays"
@@ -21,7 +21,7 @@
         />
  <ListPreference
             android:key="orangelimit"
-            android:title="Limit for yellow indicator"
+            android:title="Limit for orange indicator"
             android:summary="Define when issues are indicated."
             android:defaultValue="259200000"
             android:entries="@array/limitInDays"
@@ -29,7 +29,7 @@
         />
          <ListPreference
             android:key="yellowlimit"
-            android:title="Limit for amber indicator"
+            android:title="Limit for yellow indicator"
             android:summary="Define when issues are indicated."
             android:defaultValue="432000000"
             android:entries="@array/limitInDays"

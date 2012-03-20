@@ -17,21 +17,21 @@
         android:key="second_category">
         <ListPreference
             android:key="redlimit"
-            android:title="Orange markieren ab"
+            android:title="Rot markieren ab"
              android:defaultValue="86400000"
             android:entries="@array/limitInDays"
             android:entryValues="@array/limitInDaysValues"
         />
  <ListPreference
             android:key="orangelimit"
-            android:title="Gelb markieren ab"
+            android:title="Orange markieren ab"
             android:defaultValue="259200000"
             android:entries="@array/limitInDays"
             android:entryValues="@array/limitInDaysValues"
         />
          <ListPreference
             android:key="yellowlimit"
-            android:title="Senfgelb markieren ab"
+            android:title="Gelb markieren ab"
             android:defaultValue="432000000"
             android:entries="@array/limitInDays"
             android:entryValues="@array/limitInDaysValues"
