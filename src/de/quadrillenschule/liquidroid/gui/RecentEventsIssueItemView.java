@@ -28,6 +28,10 @@ public class RecentEventsIssueItemView extends IssueItemView {
         return " <b><font color=black> " + initiative.lastEvent() + "</font></b>  <font color=blue>" + formatter.format(initiative.dateForLastEvent()) + "</font> <b><font color=black>" + initiative.getLqfbInstance().getShortName() + "</font></b>";
     }
 
+   @Override
+    protected long itemSpecificDelta() {
+        return System.currentTimeMillis() - initiative.dateForLastEvent().getTime();
+    }
     @Override
     protected int itemSpecificColorcode() {
         long delta = System.currentTimeMillis() - initiative.dateForLastEvent().getTime();

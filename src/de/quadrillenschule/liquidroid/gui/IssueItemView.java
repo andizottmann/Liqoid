@@ -20,6 +20,7 @@ import android.widget.TextView;
 import de.quadrillenschule.liquidroid.InitiativesTabActivity;
 import de.quadrillenschule.liquidroid.LiqoidApplication;
 import de.quadrillenschule.liquidroid.model.Initiative;
+import de.quadrillenschule.liquidroid.tools.Utils;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
@@ -83,6 +84,10 @@ public class IssueItemView extends LinearLayout implements OnClickListener {
         this.addView(contentContainer);
     }
 
+    protected long itemSpecificDelta() {
+        return System.currentTimeMillis() - initiative.issue_created.getTime();
+    }
+
     protected int itemSpecificColorcode() {
         long delta = System.currentTimeMillis() - initiative.issue_created.getTime();
         long oneday = 1000 * 60 * 60 * 24;
@@ -120,7 +125,7 @@ public class IssueItemView extends LinearLayout implements OnClickListener {
     private boolean expandview = false;
 
     public void expandButtonSetText() {
-        expandButton.setText("Alt\n" + ((int) initiative.getConcurrentInis().size() + 1) + "\n  ");
+        expandButton.setText(Utils.lessThanDays(itemSpecificDelta()));
 
     }
 

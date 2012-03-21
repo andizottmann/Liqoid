@@ -28,6 +28,10 @@ public class UpcomingEventsIssueItemView extends IssueItemView {
         return "<b><font color=black> " + initiative.nextEvent() + "</font></b>  <font color=blue>" + formatter.format(initiative.getDateForNextEvent()) + "</font>  <b><font color=black>  " + initiative.getLqfbInstance().getShortName() + "</font></b>";
     }
 
+     @Override
+    protected long itemSpecificDelta() {
+        return initiative.getDateForNextEvent().getTime() - System.currentTimeMillis();
+    }
     @Override
     protected int itemSpecificColorcode() {
         long delta = initiative.getDateForNextEvent().getTime() - System.currentTimeMillis();
