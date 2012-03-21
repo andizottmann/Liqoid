@@ -47,7 +47,7 @@ public class IssueItemView extends LinearLayout implements OnClickListener {
         myCheckBox = new CheckBox(activity, null, android.R.attr.starStyle);
         myCheckBox.setTextColor(Color.BLACK);
         myCheckBox.setBackgroundColor(Color.argb(255, 245, 245, 245));
-        myCheckBox.setText(initiative.name);
+        myCheckBox.setText(initiative.name+" ("+((int)initiative.getConcurrentInis().size()+1)+" Alt.)");
         myCheckBox.setChecked(initiative.getArea().getInitiativen().isIssueSelected(initiative.issue_id));
         myCheckBox.setOnClickListener(this);
         myCheckBox.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));

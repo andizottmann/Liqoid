@@ -35,8 +35,22 @@ public class LQFBInstances extends ArrayList<LQFBInstance> {
             }
         }
         if (toAdd.getDeveloperkey().equals("")) {
+            for (LQFBInstance lockedi : getLockedInstances()) {
+                if (lockedi.getShortName().equals(toAdd.getShortName())) {
+                    return false;
+                }
+            }
             return getLockedInstances().add(toAdd);
         } else {
+            LQFBInstance toRemove = null;
+            for (LQFBInstance lockedi : getLockedInstances()) {
+                if (lockedi.getShortName().equals(toAdd.getShortName())) {
+                    toRemove = lockedi;
+                }
+            }
+            if (toRemove != null) {
+                getLockedInstances().remove(toRemove);
+            }
             return super.add(toAdd);
         }
 

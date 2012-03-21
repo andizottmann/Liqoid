@@ -31,13 +31,13 @@
     <string name="addinstance">Deine Instanz hinzufügen</string>
     <string name="addinstanceurl">http://wiki.piratenpartei.de/Benutzer:Andizo/Liqoid/Instanzen</string>
     <string name="datanotcomplete">Daten NICHT vollständig</string>
-    <string name="menu_unlock_instance">Instanzen freigeben</string>
-    <string name="menu_lock_instance">Instanzen sperren</string>
+    <string name="menu_unlock_instance">Instanz freigeben</string>
+    <string name="menu_lock_instance">Instanz sperren</string>
     <string name="ok">Okey</string>
     <string name="cancel">Abbrechen</string>
     <string name="enterdeveloperkey">Developerkey eingeben</string>
     <string name="enterdeveloperkeyhints">Den Developerkey bekommst Du in der jeweilgen LQFB-Instanz. Dort meldest Du Dich an und kannst den key unter \"Einstellungen\" generieren.</string>
     <string name="resetpublicinstances">Zurücksetzen</string>
-     <string name="toinstance">zur Instanz</string>
+    <string name="toinstance">zur Instanz</string>
 
 </resources>

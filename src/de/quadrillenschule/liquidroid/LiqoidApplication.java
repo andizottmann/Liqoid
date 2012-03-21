@@ -156,11 +156,11 @@ public class LiqoidApplication extends Application {
                 lin.setDeveloperkey(textfield.getText().toString());
                 lqfbInstances.add(lin);
                 lqfbInstances.getLockedInstances().remove(lin);
-           }
-        }).setNegativeButton(R.string.cancel, null).setNeutralButton(R.string.toinstance,new DialogInterface.OnClickListener() {
+            }
+        }).setNegativeButton(R.string.cancel, null).setNeutralButton(R.string.toinstance, new DialogInterface.OnClickListener() {
 
             public void onClick(DialogInterface arg0, int arg1) {
-                   Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(lin.getWebUrl()));
+                Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(lin.getWebUrl()));
                 myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
                 textfield.getContext().startActivity(myIntent);
             }
