@@ -13,6 +13,7 @@ import de.quadrillenschule.liquidroid.LiqoidApplication;
  */
 public class RefreshInisListThread extends Thread {
 
+    public static boolean RUNS_SEMAPHORE=false;
     boolean download;
     MultiInstanceInitiativen allInititiativen;
     Handler progressHandler;
@@ -77,6 +78,8 @@ public class RefreshInisListThread extends Thread {
 
     @Override
     public void run() {
+        if (RUNS_SEMAPHORE){return;}
+        RUNS_SEMAPHORE=true;
         progressHandler.sendEmptyMessage(UPDATING);
         dataComplete = true;
         updateAreas();
@@ -141,6 +144,8 @@ public class RefreshInisListThread extends Thread {
         }
         mylistener.finishedRefreshInisList(allInititiativen);
         progressHandler.sendEmptyMessage(FINISH_OK);
+          RUNS_SEMAPHORE=false;
+
     }
 
     public interface RefreshInisListListener {

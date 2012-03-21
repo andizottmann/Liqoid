@@ -20,7 +20,6 @@ public class LQFBInstance {
     private String prefsName = "";
     private String apiUrl = "";
     private String webUrl = "";
-    private String developerkey = "";
     public Areas areas;
     private String apiversion = "";
     private String shortName = "";
@@ -36,8 +35,12 @@ public class LQFBInstance {
         this.name = name;
         this.apiUrl = apiUrl;
         this.webUrl = webUrl;
-        this.developerkey = developerkey;
         this.instancePrefs = la.getSharedPreferences(prefsName, Application.MODE_PRIVATE);
+        if (developerkey.equals("")) {
+            developerkey = getDeveloperkey();
+        }
+        setDeveloperkey(developerkey);
+
         areas = new Areas(instancePrefs);// areaParser.areas;
         this.apiversion = apiversion;
     }
@@ -48,8 +51,8 @@ public class LQFBInstance {
     }
 
     public boolean willDownloadAreas(CachedAPI1Queries cachedAPI1Queries, boolean forceNetwork) {
-            return !cachedAPI1Queries.cacheExists(cachedAPI1Queries.getApiURL("area", "", apiUrl, developerkey));
-       
+        return !cachedAPI1Queries.cacheExists(cachedAPI1Queries.getApiURL("area", "", apiUrl, getDeveloperkey()));
+
     }
 
     public int downloadAreas(CachedAPI1Queries cachedAPI1Queries, boolean forceNetwork, boolean noDownload) {
@@ -59,7 +62,7 @@ public class LQFBInstance {
         areaParser = new AreasFromAPIParser(instancePrefs);
         try {
             saxparser = factory.newSAXParser();
-            saxparser.parse(cachedAPI1Queries.queryInputStream(this,null,"area", "", apiUrl, developerkey,"" ,forceNetwork, noDownload), areaParser);
+            saxparser.parse(cachedAPI1Queries.queryInputStream(this, null, "area", "", apiUrl, getDeveloperkey(), "", forceNetwork, noDownload), areaParser);
             //   cachedAPI1Queries.storeInCache(areaParser.docBuff.toString());
             areas = areaParser.areas;
 
@@ -75,10 +78,10 @@ public class LQFBInstance {
         boolean retval = false;
         for (String state : states) {
 
-                if (!cachedAPI1Queries.cacheExists(cachedAPI1Queries.getApiURL("initiative", "&area_id=" + area.getId() + "&state=" + state, apiUrl, developerkey))) {
-                    retval = true;
-                }
-           
+            if (!cachedAPI1Queries.cacheExists(cachedAPI1Queries.getApiURL("initiative", "&area_id=" + area.getId() + "&state=" + state, apiUrl, getDeveloperkey()))) {
+                retval = true;
+            }
+
         }
         return retval;
     }
@@ -93,7 +96,7 @@ public class LQFBInstance {
         for (String state : states) {
             try {
                 saxparser = factory.newSAXParser();
-                saxparser.parse(cachedAPI1Queries.queryInputStream(this,area,"initiative", "&area_id=" + area.getId() + "&state=" + state, apiUrl, developerkey, state, forceNetwork, noDownload), iniParser);
+                saxparser.parse(cachedAPI1Queries.queryInputStream(this, area, "initiative", "&area_id=" + area.getId() + "&state=" + state, apiUrl, getDeveloperkey(), state, forceNetwork, noDownload), iniParser);
             } catch (Exception e) {
                 return -1;
             }
@@ -148,14 +151,15 @@ public class LQFBInstance {
      * @return the developerkey
      */
     public String getDeveloperkey() {
-        return developerkey;
+        return instancePrefs.getString("developerkey", "");
     }
 
     /**
      * @param developerkey the developerkey to set
      */
     public void setDeveloperkey(String developerkey) {
-        this.developerkey = developerkey;
+        instancePrefs.edit().putString("developerkey", developerkey).commit();
+
     }
 
     /**
@@ -197,15 +201,16 @@ public class LQFBInstance {
      * @return the maxIni
      */
     public int getMaxIni() {
-       return instancePrefs.getInt("max_ini", 0);
-       
+        return instancePrefs.getInt("max_ini", 0);
+
     }
 
     /**
      * @param maxIni the maxIni to set
      */
     public void setMaxIni(int maxIni) {
-        if (maxIni>getMaxIni())
-       instancePrefs.edit().putInt("max_ini", maxIni).commit();
+        if (maxIni > getMaxIni()) {
+            instancePrefs.edit().putInt("max_ini", maxIni).commit();
+        }
     }
 }

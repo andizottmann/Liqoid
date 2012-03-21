@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import de.quadrillenschule.liquidroid.model.LQFBInstance;
 import de.quadrillenschule.liquidroid.model.LQFBInstances;
+import java.util.ArrayList;
 
 /**
  *
@@ -17,7 +18,7 @@ import de.quadrillenschule.liquidroid.model.LQFBInstances;
  */
 public class LQFBInstancesListAdapter extends ArrayAdapter<LQFBInstance> {
   NoFilter noFilter;
-    public LQFBInstancesListAdapter(Context pcontext, LQFBInstances values, int viewId, Activity activity) {
+    public LQFBInstancesListAdapter(Context pcontext, ArrayList<LQFBInstance> values, int viewId, Activity activity) {
         super(pcontext,viewId, values);
       
     }

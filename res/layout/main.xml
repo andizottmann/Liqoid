@@ -3,7 +3,6 @@
     android:id="@android:id/tabhost"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-        
         android:background="#000000"
          >
   
@@ -36,6 +35,7 @@
             android:id="@android:id/tabs"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:tabStripEnabled="false"
             />
         <FrameLayout
             android:id="@android:id/tabcontent"

@@ -31,6 +31,14 @@
     <string name="addinstance">Add your instance</string>
     <string name="addinstanceurl">http://wiki.piratenpartei.de/Benutzer:Andizo/Liqoid/Instanzen</string>
     <string name="datanotcomplete">Data NOT complete</string>
+    <string name="menu_unlock_instance">Unlock instance</string>
+    <string name="menu_lock_instance">Lock instance</string>
+    <string name="ok">Ok</string>
+    <string name="cancel">Cancel</string>
+    <string name="enterdeveloperkey">Enter Developerkey</string>
+    <string name="enterdeveloperkeyhints">The Developerkey is generated from LQFB, see Settings there.</string>
+    <string name="resetpublicinstances">Restore public instances</string>
+    <string name="toinstance">To instance</string>
     <string name="fullcredits">Hello this is Liqoid V 0.1.2!\n Developer: @andizottmann\n
     All CC-BY-SA 3.0 DE\n
     Thanks to:\n@nlohmann @darkbln @viirus42 @LarsUlrich92 @Bocki_NBG  @threehoursleep @PiratenCup @mockfrog @Iceman

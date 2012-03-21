@@ -3,6 +3,12 @@
     <item android:id="@+id/refresh_areaslist"
           android:icon="@drawable/ic_menu_refresh"
           android:title="@string/menu_refresh"/>
+    <item android:id="@+id/unlock_instance"
+          android:icon="@drawable/ic_menu_login"
+          android:title="@string/menu_unlock_instance"/>
+          <item android:id="@+id/lock_instance"
+          android:icon="@drawable/ic_menu_block"
+          android:title="@string/menu_lock_instance"/>
     <item android:id="@+id/prefs"
           android:icon="@drawable/ic_menu_manage"
           android:title="@string/prefs"/>

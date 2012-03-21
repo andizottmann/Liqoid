@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.preference.PreferenceManager;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import de.quadrillenschule.liquidroid.model.Area;
@@ -67,9 +68,10 @@ public class LiqoidApplication extends Application {
 
         }
     }
- boolean dataIntegrityCheck() {
+
+    boolean dataIntegrityCheck() {
         try {
-            for (LQFBInstance myInstance:lqfbInstances) {
+            for (LQFBInstance myInstance : lqfbInstances) {
                 for (Area a : myInstance.areas) {
                     if (a.getInitiativen().size() > 0) {
                         return true;
@@ -81,39 +83,115 @@ public class LiqoidApplication extends Application {
         }
         return false;
     }
+
     public SharedPreferences getGlobalPreferences() {
         return PreferenceManager.getDefaultSharedPreferences(this);
-     }
+    }
     public static final String REDLIMIT_PREF = "redlimit", ORANGELIMIT_PREF = "orangelimit", YELLOWLIMIT_PREF = "yellowlimit";
 
     public void toast(Context context, CharSequence charseq) {
         Toast mytoast = Toast.makeText(context, charseq, Toast.LENGTH_LONG);
         mytoast.show();
     }
+    LQFBInstance tounLocki, toLocki;
 
-    public AlertDialog aboutDialog(final Activity context){
-     AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                builder.setMessage(getString(R.string.fullcredits)).setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+    ;
 
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                }).setNeutralButton(R.string.projecthome, new DialogInterface.OnClickListener() {
+    public AlertDialog unlockInstancesDialog(final Activity context) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
-                    public void onClick(DialogInterface arg0, int arg1) {
-                        Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.projecthomeurl)));
-                        myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-                        context.startActivity(myIntent);
-                    }
-                }).setPositiveButton(R.string.userguide, new DialogInterface.OnClickListener() {
+        builder.setSingleChoiceItems(lqfbInstances.getLockedInstancesNames(), -1, new DialogInterface.OnClickListener() {
 
-                    public void onClick(DialogInterface arg0, int arg1) {
-                        Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.userguideurl)));
-                        myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-                        context.startActivity(myIntent);
-                    }
-                });
-                AlertDialog alert = builder.create();
-                return alert;
+            public void onClick(DialogInterface arg0, int arg1) {
+                tounLocki = lqfbInstances.getLockedInstances().get(arg1);
+            }
+        }).setTitle(R.string.menu_unlock_instance).setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface arg0, int arg1) {
+                if (tounLocki != null) {
+                    unlockInstanceDialog(context, tounLocki).show();
+                    arg0.dismiss();
+                }
+            }
+        }).setNegativeButton(R.string.cancel, null).setNeutralButton(R.string.resetpublicinstances, new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface arg0, int arg1) {
+                lqfbInstances.initInstances();
+            }
+        });
+        ;
+        AlertDialog alert = builder.create();
+        return alert;
+    }
+
+    public AlertDialog lockInstancesDialog(final Activity context) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+        builder.setSingleChoiceItems(lqfbInstances.getUnLockedInstancesNames(), -1, new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface arg0, int arg1) {
+                toLocki = lqfbInstances.get(arg1);
+
+            }
+        }).setTitle(R.string.menu_lock_instance).setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface arg0, int arg1) {
+                toLocki.setDeveloperkey("");
+                lqfbInstances.remove(toLocki);
+                lqfbInstances.getLockedInstances().add(toLocki);
+                arg0.dismiss();
+            }
+        }).setNegativeButton(R.string.cancel, null);
+
+        AlertDialog alert = builder.create();
+        return alert;
+    }
+
+    public AlertDialog unlockInstanceDialog(final Activity context, final LQFBInstance lin) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        final EditText textfield = new EditText(context);
+        builder.setTitle(R.string.menu_unlock_instance).setTitle(R.string.enterdeveloperkey).setMessage(R.string.enterdeveloperkeyhints).setView(textfield).setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface arg0, int arg1) {
+                lin.setDeveloperkey(textfield.getText().toString());
+                lqfbInstances.add(lin);
+                lqfbInstances.getLockedInstances().remove(lin);
+           }
+        }).setNegativeButton(R.string.cancel, null).setNeutralButton(R.string.toinstance,new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface arg0, int arg1) {
+                   Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(lin.getWebUrl()));
+                myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+                textfield.getContext().startActivity(myIntent);
+            }
+        });
+        AlertDialog alert = builder.create();
+        return alert;
+    }
+
+    public AlertDialog aboutDialog(final Activity context) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setMessage(getString(R.string.fullcredits)).setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.cancel();
+            }
+        }).setNeutralButton(R.string.projecthome, new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface arg0, int arg1) {
+                Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.projecthomeurl)));
+                myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+                context.startActivity(myIntent);
+            }
+        }).setPositiveButton(R.string.userguide, new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface arg0, int arg1) {
+                Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.userguideurl)));
+                myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+                context.startActivity(myIntent);
+            }
+        });
+        AlertDialog alert = builder.create();
+        return alert;
     }
 }

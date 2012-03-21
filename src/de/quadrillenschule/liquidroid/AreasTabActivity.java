@@ -66,7 +66,7 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
         adapter = new LQFBInstancesListAdapter(this, ((LiqoidApplication) getApplication()).lqfbInstances, android.R.layout.simple_spinner_item, this);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         //   TextView tv=new TextView(instanceSpinner.getContext());
-        ((Button) findViewById(R.id.addinstance)).setText(Html.fromHtml("<u>"+getApplication().getString(R.string.addinstance) + "...</u>"));
+        ((Button) findViewById(R.id.addinstance)).setText(Html.fromHtml("<u>" + getApplication().getString(R.string.addinstance) + "...</u>"));
         ((Button) findViewById(R.id.addinstance)).setBackgroundColor(Color.argb(255, 245, 245, 245));
         ((Button) findViewById(R.id.addinstance)).setOnClickListener(new View.OnClickListener() {
 
@@ -155,9 +155,13 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
             case R.id.refresh_areaslist:
                 refreshAreasList(true);
                 return true;
+            case R.id.unlock_instance:
+                ((LiqoidApplication) getApplication()).unlockInstancesDialog(this).show();
+                 return true;
+            case R.id.lock_instance:
+                ((LiqoidApplication) getApplication()).lockInstancesDialog(this).show();
+                 return true;
             case R.id.about:
-
-
                 ((LiqoidApplication) getApplication()).aboutDialog(this).show();
                 return true;
             default:
@@ -247,9 +251,7 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
     //Instances Spinner item selected
     public void onItemSelected(AdapterView<?> arg0, View arg1, int i, long arg3) {
         LQFBInstances ls = ((LiqoidApplication) getApplication()).lqfbInstances;
-        // if (ls.indexOf(ls.getSelectedInstance()) != i) {
-        ls.setSelectedInstance(i);
+        ls.setSelectedInstance(((LiqoidApplication) getApplication()).lqfbInstances.get(i).getShortName());
         ((LiqoidApplication) getApplication()).fireLQFBInstanceChangedEvent();
-        // }
     }
 }
