@@ -9,7 +9,7 @@
     <TextView
         android:layout_width="match_parent"
 	android:layout_height="wrap_content"
-        android:text="@string/tab_areas"
+        android:text="@string/tab_areas_long"
         android:textColor="#009010"
          android:gravity="center_vertical|center_horizontal"
         android:textSize="20dp"     

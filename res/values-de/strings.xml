@@ -6,6 +6,7 @@
     <string name="tab_recent">Neueste Ereignisse</string>
     <string name="tab_inis">Neue Themen</string>
     <string name="tab_areas">Gebiete wählen</string>
+    <string name="tab_areas_long">Gebiete und Instanzen wählen</string>
     <string name="menu_refresh">Aktualisieren</string>
     <string name="downloading">Lade vom LQFB Server</string>
     <string name="download_ok">Download ok</string>
@@ -29,7 +30,7 @@
     <string name="userguideurl">http://wiki.piratenpartei.de/Benutzer:Andizo/Liqoid/GuidedTour</string>
     <string name="addinstance">Deine Instanz hinzufügen</string>
     <string name="addinstanceurl">http://wiki.piratenpartei.de/Benutzer:Andizo/Liqoid/Instanzen</string>
-<string name="datanotcomplete">Daten NICHT vollständig</string>
+    <string name="datanotcomplete">Daten NICHT vollständig</string>
 
 
 </resources>

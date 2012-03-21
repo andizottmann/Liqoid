@@ -6,6 +6,7 @@
     <string name="tab_recent">Recent</string>
     <string name="tab_inis">Newest Issues</string>
     <string name="tab_areas">Areas</string>
+    <string name="tab_areas_long">Choose Areas and Instances</string>
     <string name="menu_refresh">Refresh</string>
     <string name="downloading">Downloading from LQFB server</string>
     <string name="download_ok">Download successfull</string>
@@ -30,7 +31,7 @@
     <string name="addinstance">Add your instance</string>
     <string name="addinstanceurl">http://wiki.piratenpartei.de/Benutzer:Andizo/Liqoid/Instanzen</string>
     <string name="datanotcomplete">Data NOT complete</string>
-       <string name="fullcredits">Hello this is Liqoid V 0.1.1!\n Developer: @andizottmann\n
+    <string name="fullcredits">Hello this is Liqoid V 0.1.1!\n Developer: @andizottmann\n
     All CC-BY-SA 3.0 DE\n
     Thanks to:\n@nlohmann @darkbln @viirus42 @LarsUlrich92 @Bocki_NBG  @threehoursleep @PiratenCup @mockfrog @Iceman
     @bridgerdier @hubx @larswestphal @Piratonym Tokamak  @mon3yp3nny
