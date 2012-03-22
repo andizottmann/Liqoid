@@ -136,7 +136,13 @@ public class Issues extends MultiInstanceInitiativen {
             existingIssueIds.add((Integer) ini.issue_id);
             return super.add(ini);
         } else {
+
+            if (ini.id==this.findByIssueID((Integer)ini.issue_id).get(0).id){
+                this.remove(this.findByIssueID((Integer)ini.issue_id).get(0));
+                  return super.add(ini);
+            } else {
             this.findByIssueID((Integer)ini.issue_id).get(0).getConcurrentInis().add(ini);
+            }
         }
         return false;
     }
