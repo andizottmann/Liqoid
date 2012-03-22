@@ -42,7 +42,7 @@ public class LiqoidApplication extends Application {
     @Override
     public void onCreate() {
         Thread.setDefaultUncaughtExceptionHandler(new CrashLog(new File(getExternalFilesDir(null), "liqoid.log")));
-        cachedAPI1Queries = new CachedAPI1Queries(getExternalCacheDir());
+        cachedAPI1Queries = new CachedAPI1Queries(getExternalCacheDir(),getGlobalPreferences());
         lqfbInstances = new LQFBInstances(this);
         lqfbInstanceChangeListeners = new ArrayList<LQFBInstanceChangeListener>();
     }

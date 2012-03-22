@@ -4,6 +4,7 @@
  */
 package de.quadrillenschule.liquidroid.model;
 
+import android.content.SharedPreferences;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -37,9 +38,11 @@ public class CachedAPI1Queries {
     File cacheFolder;
     public String url, api;
     public long dataage = 0;
+    SharedPreferences globalPrefs;
 
-    public CachedAPI1Queries(File cacheFolder) {
+    public CachedAPI1Queries(File cacheFolder,SharedPreferences globalPrefs) {
         this.cacheFolder = cacheFolder;
+        this.globalPrefs=globalPrefs;
     }
 
     private String convertStreamToString(InputStream is) throws IOException {
@@ -103,12 +106,15 @@ public class CachedAPI1Queries {
 
         return !cacheExists(apiUrl);
     }
-    public static long MIN_CACHE_AGE = 1000 * 60 * 3, MAX_CACHE_AGE = 1000 * 60 * 60 * 24 * 3, MAX_FAV_CACHE_AGE = 1000 * 60 * 60 * 4;
+    public static long MIN_CACHE_AGE = 1000 * 60;
 
     public boolean needsDownload(String apiUrl, LQFBInstance instance, Area area, String state) {
         long now = System.currentTimeMillis();
         File cachefile = new File(cacheFolder, apiUrl.hashCode() + ".xml");
         if (!cachefile.exists()) {
+            return true;
+        }
+        if (now - cachefile.lastModified() > globalPrefs.getLong("maxdataage",432000000)) {
             return true;
         }
         if (now - cachefile.lastModified() < MIN_CACHE_AGE) {
@@ -126,32 +132,10 @@ public class CachedAPI1Queries {
             }
             return false;
         }
-                /*  if (now - cachefile.lastModified() > MAX_CACHE_AGE) {
-                return true;
-                }
 
-                if (area != null) {
-                for (Initiative i : area.getInitiativen()) {
-                if ((now - i.getDateForNextEvent().getTime()) > 0) {
-                return true;
-                }
-                if ((area.getInitiativen().isIssueSelected(i.issue_id)) && (now - cachefile.lastModified() > MAX_FAV_CACHE_AGE)) {
-                return true;
-                }
-                }
-                }
+    }
 
-                if (state.equals("new")) {
-                if (hasNewerInis(instance.getMaxIni(), instance, apiUrl)) {
-                return true;
-                }
-                }
-
-                 */
-                //  return false;
-            }
-
-    public  boolean hasNewerInis(int oldmax, LQFBInstance instance, String api) {
+    public boolean hasNewerInis(int oldmax, LQFBInstance instance, String api) {
         SAXParserFactory factory = SAXParserFactory.newInstance();
         SAXParser saxparser;
         Area tempArea = new Area(instance.instancePrefs);
@@ -180,12 +164,14 @@ public class CachedAPI1Queries {
         url = apiUrl + api + ".html?key=" + developerkey + parameters;
         this.api = api;
         if ((forceNetwork) && (needsDownload(url, instance, area, state))) {
-            //    area.getInitiativen().clear();
-            return networkInputStream(url);
+            try {
+             return networkInputStream(url);
+            } catch (IOException e){
+              return cacheInputStream(url);
+            }
         }
         if (cacheExists(url)) {
-            //  area.getInitiativen().clear();
-            return cacheInputStream(url);
+             return cacheInputStream(url);
         }
         if (noDownload) {
             return null;

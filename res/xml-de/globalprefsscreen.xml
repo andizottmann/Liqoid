@@ -11,8 +11,8 @@
             android:title="Vibration"
             android:defaultValue="true"
         />
-          </PreferenceCategory>
-<PreferenceCategory
+    </PreferenceCategory>
+    <PreferenceCategory
         android:title="Themen markieren"
         android:key="second_category">
         <ListPreference
@@ -22,14 +22,14 @@
             android:entries="@array/limitInDays"
             android:entryValues="@array/limitInDaysValues"
         />
- <ListPreference
+        <ListPreference
             android:key="orangelimit"
             android:title="Orange markieren ab"
             android:defaultValue="259200000"
             android:entries="@array/limitInDays"
             android:entryValues="@array/limitInDaysValues"
         />
-         <ListPreference
+        <ListPreference
             android:key="yellowlimit"
             android:title="Gelb markieren ab"
             android:defaultValue="432000000"
@@ -37,6 +37,17 @@
             android:entryValues="@array/limitInDaysValues"
         />
     </PreferenceCategory>
-
+ <PreferenceCategory
+        android:title="Aktualisieren"
+        android:key="updatecycles">
+              <ListPreference
+            android:key="maxdataage"
+            android:title="Maximales Datenalter"
+            android:summary="Download erzwingen ab einem bestimmten Datenalter."
+            android:defaultValue="432000000"
+            android:entries="@array/limitInDays"
+            android:entryValues="@array/limitInDaysValues"
+        />
+</PreferenceCategory>
 
 </PreferenceScreen>

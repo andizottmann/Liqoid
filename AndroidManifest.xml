@@ -1,30 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      package="de.quadrillenschule.liquidroid"
-      android:versionCode="6"
-      android:versionName="0.1.5"
-
-      android:installLocation="auto">
+    package="de.quadrillenschule.liquidroid"
+    android:versionCode="7"
+    android:versionName="0.1.6"
+    android:installLocation="auto">
     <uses-sdk android:minSdkVersion="1"/>
-   
     <supports-screens
-            android:smallScreens="true"
-            android:normalScreens="true"
-            android:largeScreens="true"
-            android:anyDensity="true" />
+        android:smallScreens="true"
+        android:normalScreens="true"
+        android:largeScreens="true"
+        android:anyDensity="true" />
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.VIBRATE"/>
     <application android:label="@string/app_name"
-    android:icon="@drawable/lqfb"
-
-    android:name="LiqoidApplication">
-
-
+        android:icon="@drawable/lqfb"
+        android:name="LiqoidApplication">
         <activity android:name="LiqoidMainActivity"
                   android:label="@string/app_name"
                   android:icon="@drawable/lqfb"
                   android:theme="@android:style/Theme.NoTitleBar"
-                    android:configChanges="orientation|keyboardHidden"
+                  android:configChanges="orientation|keyboardHidden"
           >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -33,36 +28,24 @@
         </activity>
         <activity android:name="UpcomingTabActivity"
                   android:label="@string/app_name"
-                android:configChanges="orientation|keyboardHidden"
-          android:theme="@android:style/Theme.NoTitleBar"
+                  android:configChanges="orientation|keyboardHidden"
+                  android:theme="@android:style/Theme.NoTitleBar"
          />
         <activity android:name="RecentTabActivity"
                   android:label="@string/app_name"
                   android:configChanges="orientation|keyboardHidden"
-          android:theme="@android:style/Theme.NoTitleBar"
+                  android:theme="@android:style/Theme.NoTitleBar"
           />
         <activity android:name="InitiativesTabActivity"
                   android:label="@string/app_name"
                   android:configChanges="orientation|keyboardHidden"
-            android:theme="@android:style/Theme.NoTitleBar"
-
+                  android:theme="@android:style/Theme.NoTitleBar"
           />
-
         <activity android:name="AreasTabActivity"
                   android:label="@string/app_name"
-                     android:theme="@android:style/Theme.NoTitleBar"
-                       android:configChanges="orientation|keyboardHidden"
-
-            
+                  android:theme="@android:style/Theme.NoTitleBar"
+                  android:configChanges="orientation|keyboardHidden"
           />
-        <activity android:name="AreaListView"
-                  android:label="@string/app_name"
-     android:theme="@android:style/Theme.NoTitleBar"
-       android:configChanges="orientation|keyboardHidden"
-
-          />
-        <activity android:name="GlobalPrefsActivity" />
-
-
+        <activity android:name="GlobalPrefsActivity"/>
     </application>
 </manifest> 

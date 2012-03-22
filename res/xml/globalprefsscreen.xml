@@ -19,7 +19,7 @@
             android:entries="@array/limitInDays"
             android:entryValues="@array/limitInDaysValues"
         />
- <ListPreference
+        <ListPreference
             android:key="orangelimit"
             android:title="Limit for orange indicator"
             android:summary="Define when issues are indicated."
@@ -27,7 +27,7 @@
             android:entries="@array/limitInDays"
             android:entryValues="@array/limitInDaysValues"
         />
-         <ListPreference
+        <ListPreference
             android:key="yellowlimit"
             android:title="Limit for yellow indicator"
             android:summary="Define when issues are indicated."
@@ -36,6 +36,16 @@
             android:entryValues="@array/limitInDaysValues"
         />
     </PreferenceCategory>
-
-
+ <PreferenceCategory
+        android:title="Update cycles"
+        android:key="updatecycles">
+              <ListPreference
+            android:key="maxdataage"
+            android:title="Maximal dataage"
+            android:summary="Download is forced when you refresh."
+            android:defaultValue="432000000"
+            android:entries="@array/limitInDays"
+            android:entryValues="@array/limitInDaysValues"
+        />
+</PreferenceCategory>
 </PreferenceScreen>
