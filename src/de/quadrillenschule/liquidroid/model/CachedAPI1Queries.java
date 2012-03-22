@@ -168,14 +168,17 @@ public class CachedAPI1Queries {
         url = apiUrl + api + ".html?key=" + developerkey + parameters;
         this.api = api;
         if ((forceNetwork) && (needsDownload(url, instance, area, state))) {
+        //    area.getInitiativen().clear();
             return networkInputStream(url);
         }
         if (cacheExists(url)) {
+          //  area.getInitiativen().clear();
             return cacheInputStream(url);
         }
         if (noDownload) {
             return null;
         }
+        // area.getInitiativen().clear();
         return networkInputStream(url);
     }
 

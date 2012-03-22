@@ -90,7 +90,7 @@ public class LQFBInstance {
         SAXParserFactory factory = SAXParserFactory.newInstance();
         SAXParser saxparser;
 
-        area.getInitiativen().clear();
+   //     area.getInitiativen().clear();
         iniParser = new InitiativenFromAPIParser(area, this);
         String[] states = {"new", "accepted", "frozen", "voting"};
         for (String state : states) {

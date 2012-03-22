@@ -7,6 +7,7 @@ package de.quadrillenschule.liquidroid.gui;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Vibrator;
 import android.text.Html;
 import android.util.TypedValue;
@@ -47,7 +48,7 @@ public class IssueItemView extends LinearLayout implements OnClickListener {
         myCheckBox = new CheckBox(activity, null, android.R.attr.starStyle);
         myCheckBox.setTextColor(Color.BLACK);
         myCheckBox.setBackgroundColor(Color.argb(255, 245, 245, 245));
-        myCheckBox.setText(initiative.name+" ("+((int)initiative.getConcurrentInis().size()+1)+" Alt.)");
+        myCheckBox.setText(initiative.name + " (" + ((int) initiative.getConcurrentInis().size() + 1) + " Alt.)");
         myCheckBox.setChecked(initiative.getArea().getInitiativen().isIssueSelected(initiative.issue_id));
         myCheckBox.setOnClickListener(this);
         myCheckBox.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
@@ -63,6 +64,7 @@ public class IssueItemView extends LinearLayout implements OnClickListener {
 
         expandButton = new Button(activity);
         expandButton.setBackgroundColor(itemSpecificColorcode());
+        expandButton.setTypeface(Typeface.MONOSPACE);
         expandButtonSetText();
         expandButton.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT));
         expandButton.setOnClickListener(new OnClickListener() {
