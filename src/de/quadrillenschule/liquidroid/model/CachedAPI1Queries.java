@@ -106,8 +106,7 @@ public class CachedAPI1Queries {
 
         return !cacheExists(apiUrl);
     }
-    public static long MIN_CACHE_AGE = 1000 * 60;
-
+  
     public boolean needsDownload(String apiUrl, LQFBInstance instance, Area area, String state) {
         long now = System.currentTimeMillis();
         File cachefile = new File(cacheFolder, apiUrl.hashCode() + ".xml");
@@ -117,7 +116,7 @@ public class CachedAPI1Queries {
         if (now - cachefile.lastModified() > globalPrefs.getLong("maxdataage",432000000)) {
             return true;
         }
-        if (now - cachefile.lastModified() < MIN_CACHE_AGE) {
+        if (now - cachefile.lastModified() < globalPrefs.getLong("mindataage",180000)) {
             return false;
         } else {
             if (state.equals("new")) {

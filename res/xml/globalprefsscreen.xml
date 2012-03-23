@@ -47,5 +47,13 @@
             android:entries="@array/limitInDays"
             android:entryValues="@array/limitInDaysValues"
         />
+        <ListPreference
+            android:key="mindataage"
+            android:title="Minimal dataage"
+            android:summary="Data will not be downloaded if younger than this age."
+            android:defaultValue="180000"
+            android:entries="@array/limitInMins"
+            android:entryValues="@array/limitInMinsValues"
+        />
 </PreferenceCategory>
 </PreferenceScreen>

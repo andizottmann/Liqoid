@@ -111,7 +111,13 @@ public class InitiativesTabActivity extends Activity implements RefreshInisListT
             @Override
             public void onRefresh() {
                 refreshInisList(true);
-                listView.onRefreshComplete();
+                listView.postDelayed(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        listView.onRefreshComplete();
+                    }
+                }, 2000);
             }
         });
 

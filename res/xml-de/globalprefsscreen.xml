@@ -37,10 +37,10 @@
             android:entryValues="@array/limitInDaysValues"
         />
     </PreferenceCategory>
- <PreferenceCategory
+    <PreferenceCategory
         android:title="Aktualisieren"
         android:key="updatecycles">
-              <ListPreference
+        <ListPreference
             android:key="maxdataage"
             android:title="Maximales Datenalter"
             android:summary="Download erzwingen ab einem bestimmten Datenalter."
@@ -48,6 +48,14 @@
             android:entries="@array/limitInDays"
             android:entryValues="@array/limitInDaysValues"
         />
-</PreferenceCategory>
+        <ListPreference
+            android:key="mindataage"
+            android:title="Minimales Datenalter"
+            android:summary="Jüngere Daten werden nicht heruntergeladen."
+            android:defaultValue="180000"
+            android:entries="@array/limitInMins"
+            android:entryValues="@array/limitInMinsValues"
+        />
+    </PreferenceCategory>
 
 </PreferenceScreen>

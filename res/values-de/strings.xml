@@ -39,5 +39,7 @@
     <string name="enterdeveloperkeyhints">Den Developerkey bekommst Du in der jeweilgen LQFB-Instanz. Dort meldest Du Dich an und kannst den key unter \"Einstellungen\" generieren.</string>
     <string name="resetpublicinstances">Zurücksetzen</string>
     <string name="toinstance">zur Instanz</string>
-
+    <string name="ptr_pull_to_refresh">Ziehen zum neuladen</string>
+    <string name="ptr_release_to_refresh">Loslassen zum neuladen</string>
+    <string name="ptr_refreshing">Aktualisieren</string>
 </resources>
