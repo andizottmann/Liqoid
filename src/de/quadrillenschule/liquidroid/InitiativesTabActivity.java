@@ -29,6 +29,8 @@ import de.quadrillenschule.liquidroid.model.LQFBInstance;
 import de.quadrillenschule.liquidroid.model.LQFBInstances;
 import de.quadrillenschule.liquidroid.model.MultiInstanceInitiativen;
 import de.quadrillenschule.liquidroid.model.RefreshInisListThread;
+import eu.erikw.PullToRefreshListView;
+import eu.erikw.PullToRefreshListView.OnRefreshListener;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -99,8 +101,20 @@ public class InitiativesTabActivity extends Activity implements RefreshInisListT
         inisListAdapter = getInitiativenListAdapter();
         filterList();
         sortList();
-        final ListView listview = (ListView) findViewById(R.id.initiativenList);
-        listview.setAdapter(inisListAdapter);
+        final PullToRefreshListView listView = (PullToRefreshListView) findViewById(R.id.initiativenList);
+        listView.setTextPullToRefresh(getString(R.string.ptr_pull_to_refresh));
+        listView.setTextReleaseToRefresh(getString(R.string.ptr_release_to_refresh));
+        listView.setTextRefreshing(getString(R.string.ptr_refreshing));
+        listView.setAdapter(inisListAdapter);
+        listView.setOnRefreshListener(new OnRefreshListener() {
+
+            @Override
+            public void onRefresh() {
+                refreshInisList(true);
+                listView.onRefreshComplete();
+            }
+        });
+
         inisListAdapter.notifyDataSetChanged();
 
 
@@ -311,6 +325,7 @@ public class InitiativesTabActivity extends Activity implements RefreshInisListT
         filterList();
         sortList();
         inisListAdapter.notifyDataSetChanged();
+
     }
 
     public String getDateFormat() {
