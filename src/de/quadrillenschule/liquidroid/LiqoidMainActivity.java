@@ -10,6 +10,7 @@ import android.gesture.GestureOverlayView;
 import android.gesture.Prediction;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup.LayoutParams;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
@@ -55,10 +56,15 @@ public class LiqoidMainActivity extends TabActivity implements GestureOverlayVie
         intent = new Intent().setClass(this, AreasTabActivity.class);
         spec = tabHost.newTabSpec("areas").setIndicator(res.getString(R.string.tab_areas)).setContent(intent);
         tabHost.addTab(spec);
+        TextView v = new TextView(this);
+        int tabheight = (int) (v.getTextSize() * 2.7);
 
         tabHost.setCurrentTab(3);
-        for (int i=0;i<tabHost.getTabWidget().getChildCount();i++){
-        tabHost.getTabWidget().getChildAt(i).getLayoutParams().height =40;
+        for (int i = 0; i < tabHost.getTabWidget().getChildCount(); i++) {
+            tabHost.getTabWidget().getChildAt(i).getLayoutParams().height = tabheight;
+
+
+
         }
         lastTab = 3;
         lastTabView = tabHost.getCurrentView();
