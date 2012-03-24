@@ -80,7 +80,11 @@ public class LQFBInstances extends ArrayList<LQFBInstance> {
                 "http://lqfb.piraten-lsa.de/lsa/api/",
                 "http://lqfb.piraten-lsa.de/lsa/",
                 "jXKWm5rFLQXQ8f6LMf92", "1.x"));
-
+   this.add(new LQFBInstance(liqoidApplication, "PP HH", "HH",
+                "Piraten Hamburg",
+                "https://lqpp.de/hh/api/",
+                "https://lqpp.de/hh/",
+                "", "1.x"));
         this.add(new LQFBInstance(liqoidApplication, "PP NDS", "DE_PIRATEN_NDS",
                 "Piraten NDS",
                 "https://lqpp.de/ni/api/",
@@ -125,7 +129,7 @@ public class LQFBInstances extends ArrayList<LQFBInstance> {
         CharSequence[] retval = new String[lockedInstances.size()];
         int i = 0;
         for (LQFBInstance l : lockedInstances) {
-            retval[i] = (l.getShortName());
+            retval[i] = (l.getName());
             i++;
         }
         return retval;
