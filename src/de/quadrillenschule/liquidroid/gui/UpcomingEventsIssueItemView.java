@@ -25,7 +25,7 @@ public class UpcomingEventsIssueItemView extends IssueItemView {
     @Override
     protected String getStatusText() {
         DateFormat formatter = new SimpleDateFormat(activity.getDateFormat());
-        return "<b><font color=black> " + initiative.nextEvent() + "</font></b>  <font color=blue>" + formatter.format(initiative.getDateForNextEvent()) + "</font>";
+        return "<b><font color=black> " + initiative.nextEvent() + "</font> - <font color=blue>" + formatter.format(initiative.getDateForNextEvent()) + "</font></b>";
     }
 
      @Override

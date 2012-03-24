@@ -141,7 +141,7 @@ public class IssueItemView extends LinearLayout implements OnClickListener {
 
     protected String getStatusText() {
         DateFormat formatter = new SimpleDateFormat(activity.getDateFormat());
-        return " <b><font color=black> " + initiative.state + "</font></b> <font color=blue>" + formatter.format(initiative.issue_created) + "</font>";
+        return " <b><font color=black> " + initiative.state + "</font> - <font color=blue>" + formatter.format(initiative.issue_created) + "</font></b>";
     }
 
     public void onClick(View arg0) {

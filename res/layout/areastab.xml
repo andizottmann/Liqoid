@@ -12,7 +12,8 @@
         android:text="@string/tab_areas_long"
         android:textColor="#009010"
          android:gravity="center_vertical|center_horizontal"
-        android:textSize="20dp"     
+        android:textStyle="bold"
+        android:textSize="18dp"
                 />
 
     <Spinner
