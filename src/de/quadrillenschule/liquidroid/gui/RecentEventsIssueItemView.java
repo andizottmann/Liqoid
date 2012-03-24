@@ -25,7 +25,7 @@ public class RecentEventsIssueItemView extends IssueItemView {
     @Override
     protected String getStatusText() {
         DateFormat formatter = new SimpleDateFormat(activity.getDateFormat());
-        return " <b><font color=black> " + initiative.lastEvent() + "</font></b>  <font color=blue>" + formatter.format(initiative.dateForLastEvent()) + "</font> <b><font color=black>" + initiative.getLqfbInstance().getShortName() + "</font></b>";
+        return " <b><font color=black> " + initiative.lastEvent() + "</font></b>  <font color=blue>" + formatter.format(initiative.dateForLastEvent()) + "</font>";
     }
 
    @Override

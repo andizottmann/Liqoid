@@ -11,12 +11,14 @@ import android.graphics.Typeface;
 import android.os.Vibrator;
 import android.text.Html;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import de.quadrillenschule.liquidroid.InitiativesTabActivity;
 import de.quadrillenschule.liquidroid.LiqoidApplication;
@@ -34,56 +36,87 @@ public class IssueItemView extends LinearLayout implements OnClickListener {
     InitiativesTabActivity activity;
     public Initiative initiative;
     CheckBox myCheckBox;
-    TextView statusLine;
+    TextView statusLine, instanceView;
+    TextView expandView;
     ImageView colorView;
-    LinearLayout contentContainer;
+    //LinearLayout contentContainer, statusContainer;
+    // RelativeLayout contentContainer;
     Button expandButton;
 
     public IssueItemView(InitiativesTabActivity activity, Initiative initiative) {
         super(activity);
-        setOrientation(HORIZONTAL);
         this.activity = activity;
         this.initiative = initiative;
 
-        myCheckBox = new CheckBox(activity, null, android.R.attr.starStyle);
-        myCheckBox.setTextColor(Color.BLACK);
-        myCheckBox.setBackgroundColor(Color.argb(255, 245, 245, 245));
-        myCheckBox.setText(initiative.name + " (" + ((int) initiative.getConcurrentInis().size() + 1) + " Alt.)");
-        myCheckBox.setChecked(initiative.getArea().getInitiativen().isIssueSelected(initiative.issue_id));
-        myCheckBox.setOnClickListener(this);
-        myCheckBox.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
-
-        activity.registerForContextMenu(myCheckBox);
-
-        statusLine = new TextView(activity);
-        statusLine.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
-        statusLine.setText(Html.fromHtml(getStatusText()));
-        statusLine.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
-        statusLine.setTextColor(Color.parseColor("#108020"));
-        statusLine.setBackgroundColor(Color.argb(255, 245, 245, 245));
+        RelativeLayout.LayoutParams rlp;
+        RelativeLayout rl = new RelativeLayout(activity);
+        rl.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
 
         expandButton = new Button(activity);
         expandButton.setBackgroundColor(itemSpecificColorcode());
         expandButton.setTypeface(Typeface.MONOSPACE);
         expandButtonSetText();
-        expandButton.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT));
         expandButton.setOnClickListener(new OnClickListener() {
 
             public void onClick(View arg0) {
                 expand();
             }
         });
-        contentContainer = new LinearLayout(activity);
-        contentContainer.setOrientation(VERTICAL);
-        contentContainer.setBackgroundColor(Color.argb(255, 245, 245, 245));
-        contentContainer.addView(statusLine);
-        contentContainer.addView(myCheckBox);
-        LayoutParams lp = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.MATCH_PARENT);
-        contentContainer.setLayoutParams(lp);
-        contentContainer.setPadding(8, 1, 1, 1);
+        LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.FILL_PARENT);
+        this.addView(expandButton, lp);
 
-        this.addView(expandButton);
-        this.addView(contentContainer);
+
+        statusLine = new TextView(activity);
+        rlp = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+        rlp.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+        rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+        statusLine.setText(Html.fromHtml(getStatusText()));
+        statusLine.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+        statusLine.setTextColor(Color.parseColor("#108020"));
+        statusLine.setSingleLine();
+        statusLine.setId(2);
+        rl.addView(statusLine, rlp);
+
+        instanceView = new TextView(activity);
+        rlp = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        //rlp.addRule(RelativeLayout.RIGHT_OF, statusLine.getId());
+        rlp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+        rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+           rlp.addRule(RelativeLayout.ALIGN_RIGHT);
+        rlp.addRule(RelativeLayout.ALIGN_TOP);
+        rlp.setMargins(0, 0, 5,0);
+        instanceView.setText(Html.fromHtml("<b><font color=black>" + initiative.getLqfbInstance().getShortName() + "</font></b>"));
+        instanceView.setTextColor(Color.parseColor("#108020"));
+        instanceView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+        instanceView.setSingleLine();
+        instanceView.setId(3);
+        rl.addView(instanceView, rlp);
+
+        myCheckBox = new CheckBox(activity, null, android.R.attr.starStyle);
+        myCheckBox.setTextColor(Color.BLACK);
+        myCheckBox.setText(initiative.name + " (" + ((int) initiative.getConcurrentInis().size() + 1) + " Alt.)");
+        myCheckBox.setChecked(initiative.getArea().getInitiativen().isIssueSelected(initiative.issue_id));
+        myCheckBox.setOnClickListener(this);
+        rlp = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+        rlp.addRule(RelativeLayout.BELOW, statusLine.getId());
+        rlp.addRule(RelativeLayout.BELOW, instanceView.getId());
+        rlp.addRule(RelativeLayout.ALIGN_TOP);
+        myCheckBox.setId(4);
+        activity.registerForContextMenu(myCheckBox);
+        rl.addView(myCheckBox, rlp);
+
+        expandView = new TextView(activity);
+        rlp = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+        rlp.addRule(RelativeLayout.BELOW, myCheckBox.getId());
+        rlp.addRule(RelativeLayout.ALIGN_TOP);
+        expandView.setText("");
+        expandView.setTextColor(Color.parseColor("#108020"));
+        expandView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+        expandView.setId(5);
+        rl.addView(expandView, rlp);
+
+        this.addView(rl);
+        this.forceLayout();
     }
 
     protected long itemSpecificDelta() {
@@ -108,7 +141,7 @@ public class IssueItemView extends LinearLayout implements OnClickListener {
 
     protected String getStatusText() {
         DateFormat formatter = new SimpleDateFormat(activity.getDateFormat());
-        return " <b><font color=black> " + initiative.state + "</font></b> <font color=blue>" + formatter.format(initiative.issue_created) + "</font> <b><font color=black>" + initiative.getLqfbInstance().getShortName() + "</font></b>";
+        return " <b><font color=black> " + initiative.state + "</font></b> <font color=blue>" + formatter.format(initiative.issue_created) + "</font>";
     }
 
     public void onClick(View arg0) {
@@ -135,6 +168,7 @@ public class IssueItemView extends LinearLayout implements OnClickListener {
         if (expandview) {
             statusLine.setText(Html.fromHtml(getStatusText()));
             expandButtonSetText();
+            expandView.setText("");
             expandview = false;
         } else {
             String string = "";
@@ -145,8 +179,8 @@ public class IssueItemView extends LinearLayout implements OnClickListener {
             for (Initiative i : initiative.getConcurrentInis()) {
                 string += "<br><br>Supporter: <font color=black><b>" + i.supporter_count + "</b> &nbsp; " + i.name + "</font>";
             }
-            statusLine.setText(Html.fromHtml(getStatusText() + "<br>" + string + "<br>"));
-
+            //statusLine.setText(Html.fromHtml(getStatusText() + "<br>" + string + "<br>"));
+            expandView.setText(Html.fromHtml(string));
             expandButtonSetText();
             expandview = true;
         }
