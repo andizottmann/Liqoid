@@ -7,6 +7,8 @@ package de.quadrillenschule.liquidroid.model;
 import android.content.SharedPreferences;
 import de.quadrillenschule.liquidroid.LiqoidApplication;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
  *
@@ -120,5 +122,14 @@ public class Areas extends ArrayList<Area> {
             }
         }
         return null;
+    }
+
+    public void sortByMembers(){
+    Collections.sort(this, new Comparator<Area>() {
+
+            public int compare(Area arg0, Area arg1) {
+                return arg1.getMember_weight()-arg0.getMember_weight();
+            }
+        });
     }
 }

@@ -8,6 +8,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Vibrator;
+import android.text.Html;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -37,7 +38,11 @@ public class AreasListAdapter extends ArrayAdapter<Area> {
 
         retval.setTextColor(Color.BLACK);
         retval.setBackgroundColor(Color.argb(255, 245, 245, 245));
-        retval.setText(areas.get(position).getName()+" ("+areas.get(position).getInitiativen().getSelectedIssues().size()+")");
+        String inisspecial=" Inis:"+areas.get(position).getInitiativen().size();
+        if (!areas.getSelectedAreas().contains(areas.get(position))){
+        inisspecial=" Inis:?";
+        }
+        retval.setText(Html.fromHtml(areas.get(position).getName()+"<br><small> M:"+areas.get(position).getMember_weight()+" &nbsp;&nbsp; "+inisspecial+" &nbsp;&nbsp; Favs <font color=\"#eecc00\">\u2605</font>"+areas.get(position).getInitiativen().getSelectedIssues().size()+"</small>"));
         retval.setChecked(areas.isSelected(position));
         retval.setOnClickListener(new View.OnClickListener() {
 

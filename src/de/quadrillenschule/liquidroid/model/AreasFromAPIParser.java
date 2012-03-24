@@ -29,6 +29,10 @@ public class AreasFromAPIParser extends DefaultHandler {
     @Override
     public void startDocument() {
     }
+  @Override
+    public void endDocument() {
+      areas.sortByMembers();
+    }
 
     @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
