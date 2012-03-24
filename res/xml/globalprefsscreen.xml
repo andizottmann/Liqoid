@@ -11,6 +11,12 @@
             android:title="Enable vibrate"
             android:defaultValue="true"
         />
+        <CheckBoxPreference
+            android:key="pulltorefresh"
+            android:summary="Enable or disable Pull-to-refresh lists"
+            android:title="Enable Pull-To-Refresh"
+            android:defaultValue="true"
+        />
         <ListPreference
             android:key="redlimit"
             android:title="Limit for red indicator"

@@ -102,6 +102,7 @@ public class InitiativesTabActivity extends Activity implements RefreshInisListT
         filterList();
         sortList();
         final PullToRefreshListView listView = (PullToRefreshListView) findViewById(R.id.initiativenList);
+        listView.enabled = ((LiqoidApplication) getApplication()).getGlobalPreferences().getBoolean("pulltorefresh", true);
         listView.setTextPullToRefresh(getString(R.string.ptr_pull_to_refresh));
         listView.setTextReleaseToRefresh(getString(R.string.ptr_release_to_refresh));
         listView.setTextRefreshing(getString(R.string.ptr_refreshing));

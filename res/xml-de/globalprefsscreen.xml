@@ -11,6 +11,12 @@
             android:title="Vibration"
             android:defaultValue="true"
         />
+           <CheckBoxPreference
+            android:key="pulltorefresh"
+            android:summary="Pull-to-refresh Listen aktivieren"
+            android:title="Pull-To-Refresh"
+            android:defaultValue="true"
+        />
     </PreferenceCategory>
     <PreferenceCategory
         android:title="Themen markieren"
