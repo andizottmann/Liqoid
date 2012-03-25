@@ -18,6 +18,7 @@ public class Initiative {
     public int area_id = 0;
     public String name = "";
     public String state = "";
+    public String current_draft_content="";
     public int issue_id = 0;
     public long issue_discussion_time = 0;
     public long issue_admission_time = 0;

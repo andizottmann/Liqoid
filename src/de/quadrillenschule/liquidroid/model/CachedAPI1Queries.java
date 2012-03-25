@@ -40,9 +40,9 @@ public class CachedAPI1Queries {
     public long dataage = 0;
     SharedPreferences globalPrefs;
 
-    public CachedAPI1Queries(File cacheFolder,SharedPreferences globalPrefs) {
+    public CachedAPI1Queries(File cacheFolder, SharedPreferences globalPrefs) {
         this.cacheFolder = cacheFolder;
-        this.globalPrefs=globalPrefs;
+        this.globalPrefs = globalPrefs;
     }
 
     private String convertStreamToString(InputStream is) throws IOException {
@@ -77,13 +77,13 @@ public class CachedAPI1Queries {
                 endswith = "</initiative_list>";
             }
             String string = convertStreamToString(is);
-            string = string.replaceAll("<current_draft_content>(.*?)</current_draft_content>", "");
-            if (string.contains(endswith)) {
+             if (string.contains(endswith)) {
 
                 myfile.createNewFile();
                 FileOutputStream fos = new FileOutputStream(myfile);
                 fos.write(string.getBytes("UTF-8"));
                 fos.close();
+
             }
         } catch (Exception e) {
         }
@@ -106,17 +106,17 @@ public class CachedAPI1Queries {
 
         return !cacheExists(apiUrl);
     }
-  
+
     public boolean needsDownload(String apiUrl, LQFBInstance instance, Area area, String state) {
         long now = System.currentTimeMillis();
         File cachefile = new File(cacheFolder, apiUrl.hashCode() + ".xml");
         if (!cachefile.exists()) {
             return true;
         }
-        if (now - cachefile.lastModified() > globalPrefs.getLong("maxdataage",432000000)) {
+        if (now - cachefile.lastModified() > globalPrefs.getLong("maxdataage", 432000000)) {
             return true;
         }
-        if (now - cachefile.lastModified() < globalPrefs.getLong("mindataage",180000)) {
+        if (now - cachefile.lastModified() < globalPrefs.getLong("mindataage", 180000)) {
             return false;
         } else {
             if (state.equals("new")) {
@@ -164,13 +164,13 @@ public class CachedAPI1Queries {
         this.api = api;
         if ((forceNetwork) && (needsDownload(url, instance, area, state))) {
             try {
-             return networkInputStream(url);
-            } catch (IOException e){
-              return cacheInputStream(url);
+                return networkInputStream(url);
+            } catch (IOException e) {
+                return cacheInputStream(url);
             }
         }
         if (cacheExists(url)) {
-             return cacheInputStream(url);
+            return cacheInputStream(url);
         }
         if (noDownload) {
             return null;

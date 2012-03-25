@@ -99,6 +99,10 @@ public class InitiativenFromAPIParser extends DefaultHandler {
         if (qName.equals("name")) {
             currentInitiative.name = charBuff.toString();
         }
+         if (qName.equals("current_draft_content")) {
+            currentInitiative.current_draft_content = charBuff.toString();
+        }
+
         if (qName.equals("issue_state")) {
             currentInitiative.state = charBuff.toString();
         }
