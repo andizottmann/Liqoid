@@ -106,7 +106,7 @@ public class InitiativenFromAPIParser extends DefaultHandler {
         }
 
         if (qName.equals("issue_state")) {
-            currentInitiative.state = charBuff.toString();
+            currentInitiative.setState(charBuff.toString());
         }
         if (qName.equals("issue_id")) {
             currentInitiative.issue_id = Integer.parseInt(charBuff.toString());

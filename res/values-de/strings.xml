@@ -42,4 +42,9 @@
     <string name="ptr_pull_to_refresh">Ziehen zum neuladen</string>
     <string name="ptr_release_to_refresh">Loslassen zum neuladen</string>
     <string name="ptr_refreshing">Aktualisieren</string>
+    <string name="finished">Abgeschlossen</string>
+    <string name="new_">Neu</string>
+    <string name="accepted">Akzeptiert</string>
+    <string name="frozen">Eingefroren</string>
+    <string name="voting">Abstimmung</string>
 </resources>

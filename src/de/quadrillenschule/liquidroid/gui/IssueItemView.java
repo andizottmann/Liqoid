@@ -30,6 +30,7 @@ import de.quadrillenschule.liquidroid.model.Initiative;
 import de.quadrillenschule.liquidroid.tools.Utils;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import de.quadrillenschule.liquidroid.R;
 
 /**
  *
@@ -161,7 +162,7 @@ public class IssueItemView extends LinearLayout implements OnClickListener {
 
     protected String getStatusText() {
         DateFormat formatter = new SimpleDateFormat(activity.getDateFormat());
-        return " <b><font color=black> " + initiative.state + "</font> - <font color=blue>" + formatter.format(initiative.issue_created) + "</font></b>";
+        return " <b><font color=black> " + activity.getString(initiative.getIntlStateResId()) + "</font> - <font color=blue>" + formatter.format(initiative.issue_created) + "</font></b>";
     }
 
     public void onClick(View arg0) {
@@ -215,12 +216,21 @@ public class IssueItemView extends LinearLayout implements OnClickListener {
 
             public void onClick(View arg0) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-                builder.setMessage(i.current_draft_content).setNeutralButton("Browser", new android.content.DialogInterface.OnClickListener() {
+                builder.setMessage(i.current_draft_content).setNeutralButton(R.string.open_browser, new android.content.DialogInterface.OnClickListener() {
 
                     public void onClick(DialogInterface arg0, int arg1) {
                         Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(i.getLqfbInstance().getWebUrl() + "initiative/show/" + i.id + ".html"));
                         myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
                         activity.startActivity(myIntent);
+                    }
+                }).setPositiveButton(R.string.share, new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface arg0, int arg1) {
+                     Intent intent = new Intent(android.content.Intent.ACTION_SEND);
+                    intent.setType("text/plain");
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+                    intent.putExtra(Intent.EXTRA_TEXT, i.getLqfbInstance().getWebUrl() + "initiative/show/" + i.id + ".html");
+                    activity.startActivity(Intent.createChooser(intent, activity.getString(R.string.share)));
                     }
                 });
 

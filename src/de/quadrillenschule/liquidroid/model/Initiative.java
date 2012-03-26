@@ -7,7 +7,7 @@ package de.quadrillenschule.liquidroid.model;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-
+import de.quadrillenschule.liquidroid.R;
 /**
  *
  * @author andi
@@ -17,7 +17,7 @@ public class Initiative {
     public int id = 0;
     public int area_id = 0;
     public String name = "";
-    public String state = "";
+    private String state = "";
     public String current_draft_content="";
     public int issue_id = 0;
     public long issue_discussion_time = 0;
@@ -56,7 +56,7 @@ public class Initiative {
         if (revoked != null) {
             return lastRevoked;
         }
-        if (state.equals("finished")) {
+        if (getState().equals("finished")) {
             return lastVotingEnded;
         }
         if (issue_closed != null) {
@@ -106,16 +106,16 @@ public class Initiative {
     public static String nextEingefroren = "->Eingefroren", nextAbstimmung = "->Abstimmung", nextAbstimmungsende = "->Abstimmungsende", nextAkzeptiert = "->Akzeptiert";
 
     public String nextEvent() {
-        if (state.equals("new")) {
+        if (getState().equals("new")) {
             return nextAkzeptiert;
         }
-        if (state.equals("accepted")) {
+        if (getState().equals("accepted")) {
             return nextEingefroren;
         }
-        if (state.equals("frozen")) {
+        if (getState().equals("frozen")) {
             return nextAbstimmung;
         }
-        if (state.equals("voting")) {
+        if (getState().equals("voting")) {
             return nextAbstimmungsende;
         }
         return "";
@@ -171,5 +171,35 @@ public class Initiative {
      */
     public void setConcurrentInis(ArrayList<Initiative> concurrentInis) {
         this.concurrentInis = concurrentInis;
+    }
+
+    /**
+     * @return the state
+     */
+    public String getState() {
+        return state;
+    }
+
+      public int getIntlStateResId() {
+        if (getState().equals("new")) {
+            return R.string.new_;
+        }
+        if (getState().equals("accepted")) {
+              return R.string.accepted;
+        }
+        if (getState().equals("frozen")) {
+            return R.string.frozen;
+        }
+        if (getState().equals("voting")) {
+            return R.string.voting;
+        }
+        return R.string.unknown;
+    }
+
+    /**
+     * @param state the state to set
+     */
+    public void setState(String state) {
+        this.state = state;
     }
 }
