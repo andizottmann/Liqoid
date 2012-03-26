@@ -78,11 +78,8 @@ public class CachedAPI1Queries {
             }
             String string = convertStreamToString(is);
             if (string.contains(endswith)) {
-                if (myfile.exists()) {
-                    myfile.delete();
-                }
-                myfile.createNewFile();
-                FileOutputStream fos = new FileOutputStream(myfile);
+               
+                 FileOutputStream fos = new FileOutputStream(myfile);
                 fos.write(string.getBytes("UTF-8"));
                 fos.close();
 
