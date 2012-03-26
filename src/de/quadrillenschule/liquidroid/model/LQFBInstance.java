@@ -7,8 +7,13 @@ package de.quadrillenschule.liquidroid.model;
 import android.app.Application;
 import android.content.SharedPreferences;
 import de.quadrillenschule.liquidroid.LiqoidApplication;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+import org.xml.sax.SAXException;
 
 /**
  *
@@ -61,156 +66,254 @@ public class LQFBInstance {
 
         areaParser = new AreasFromAPIParser(instancePrefs);
         try {
+            //   try {
             saxparser = factory.newSAXParser();
-            saxparser.parse(cachedAPI1Queries.queryInputStream(this, null, "area", "", apiUrl, getDeveloperkey(), "", forceNetwork, noDownload), areaParser);
-            //   cachedAPI1Queries.storeInCache(areaParser.docBuff.toString());
-            areas = areaParser.areas;
 
-        } catch (Exception e) {
+            saxparser.parse(cachedAPI1Queries.queryInputStream(this, null, "area", "", apiUrl, getDeveloperkey(), "", forceNetwork, noDownload), areaParser);
+        } catch (SAXException ex) {
+            return -1;
+        } catch (IOException ex) {
+            return -1;
+        } catch (ParserConfigurationException ex) {
             return -1;
         }
+    //   cachedAPI1Queries.storeInCache(areaParser.docBuff.toString());
+    areas  = areaParser.areas;
+    /*
+    } catch (Exception e) {
+    return -1;
+    }*/
+    return
 
-        return 0;
+
+0;
     }
 
-    public boolean willDownloadInitiativen(Area area, CachedAPI1Queries cachedAPI1Queries, boolean forceNetwork) {
+    public boolean
+
+willDownloadInitiativen(Area area, CachedAPI1Queries cachedAPI1Queries, boolean forceNetwork) {
         String[] states = {"new", "accepted", "frozen", "voting"};
-        boolean retval = false;
-        for (String state : states) {
+
+
+boolean retval = false;
+
+
+for (String state : states) {
 
             if (!cachedAPI1Queries.cacheExists(cachedAPI1Queries.getApiURL("initiative", "&area_id=" + area.getId() + "&state=" + state, apiUrl, getDeveloperkey()))) {
                 retval = true;
-            }
+
+
+}
 
         }
         return retval;
-    }
 
-    public int downloadInitiativen(Area area, CachedAPI1Queries cachedAPI1Queries, boolean forceNetwork, boolean noDownload) {
+
+}
+
+    public int
+
+downloadInitiativen(Area area, CachedAPI1Queries cachedAPI1Queries, boolean forceNetwork, boolean noDownload) {
         SAXParserFactory factory = SAXParserFactory.newInstance();
-        SAXParser saxparser;
+        SAXParser
+
+saxparser;
 
    //     area.getInitiativen().clear();
-        iniParser = new InitiativenFromAPIParser(area, this);
-        String[] states = {"new", "accepted", "frozen", "voting"};
-        for (String state : states) {
+        iniParser
+
+= new InitiativenFromAPIParser(area, this);
+        String[
+
+] states = {"new", "accepted", "frozen", "voting"};
+
+
+for (String state : states) {
             try {
                 saxparser = factory.newSAXParser();
-                saxparser.parse(cachedAPI1Queries.queryInputStream(this, area, "initiative", "&area_id=" + area.getId() + "&state=" + state, apiUrl, getDeveloperkey(), state, forceNetwork, noDownload), iniParser);
-            } catch (Exception e) {
+                saxparser.
+
+parse(cachedAPI1Queries.queryInputStream(this, area, "initiative", "&area_id=" + area.getId() + "&state=" + state, apiUrl, getDeveloperkey(), state, forceNetwork, noDownload), iniParser);
+
+
+} catch (Exception e) {
                 return -1;
-            }
+
+
+}
 
         }
         return 0;
-    }
+
+
+}
 
     /**
      * @return the name
      */
-    public String getName() {
+    public String
+
+getName() {
         return name;
-    }
+
+
+}
 
     /**
      * @param name the name to set
      */
-    public void setName(String name) {
+    public void
+
+setName(String name) {
         this.name = name;
-    }
+
+
+}
 
     /**
      * @return the apiUrl
      */
-    public String getApiUrl() {
+    public String
+
+getApiUrl() {
         return apiUrl;
-    }
+
+
+}
 
     /**
      * @param apiUrl the apiUrl to set
      */
-    public void setApiUrl(String apiUrl) {
+    public void
+
+setApiUrl(String apiUrl) {
         this.apiUrl = apiUrl;
-    }
+
+
+}
 
     /**
      * @return the webUrl
      */
-    public String getWebUrl() {
+    public String
+
+getWebUrl() {
         return webUrl;
-    }
+
+
+}
 
     /**
      * @param webUrl the webUrl to set
      */
-    public void setWebUrl(String webUrl) {
+    public void
+
+setWebUrl(String webUrl) {
         this.webUrl = webUrl;
-    }
+
+
+}
 
     /**
      * @return the developerkey
      */
-    public String getDeveloperkey() {
+    public String
+
+getDeveloperkey() {
         return instancePrefs.getString("developerkey", "");
-    }
+
+
+}
 
     /**
      * @param developerkey the developerkey to set
      */
-    public void setDeveloperkey(String developerkey) {
+    public void
+
+setDeveloperkey(String developerkey) {
         instancePrefs.edit().putString("developerkey", developerkey).commit();
 
-    }
+
+
+}
 
     /**
      * @return the apiversion
      */
-    public String getApiversion() {
+    public String
+
+getApiversion() {
         return apiversion;
-    }
+
+
+}
 
     /**
      * @param apiversion the apiversion to set
      */
-    public void setApiversion(String apiversion) {
+    public void
+
+setApiversion(String apiversion) {
         this.apiversion = apiversion;
-    }
+
+
+}
 
     /**
      * @return the prefsName
      */
-    public String getPrefsName() {
+    public String
+
+getPrefsName() {
         return prefsName;
-    }
+
+
+}
 
     /**
      * @param prefsName the prefsName to set
      */
-    public void setPrefsName(String prefsName) {
+    public void
+
+setPrefsName(String prefsName) {
         this.prefsName = prefsName;
-    }
+
+
+}
 
     /**
      * @return the shortName
      */
-    public String getShortName() {
+    public String
+
+getShortName() {
         return shortName;
-    }
+
+
+}
 
     /**
      * @return the maxIni
      */
-    public int getMaxIni() {
+    public int
+
+getMaxIni() {
         return instancePrefs.getInt("max_ini", 0);
 
-    }
+
+
+}
 
     /**
      * @param maxIni the maxIni to set
      */
-    public void setMaxIni(int maxIni) {
+    public void
+
+setMaxIni(int maxIni) {
         if (maxIni > getMaxIni()) {
             instancePrefs.edit().putInt("max_ini", maxIni).commit();
-        }
+
+}
     }
 }

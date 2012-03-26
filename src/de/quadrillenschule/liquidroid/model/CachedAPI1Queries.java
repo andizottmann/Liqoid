@@ -77,8 +77,10 @@ public class CachedAPI1Queries {
                 endswith = "</initiative_list>";
             }
             String string = convertStreamToString(is);
-             if (string.contains(endswith)) {
-
+            if (string.contains(endswith)) {
+                if (myfile.exists()) {
+                    myfile.delete();
+                }
                 myfile.createNewFile();
                 FileOutputStream fos = new FileOutputStream(myfile);
                 fos.write(string.getBytes("UTF-8"));
@@ -113,10 +115,10 @@ public class CachedAPI1Queries {
         if (!cachefile.exists()) {
             return true;
         }
-        if (now - cachefile.lastModified() > globalPrefs.getLong("maxdataage", 432000000)) {
+        if (now - cachefile.lastModified() > Long.parseLong(globalPrefs.getString("maxdataage", "432000000"))) {
             return true;
         }
-        if (now - cachefile.lastModified() < globalPrefs.getLong("mindataage", 180000)) {
+        if (now - cachefile.lastModified() < Long.parseLong(globalPrefs.getString("mindataage", "180000"))) {
             return false;
         } else {
             if (state.equals("new")) {
