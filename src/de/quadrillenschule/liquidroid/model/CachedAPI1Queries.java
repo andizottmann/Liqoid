@@ -16,8 +16,11 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import org.apache.http.HttpResponse;
@@ -28,6 +31,7 @@ import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.conn.ssl.X509HostnameVerifier;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.SingleClientConnManager;
+import org.xml.sax.SAXException;
 
 /**
  *
@@ -68,24 +72,26 @@ public class CachedAPI1Queries {
     public void storeInCache(InputStream is, String url) {
 
         File myfile = new File(cacheFolder, url.hashCode() + ".xml");
+
+        String endswith = ">";
+        if (api.equals("area")) {
+            endswith = "</area_list>";
+        }
+        if (api.equals("initiative")) {
+            endswith = "</initiative_list>";
+        }
         try {
-            String endswith = ">";
-            if (api.equals("area")) {
-                endswith = "</area_list>";
-            }
-            if (api.equals("initiative")) {
-                endswith = "</initiative_list>";
-            }
             String string = convertStreamToString(is);
             if (string.contains(endswith)) {
-               
-                 FileOutputStream fos = new FileOutputStream(myfile);
+
+                FileOutputStream fos = new FileOutputStream(myfile);
                 fos.write(string.getBytes("UTF-8"));
                 fos.close();
 
             }
-        } catch (Exception e) {
+        } catch (IOException e) {
         }
+
 
     }
 
@@ -138,14 +144,18 @@ public class CachedAPI1Queries {
         SAXParser saxparser;
         Area tempArea = new Area(instance.instancePrefs);
         InitiativenFromAPIParser iniParser = new InitiativenFromAPIParser(tempArea, instance);
-
-
         try {
             saxparser = factory.newSAXParser();
             saxparser.parse(networkInputStream(api + "&min_id=" + oldmax), iniParser);
-        } catch (Exception e) {
+
+        } catch (ParserConfigurationException ex) {
+            return false;
+        } catch (SAXException ex) {
+            return false;
+        } catch (IOException ex) {
             return false;
         }
+
 
         if (iniParser.inis.size() > 1) {
             return true;

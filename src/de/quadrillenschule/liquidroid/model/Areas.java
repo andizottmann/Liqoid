@@ -42,13 +42,12 @@ public class Areas extends ArrayList<Area> {
     }
 
     public boolean isSelected(int areapos) {
-        try {
+      
             Area myarea = this.get(areapos);
             if (getSelectedAreas().getById(myarea.getId()) != null) {
                 return true;
             }
-        } catch (Exception e) {
-        }
+     
         return false;
     }
 

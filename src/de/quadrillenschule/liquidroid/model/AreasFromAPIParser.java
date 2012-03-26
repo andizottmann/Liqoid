@@ -51,10 +51,9 @@ public class AreasFromAPIParser extends DefaultHandler {
             currentArea.setName(charBuff.toString());
         }
         if (qName.equals("member_weight")) {
-            try {
+          
                 currentArea.setMember_weight(Integer.parseInt(charBuff.toString()));
-            } catch (Exception e) {
-            }
+         
         }
         if (qName.equals("area")) {
             areas.add(currentArea);

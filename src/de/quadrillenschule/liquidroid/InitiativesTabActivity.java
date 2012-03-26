@@ -212,9 +212,8 @@ public class InitiativesTabActivity extends Activity implements RefreshInisListT
         } else {
             allInis.sort(Initiative.ISSUE_CREATED_COMP);
         }
-        try {
+        if (inisListAdapter != null) {
             inisListAdapter.notifyDataSetChanged();
-        } catch (Exception e) {
         }
 
     }
@@ -271,7 +270,6 @@ public class InitiativesTabActivity extends Activity implements RefreshInisListT
                     String url = ((IssueItemView) contextMenuView.getParent().getParent()).initiative.getLqfbInstance().getWebUrl() + "issue/show/" + issueid + ".html";
                     Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                     myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-
                     startActivity(myIntent);
                 } catch (Exception e) {
                     return false;

@@ -38,7 +38,7 @@ public class UpcomingTabActivity extends InitiativesTabActivity {
         }
         try {
             inisListAdapter.notifyDataSetChanged();
-        } catch (Exception e) {
+        } catch (NullPointerException e) {
         }
     }
 

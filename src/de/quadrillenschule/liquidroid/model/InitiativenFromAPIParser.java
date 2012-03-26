@@ -5,8 +5,11 @@
 package de.quadrillenschule.liquidroid.model;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -68,13 +71,12 @@ public class InitiativenFromAPIParser extends DefaultHandler {
 
     static Date myDateParser(String str) {
         DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
         try {
             return (Date) formatter.parse(str);
-        } catch (Exception ex) {
-            // Logger.getLogger(InitiativenParser.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParseException ex) {
             return null;
         }
+
     }
 
     static String dateToStringFormatter(Date date) {
@@ -99,7 +101,7 @@ public class InitiativenFromAPIParser extends DefaultHandler {
         if (qName.equals("name")) {
             currentInitiative.name = charBuff.toString();
         }
-         if (qName.equals("current_draft_content")) {
+        if (qName.equals("current_draft_content")) {
             currentInitiative.current_draft_content = charBuff.toString();
         }
 

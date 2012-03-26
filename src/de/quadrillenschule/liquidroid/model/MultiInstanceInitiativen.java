@@ -20,22 +20,21 @@ public class MultiInstanceInitiativen extends ArrayList<Initiative> {
         public boolean orderNormal = true;
 
         public int compare(Initiative o1, Initiative o2) {
-            try {
-                long retval = 0;
-                if (orderNormal) {
-                    retval = (o1.issue_created.getTime() - o2.issue_created.getTime());
-                } else {
-                    retval = (o2.issue_created.getTime() - o1.issue_created.getTime());
 
-                }
-                if (retval > 0) {
-                    return 1;
-                }
-                if (retval < 0) {
-                    return -1;
-                }
-            } catch (Exception e) {
+            long retval = 0;
+            if (orderNormal) {
+                retval = (o1.issue_created.getTime() - o2.issue_created.getTime());
+            } else {
+                retval = (o2.issue_created.getTime() - o1.issue_created.getTime());
+
             }
+            if (retval > 0) {
+                return 1;
+            }
+            if (retval < 0) {
+                return -1;
+            }
+
             return 0;
         }
     }
@@ -45,22 +44,21 @@ public class MultiInstanceInitiativen extends ArrayList<Initiative> {
         public boolean orderNormal = true;
 
         public int compare(Initiative o1, Initiative o2) {
-            try {
-                long retval = 0;
-                if (orderNormal) {
-                    retval = (o1.getDateForNextEvent().getTime() - o2.getDateForNextEvent().getTime());
-                } else {
-                    retval = (o2.getDateForNextEvent().getTime() - o1.getDateForNextEvent().getTime());
 
-                }
-                if (retval > 0) {
-                    return 1;
-                }
-                if (retval < 0) {
-                    return -1;
-                }
-            } catch (Exception e) {
+            long retval = 0;
+            if (orderNormal) {
+                retval = (o1.getDateForNextEvent().getTime() - o2.getDateForNextEvent().getTime());
+            } else {
+                retval = (o2.getDateForNextEvent().getTime() - o1.getDateForNextEvent().getTime());
+
             }
+            if (retval > 0) {
+                return 1;
+            }
+            if (retval < 0) {
+                return -1;
+            }
+
             return 0;
         }
     }
@@ -70,23 +68,20 @@ public class MultiInstanceInitiativen extends ArrayList<Initiative> {
         public boolean orderNormal = true;
 
         public int compare(Initiative o1, Initiative o2) {
-            try {
-                long retval = 0;
-                Date o1date = o1.dateForLastEvent();
-                Date o2date = o2.dateForLastEvent();
-                if (orderNormal) {
-                    retval = (o2date.getTime() - o1date.getTime());
-                } else {
-                    retval = (o1date.getTime() - o2date.getTime());
+            long retval = 0;
+            Date o1date = o1.dateForLastEvent();
+            Date o2date = o2.dateForLastEvent();
+            if (orderNormal) {
+                retval = (o2date.getTime() - o1date.getTime());
+            } else {
+                retval = (o1date.getTime() - o2date.getTime());
 
-                }
-                if (retval > 0) {
-                    return 1;
-                }
-                if (retval < 0) {
-                    return -1;
-                }
-            } catch (Exception e) {
+            }
+            if (retval > 0) {
+                return 1;
+            }
+            if (retval < 0) {
+                return -1;
             }
             return 0;
         }
@@ -116,7 +111,7 @@ public class MultiInstanceInitiativen extends ArrayList<Initiative> {
             c = new SortByNextEventComparator();
             ((SortByNextEventComparator) c).orderNormal = false;
         }
-         if (comparator == Initiative.ISSUE_LAST_EVENT_COMP) {
+        if (comparator == Initiative.ISSUE_LAST_EVENT_COMP) {
             c = new SortByLastEventComparator();
             ((SortByLastEventComparator) c).orderNormal = false;
         }
@@ -124,7 +119,7 @@ public class MultiInstanceInitiativen extends ArrayList<Initiative> {
     }
 
     public void removeNonSelected() {
-        ArrayList<Initiative> removeList=new ArrayList<Initiative>();
+        ArrayList<Initiative> removeList = new ArrayList<Initiative>();
         for (Initiative i : this) {
             if (!i.getArea().getInitiativen().getSelectedIssues().isIssueSelected(i.issue_id)) {
                 removeList.add(i);

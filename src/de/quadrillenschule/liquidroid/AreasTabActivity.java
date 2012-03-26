@@ -121,16 +121,14 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
     public boolean onContextItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.open_browser:
-                try {
-                    String areaname = ((CheckBox) contextMenuView).getText().toString();
-                    int areaid = ((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance().areas.getByName(areaname).getId();
-                    String url = ((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance().getWebUrl() + "area/show/" + areaid + ".html";
-                    Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                    myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-                    startActivity(myIntent);
-                } catch (Exception e) {
-                    return false;
-                }
+
+                String areaname = ((CheckBox) contextMenuView).getText().toString();
+                int areaid = ((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance().areas.getByName(areaname).getId();
+                String url = ((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance().getWebUrl() + "area/show/" + areaid + ".html";
+                Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+                startActivity(myIntent);
+
                 return true;
 
             default:
@@ -157,10 +155,10 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
                 return true;
             case R.id.unlock_instance:
                 ((LiqoidApplication) getApplication()).unlockInstancesDialog(this).show();
-                 return true;
+                return true;
             case R.id.lock_instance:
                 ((LiqoidApplication) getApplication()).lockInstancesDialog(this).show();
-                 return true;
+                return true;
             case R.id.about:
                 ((LiqoidApplication) getApplication()).aboutDialog(this).show();
                 return true;

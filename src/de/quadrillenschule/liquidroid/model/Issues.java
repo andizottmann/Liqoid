@@ -28,10 +28,9 @@ public class Issues extends MultiInstanceInitiativen {
         String[] selectedissues_str = instancePrefs.getString("selectedissues", "0").split(":");
         ArrayList<Integer> selectedIssues = new ArrayList<Integer>();
         for (String s : selectedissues_str) {
-            try {
+           
                 selectedIssues.add(Integer.parseInt(s));
-            } catch (Exception e) {
-            }
+          
         }
 
         for (Integer i : selectedIssues) {
@@ -47,12 +46,11 @@ public class Issues extends MultiInstanceInitiativen {
         Initiative myini = this.get(pos);
         String[] selectedissues_str = instancePrefs.getString("selectedissues", "0").split(":");
         for (String s : selectedissues_str) {
-            try {
+           
                 if (Integer.parseInt(s) == myini.issue_id) {
                     return true;
                 }
-            } catch (Exception e) {
-            }
+            
         }
 
 
@@ -67,12 +65,11 @@ public class Issues extends MultiInstanceInitiativen {
         Initiative myini = myinis.get(0);
         String[] selectedissues_str = instancePrefs.getString("selectedissues", "0").split(":");
         for (String s : selectedissues_str) {
-            try {
+          
                 if (Integer.parseInt(s) == myini.issue_id) {
                     return true;
                 }
-            } catch (Exception e) {
-            }
+           
         }
 
 
