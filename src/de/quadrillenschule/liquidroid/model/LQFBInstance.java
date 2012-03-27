@@ -29,7 +29,7 @@ public class LQFBInstance {
     private String apiversion = "";
     private String shortName = "";
     private AreasFromAPIParser areaParser;
-    private InitiativenFromAPIParser iniParser;
+    private InitiativenFromAPI1Parser iniParser;
     public static final String AREA_API = "area";
     public boolean pauseDownload = false;
     SharedPreferences instancePrefs;
@@ -108,7 +108,7 @@ public class LQFBInstance {
         SAXParser saxparser;
 
         //     area.getInitiativen().clear();
-        iniParser = new InitiativenFromAPIParser(area, this);
+        iniParser = new InitiativenFromAPI1Parser(area, this);
         String[] states = {"new", "accepted", "frozen", "voting"};
 
 

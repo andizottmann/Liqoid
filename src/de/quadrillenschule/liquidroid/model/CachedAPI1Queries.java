@@ -144,7 +144,7 @@ public class CachedAPI1Queries {
         SAXParserFactory factory = SAXParserFactory.newInstance();
         SAXParser saxparser;
         Area tempArea = new Area(instance.instancePrefs);
-        InitiativenFromAPIParser iniParser = new InitiativenFromAPIParser(tempArea, instance);
+        InitiativenFromAPI1Parser iniParser = new InitiativenFromAPI1Parser(tempArea, instance);
         try {
             saxparser = factory.newSAXParser();
             saxparser.parse(networkInputStream(api + "&min_id=" + oldmax), iniParser);

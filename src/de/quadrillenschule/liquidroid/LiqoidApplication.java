@@ -106,7 +106,7 @@ public class LiqoidApplication extends Application {
             public void onClick(DialogInterface arg0, int arg1) {
                 tounLocki = lqfbInstances.getLockedInstances().get(arg1);
             }
-        }).setTitle(R.string.menu_unlock_instance).setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+        }).setTitle(R.string.menu_unlock_instance).setPositiveButton(R.string.menu_unlock_instance, new DialogInterface.OnClickListener() {
 
             public void onClick(DialogInterface arg0, int arg1) {
                 if (tounLocki != null) {
@@ -114,7 +114,7 @@ public class LiqoidApplication extends Application {
                     arg0.dismiss();
                 }
             }
-        }).setNegativeButton(R.string.cancel, null).setNeutralButton(R.string.resetpublicinstances, new DialogInterface.OnClickListener() {
+        }).setNeutralButton(R.string.resetpublicinstances, new DialogInterface.OnClickListener() {
 
             public void onClick(DialogInterface arg0, int arg1) {
                 lqfbInstances.initInstances();
@@ -134,7 +134,7 @@ public class LiqoidApplication extends Application {
                 toLocki = lqfbInstances.get(arg1);
 
             }
-        }).setTitle(R.string.menu_lock_instance).setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+        }).setTitle(R.string.menu_lock_instance).setPositiveButton(R.string.menu_lock_instance, new DialogInterface.OnClickListener() {
 
             public void onClick(DialogInterface arg0, int arg1) {
                 toLocki.setDeveloperkey("");
@@ -142,7 +142,7 @@ public class LiqoidApplication extends Application {
                 lqfbInstances.getLockedInstances().add(toLocki);
                 arg0.dismiss();
             }
-        }).setNegativeButton(R.string.cancel, null);
+        });
 
         AlertDialog alert = builder.create();
         return alert;
@@ -151,14 +151,14 @@ public class LiqoidApplication extends Application {
     public AlertDialog unlockInstanceDialog(final Activity context, final LQFBInstance lin) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         final EditText textfield = new EditText(context);
-        builder.setTitle(R.string.menu_unlock_instance).setTitle(R.string.enterdeveloperkey).setMessage(R.string.enterdeveloperkeyhints).setView(textfield).setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+        builder.setTitle(R.string.menu_unlock_instance).setTitle(R.string.enterdeveloperkey).setMessage(R.string.enterdeveloperkeyhints).setView(textfield).setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
 
             public void onClick(DialogInterface arg0, int arg1) {
                 lin.setDeveloperkey(textfield.getText().toString());
                 lqfbInstances.add(lin);
                 lqfbInstances.getLockedInstances().remove(lin);
             }
-        }).setNegativeButton(R.string.cancel, null).setNeutralButton(R.string.toinstance, new DialogInterface.OnClickListener() {
+        }).setNeutralButton(R.string.toinstance, new DialogInterface.OnClickListener() {
 
             public void onClick(DialogInterface arg0, int arg1) {
                 Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(lin.getWebUrl()));
@@ -172,12 +172,7 @@ public class LiqoidApplication extends Application {
 
     public AlertDialog aboutDialog(final Activity context) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setMessage(getString(R.string.fullcredits)).setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
-
-            public void onClick(DialogInterface dialog, int id) {
-                dialog.cancel();
-            }
-        }).setNeutralButton(R.string.projecthome, new DialogInterface.OnClickListener() {
+        builder.setMessage(getString(R.string.fullcredits)).setCancelable(false).setNeutralButton(R.string.projecthome, new DialogInterface.OnClickListener() {
 
             public void onClick(DialogInterface arg0, int arg1) {
                 Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.projecthomeurl)));

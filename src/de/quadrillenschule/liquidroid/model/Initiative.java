@@ -26,6 +26,7 @@ public class Initiative {
     public long issue_verification_time = 0;
     public long issue_voting_time = 0;
     public int supporter_count = 0;//,issue_voter_count=-1,positive_votes=-1,negative_voters=-1;
+    public int policy_issue_quorum_num=10;
     public Date revoked;
     public Date created;
     public Date issue_created;
@@ -247,5 +248,9 @@ public class Initiative {
      */
     public void setState(String state) {
         this.state = state;
+    }
+
+    public int getQuorum(){
+    return (int)(Math.round((policy_issue_quorum_num/100.0)*area.getMember_weight()));
     }
 }

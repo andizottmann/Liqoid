@@ -68,11 +68,13 @@ public class Issues extends MultiInstanceInitiativen {
         Initiative myini = myinis.get(0);
         String[] selectedissues_str = instancePrefs.getString("selectedissues", "0").split(":");
         for (String s : selectedissues_str) {
-          
+          try {
                 if (Integer.parseInt(s) == myini.issue_id) {
                     return true;
                 }
-           
+            } catch (NumberFormatException nfe){
+            //must be an empty one
+            }
         }
 
 

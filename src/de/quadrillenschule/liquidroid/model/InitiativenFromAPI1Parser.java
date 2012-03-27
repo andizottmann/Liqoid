@@ -8,8 +8,6 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -18,7 +16,7 @@ import org.xml.sax.helpers.DefaultHandler;
  *
  * @author andi
  */
-public class InitiativenFromAPIParser extends DefaultHandler {
+public class InitiativenFromAPI1Parser extends DefaultHandler {
 
     public Issues inis;
     Initiative currentInitiative;
@@ -26,7 +24,7 @@ public class InitiativenFromAPIParser extends DefaultHandler {
     Area area;
     LQFBInstance lqfbInstance;
 
-    public InitiativenFromAPIParser(Area area, LQFBInstance lqfbInstance) {
+    public InitiativenFromAPI1Parser(Area area, LQFBInstance lqfbInstance) {
         super();
         this.area = area;
         charBuff = new StringBuffer();
@@ -129,16 +127,18 @@ public class InitiativenFromAPIParser extends DefaultHandler {
 
         if (qName.equals("supporter_count")) {
             try {
-            currentInitiative.supporter_count = Integer.parseInt(charBuff.toString());
-            } catch (NumberFormatException e){
-             currentInitiative.supporter_count =0;
+                currentInitiative.supporter_count = Integer.parseInt(charBuff.toString());
+            } catch (NumberFormatException e) {
+                currentInitiative.supporter_count = 0;
             }
+        }
+
+        if (qName.equals("policy_issue_quorum_num")) {
+            currentInitiative.policy_issue_quorum_num = Integer.parseInt(charBuff.toString());
         }
 
         if (qName.equals("issue_verification_time")) {
             currentInitiative.issue_verification_time = myTimeParser(charBuff.toString());
-            //   System.out.println(currentInitiative.issue_verification_time);
-
         }
         if (qName.equals("issue_voting_time")) {
             currentInitiative.issue_voting_time = myTimeParser(charBuff.toString());

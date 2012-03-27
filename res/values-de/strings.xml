@@ -57,5 +57,6 @@
     <string name="lastErzeugt">Neues Thema</string>
     <string name="supporter">Unterstützer</string>
     <string name="members">Mitglieder</string>
+    <string name="save">Speichern</string>
 
 </resources>

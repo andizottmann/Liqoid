@@ -216,7 +216,7 @@ public class IssueItemView extends LinearLayout implements OnClickListener {
 
             public void onClick(View arg0) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-                builder.setMessage("Status: "+activity.getString(i.getIntlStateResId())+"\n\n"+i.current_draft_content).setNeutralButton(R.string.open_browser, new android.content.DialogInterface.OnClickListener() {
+                builder.setMessage("Status: " + activity.getString(i.getIntlStateResId()) + "\n\n" + i.current_draft_content).setNeutralButton(R.string.open_browser, new android.content.DialogInterface.OnClickListener() {
 
                     public void onClick(DialogInterface arg0, int arg1) {
                         Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(i.getLqfbInstance().getWebUrl() + "initiative/show/" + i.id + ".html"));
@@ -226,11 +226,11 @@ public class IssueItemView extends LinearLayout implements OnClickListener {
                 }).setPositiveButton(R.string.share, new DialogInterface.OnClickListener() {
 
                     public void onClick(DialogInterface arg0, int arg1) {
-                     Intent intent = new Intent(android.content.Intent.ACTION_SEND);
-                    intent.setType("text/plain");
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-                    intent.putExtra(Intent.EXTRA_TEXT, i.getLqfbInstance().getWebUrl() + "initiative/show/" + i.id + ".html");
-                    activity.startActivity(Intent.createChooser(intent, activity.getString(R.string.share)));
+                        Intent intent = new Intent(android.content.Intent.ACTION_SEND);
+                        intent.setType("text/plain");
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+                        intent.putExtra(Intent.EXTRA_TEXT, i.getLqfbInstance().getWebUrl() + "initiative/show/" + i.id + ".html");
+                        activity.startActivity(Intent.createChooser(intent, activity.getString(R.string.share)));
                     }
                 }).setTitle(i.name);
 
@@ -239,7 +239,11 @@ public class IssueItemView extends LinearLayout implements OnClickListener {
 
             }
         });
-        retval.setText(Html.fromHtml(i.name + "<font color=\"#009010\"><br>"+activity.getString(R.string.supporter)+":<b>" + i.supporter_count + "</b></b>"));
+        String quorumcolor = "#009010";//green
+        if (i.getQuorum() > i.supporter_count) {
+            quorumcolor = "#d00010";//red
+        }
+        retval.setText(Html.fromHtml(i.name + "<font color=\"#009010\"><br>" + activity.getString(R.string.supporter) + ":</font><font color=\"" + quorumcolor + "\"><b>" + i.supporter_count + " / " + i.getQuorum() + "</b></font>"));
         retval.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
         retval.setGravity(Gravity.LEFT);
         return retval;
