@@ -58,5 +58,7 @@
     <string name="supporter">Unterstützer</string>
     <string name="members">Mitglieder</string>
     <string name="save">Speichern</string>
+    <string name="collapse">Zuklappen</string>
+
 
 </resources>

@@ -29,7 +29,7 @@ import java.util.ArrayList;
  *
  * @author andi
  */
-public class LiqoidApplication extends Application {
+public class LiqoidApplication extends Application implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     public LQFBInstances lqfbInstances;
     ArrayList<LQFBInstanceChangeListener> lqfbInstanceChangeListeners;
@@ -46,6 +46,7 @@ public class LiqoidApplication extends Application {
         cachedAPI1Queries = new CachedAPI1Queries(getExternalCacheDir(),getGlobalPreferences());
         lqfbInstances = new LQFBInstances(this);
         lqfbInstanceChangeListeners = new ArrayList<LQFBInstanceChangeListener>();
+        getGlobalPreferences().registerOnSharedPreferenceChangeListener(this);
     }
 
     public void statusLineText(String text) {
@@ -189,5 +190,9 @@ public class LiqoidApplication extends Application {
         });
         AlertDialog alert = builder.create();
         return alert;
+    }
+
+    public void onSharedPreferenceChanged(SharedPreferences arg0, String arg1) {
+        
     }
 }

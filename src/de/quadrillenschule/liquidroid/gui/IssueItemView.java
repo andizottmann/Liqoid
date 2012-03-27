@@ -24,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 import de.quadrillenschule.liquidroid.InitiativesTabActivity;
 import de.quadrillenschule.liquidroid.LiqoidApplication;
 import de.quadrillenschule.liquidroid.model.Initiative;
@@ -36,14 +37,16 @@ import de.quadrillenschule.liquidroid.R;
  *
  * @author andi
  */
-public class IssueItemView extends LinearLayout implements OnClickListener {
+public class IssueItemView extends LinearLayout {
 
     InitiativesTabActivity activity;
     public Initiative initiative;
-    CheckBox myCheckBox;
+    CheckBox favStarCheckBox;
+    ToggleButton issueButton;
     TextView statusLine, instanceView, areaView;
     LinearLayout expandView;
     ImageView colorView;
+    LinearLayout issueView;
     //LinearLayout contentContainer, statusContainer;
     // RelativeLayout contentContainer;
     Button expandButton;
@@ -113,26 +116,54 @@ public class IssueItemView extends LinearLayout implements OnClickListener {
         areaView.setId(31);
         rl.addView(areaView, rlp);
 
-        myCheckBox = new CheckBox(activity, null, android.R.attr.starStyle);
-        myCheckBox.setTextColor(Color.BLACK);
-        myCheckBox.setText(Html.fromHtml(initiative.name + "<font color=\"#009010\"> / Alt: <b>" + ((int) initiative.getConcurrentInis().size()) + "</b></font>"));
-        myCheckBox.setChecked(initiative.getArea().getInitiativen().isIssueSelected(initiative.issue_id));
-        myCheckBox.setOnClickListener(this);
+        issueView = new LinearLayout(activity);
+        issueView.setOrientation(HORIZONTAL);
+
+        favStarCheckBox = new CheckBox(activity, null, android.R.attr.starStyle);
+        favStarCheckBox.setTextColor(Color.BLACK);
+        //   favStarCheckBox.setText("   ");
+        favStarCheckBox.setChecked(initiative.getArea().getInitiativen().isIssueSelected(initiative.issue_id));
+        favStarCheckBox.setOnClickListener(new OnClickListener() {
+
+            public void onClick(View arg0) {
+                onFavStarClick(arg0);
+            }
+        });
+        favStarCheckBox.setId(4);
+        issueView.addView(favStarCheckBox, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+
+        issueButton = new ToggleButton(activity);//,null,android.R.attr.borderlessButtonStyle);
+        issueButton.setTextColor(Color.BLACK);
+        issueButtonSetText();
+        issueButton.setOnClickListener(new OnClickListener() {
+
+            public void onClick(View arg0) {
+                expand();
+            }
+        });
+
+        issueButton.setId(41);
+        issueButton.setGravity(Gravity.LEFT);
+        activity.registerForContextMenu(issueButton);
+        //   rl.addView(issueButton, rlp);
+
+        issueView.addView(issueButton, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+
         rlp = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
         rlp.addRule(RelativeLayout.BELOW, areaView.getId());
+        //   rlp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
         rlp.addRule(RelativeLayout.ALIGN_TOP);
-        myCheckBox.setId(4);
-        activity.registerForContextMenu(myCheckBox);
-        rl.addView(myCheckBox, rlp);
+        rlp.addRule(RelativeLayout.ALIGN_LEFT);
+        issueView.setId(411);
+        rl.addView(issueView, rlp);
 
         expandView = new LinearLayout(activity);
         expandView.setOrientation(VERTICAL);
         rlp = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-        rlp.addRule(RelativeLayout.BELOW, myCheckBox.getId());
+        rlp.addRule(RelativeLayout.BELOW, issueView.getId());
         rlp.addRule(RelativeLayout.ALIGN_TOP);
-        //  expandView.setText("");
-        // expandView.setTextColor(Color.parseColor("#108020"));
-        //  expandView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+        rlp.addRule(RelativeLayout.ALIGN_LEFT);
+        rlp.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
         expandView.setId(5);
         rl.addView(expandView, rlp);
 
@@ -165,7 +196,7 @@ public class IssueItemView extends LinearLayout implements OnClickListener {
         return " <b><font color=black> " + activity.getString(initiative.getIntlStateResId()) + "</font> - <font color=blue>" + formatter.format(initiative.issue_created) + "</font></b>";
     }
 
-    public void onClick(View arg0) {
+    public void onFavStarClick(View arg0) {
         int issueid = initiative.issue_id;
         initiative.getArea().getInitiativen().setSelectedIssue(issueid, !initiative.getArea().getInitiativen().isIssueSelected(issueid));
 
@@ -179,34 +210,42 @@ public class IssueItemView extends LinearLayout implements OnClickListener {
         }
     }
 
+    public void issueButtonSetText() {
+        String text = "Thema: "+initiative.name + "<font color=\"#009010\"> / Alt: <b>" + ((int) initiative.getConcurrentInis().size()) + "</b></font>";
+        issueButton.setText(Html.fromHtml(text));
+        issueButton.setTextOff(Html.fromHtml(text));
+        issueButton.setTextOn(Html.fromHtml(text));
+    }
+
     public void expandButtonSetText() {
         String text = Utils.lessThanDays(itemSpecificDelta());
-        if (expandview) {
-            text += "\n\n\u2191";
-        } else {
-            text += "\n\n\u2193";
-        }
+
         expandButton.setText(text);
 
     }
 
     public void expand() {
         if (expandview) {
+            // issueButton.setText(Html.fromHtml(initiative.name + "<font color=\"#009010\"> / Alt: <b>" + ((int) initiative.getConcurrentInis().size()) + "</b></font>"));
+            issueButtonSetText();
             statusLine.setText(Html.fromHtml(getStatusText()));
 
             expandView.removeAllViews();
             expandview = false;
-            expandButtonSetText();
+            //    expandButtonSetText();
         } else {
+            //    expandView.addView(favStarCheckBox);
+            // expandView.addView();
             expandView.addView(generateIniButton(initiative));
             for (Initiative i : initiative.getConcurrentInis()) {
                 expandView.addView(generateIniButton(i));
 
             }
-            //statusLine.setText(Html.fromHtml(getStatusText() + "<br>" + string + "<br>"));
+            //     issueButton.setText("\u2191\u2191\u2191 " + activity.getString(R.string.collapse) + " \u2191\u2191\u2191");
 
+            //statusLine.setText(Html.fromHtml(getStatusText() + "<br>" + string + "<br>"));
             expandview = true;
-            expandButtonSetText();
+            //    expandButtonSetText();
         }
     }
 
@@ -243,7 +282,7 @@ public class IssueItemView extends LinearLayout implements OnClickListener {
         if (i.getQuorum() > i.supporter_count) {
             quorumcolor = "#d00010";//red
         }
-        retval.setText(Html.fromHtml(i.name + "<font color=\"#009010\"><br>" + activity.getString(R.string.supporter) + ":</font><font color=\"" + quorumcolor + "\"><b>" + i.supporter_count + " / " + i.getQuorum() + "</b></font>"));
+        retval.setText(Html.fromHtml("Ini: "+i.name + "<font color=\"#009010\"><br>" + activity.getString(R.string.supporter) + ":</font><font color=\"" + quorumcolor + "\"><b>" + i.supporter_count + " / " + i.getQuorum() + "</b></font>"));
         retval.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
         retval.setGravity(Gravity.LEFT);
         return retval;
