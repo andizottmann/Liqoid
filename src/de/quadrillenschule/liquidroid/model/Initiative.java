@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import de.quadrillenschule.liquidroid.R;
+
 /**
  *
  * @author andi
@@ -18,7 +19,7 @@ public class Initiative {
     public int area_id = 0;
     public String name = "";
     private String state = "";
-    public String current_draft_content="";
+    public String current_draft_content = "";
     public int issue_id = 0;
     public long issue_discussion_time = 0;
     public long issue_admission_time = 0;
@@ -36,7 +37,7 @@ public class Initiative {
     public static final int ISSUE_ID_COMP = 0, ISSUE_CREATED_COMP = 1, ISSUE_NEXT_EVENT_COMP = 2, ISSUE_LAST_EVENT_COMP = 3;
     private LQFBInstance lqfbInstance;
     private Area area;
-    private ArrayList<Initiative> concurrentInis=new ArrayList();
+    private ArrayList<Initiative> concurrentInis = new ArrayList();
 
     public Initiative(Area area, LQFBInstance lqfbInstance) {
         this.area = area;
@@ -80,6 +81,35 @@ public class Initiative {
         }
     }
 
+    public int lastEventIntlId() {
+
+
+        String s = lastEvent();
+        if (s.equals(lastVotingEnded)) {
+            return R.string.lastVotingEnded;
+        }
+        if (s.equals(lastVotingStarted)) {
+            return R.string.lastVotingStarted;
+        }
+        if (s.equals(lastFrozen)) {
+            return R.string.lastFrozen;
+        }
+        if (s.equals(lastClosed)) {
+            return R.string.lastClosed;
+        }
+        if (s.equals(lastRevoked)) {
+            return R.string.lastRevoked;
+        }
+        if (s.equals(lastNeuerEntwurf)) {
+            return R.string.lastNeuerEntwurf;
+        }
+        if (s.equals(lastErzeugt)) {
+            return R.string.lastErzeugt;
+        }
+
+        return R.string.unknown;
+    }
+
     public Date dateForLastEvent() {
         if (lastEvent().equals(lastRevoked)) {
             return revoked;
@@ -119,6 +149,22 @@ public class Initiative {
             return nextAbstimmungsende;
         }
         return "";
+    }
+
+    public int nextEventIntlResId() {
+        if (getState().equals("new")) {
+            return R.string.accepted;
+        }
+        if (getState().equals("accepted")) {
+            return R.string.frozen;
+        }
+        if (getState().equals("frozen")) {
+            return R.string.voting;
+        }
+        if (getState().equals("voting")) {
+            return R.string.votingends;
+        }
+        return R.string.unknown;
     }
 
     public Date getDateForNextEvent() {
@@ -180,12 +226,12 @@ public class Initiative {
         return state;
     }
 
-      public int getIntlStateResId() {
+    public int getIntlStateResId() {
         if (getState().equals("new")) {
             return R.string.new_;
         }
         if (getState().equals("accepted")) {
-              return R.string.accepted;
+            return R.string.accepted;
         }
         if (getState().equals("frozen")) {
             return R.string.frozen;

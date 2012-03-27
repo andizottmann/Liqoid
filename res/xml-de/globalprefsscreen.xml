@@ -15,7 +15,13 @@
             android:key="pulltorefresh"
             android:summary="Pull-to-refresh Listen aktivieren"
             android:title="Pull-To-Refresh"
-            android:defaultValue="true"
+            android:defaultValue="false"
+        />
+            <CheckBoxPreference
+            android:key="animations"
+            android:summary="Animationen"
+            android:title="Animationen ein- und ausschalten"
+            android:defaultValue="false"
         />
     </PreferenceCategory>
     <PreferenceCategory

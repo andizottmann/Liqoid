@@ -10,7 +10,6 @@ import android.gesture.GestureOverlayView;
 import android.gesture.Prediction;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup.LayoutParams;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
@@ -131,18 +130,19 @@ public class LiqoidMainActivity extends TabActivity implements GestureOverlayVie
     private View lastTabView;
 
     public void onTabChanged(String tabId) {
-        // tab1Layout.setAnimation(outToLeftAnimation());
-        if (lastTab == tabHost.getCurrentTab()) {
+         if (lastTab == tabHost.getCurrentTab()) {
             return;
         }
-        if (lastTab > tabHost.getCurrentTab()) {
-            tabHost.getCurrentView().setAnimation(inFromLeftAnimation());
-            lastTabView.setAnimation(outToRightAnimation());
+        if (((LiqoidApplication) getApplication()).getGlobalPreferences().getBoolean("animations", false)) {
+            if (lastTab > tabHost.getCurrentTab()) {
+                tabHost.getCurrentView().setAnimation(inFromLeftAnimation());
+                lastTabView.setAnimation(outToRightAnimation());
 
-        } else {
-            tabHost.getCurrentView().setAnimation(inFromRightAnimation());
-            lastTabView.setAnimation(outToLeftAnimation());
+            } else {
+                tabHost.getCurrentView().setAnimation(inFromRightAnimation());
+                lastTabView.setAnimation(outToLeftAnimation());
 
+            }
         }
         lastTab = tabHost.getCurrentTab();
         lastTabView = tabHost.getCurrentView();

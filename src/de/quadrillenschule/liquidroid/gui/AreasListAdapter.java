@@ -17,6 +17,7 @@ import de.quadrillenschule.liquidroid.AreasTabActivity;
 import de.quadrillenschule.liquidroid.LiqoidApplication;
 import de.quadrillenschule.liquidroid.model.Area;
 import de.quadrillenschule.liquidroid.model.Areas;
+import de.quadrillenschule.liquidroid.R;
 
 public class AreasListAdapter extends ArrayAdapter<Area> {
 
@@ -38,11 +39,11 @@ public class AreasListAdapter extends ArrayAdapter<Area> {
 
         retval.setTextColor(Color.BLACK);
         retval.setBackgroundColor(Color.argb(255, 245, 245, 245));
-        String inisspecial=" Inis:"+areas.get(position).getInitiativen().size();
-        if (!areas.getSelectedAreas().contains(areas.get(position))){
-        inisspecial=" Inis:?";
+        String inisspecial = " Inis:" + areas.get(position).getInitiativen().size();
+        if (!areas.getSelectedAreas().contains(areas.get(position))) {
+            inisspecial = " Inis:?";
         }
-        retval.setText(Html.fromHtml(areas.get(position).getName()+"<br><small> M:"+areas.get(position).getMember_weight()+" &nbsp;&nbsp; "+inisspecial+" &nbsp;&nbsp; Favs <font color=\"#eecc00\">\u2605</font>"+areas.get(position).getInitiativen().getSelectedIssues().size()+"</small>"));
+        retval.setText(Html.fromHtml(areas.get(position).getName() + "<br><small> " + activity.getString(R.string.members) + ":" + areas.get(position).getMember_weight() + " &nbsp;&nbsp; " + inisspecial + " &nbsp;&nbsp; Favs <font color=\"#eecc00\">\u2605</font>" + areas.get(position).getInitiativen().getSelectedIssues().size() + "</small>"));
         retval.setChecked(areas.isSelected(position));
         retval.setOnClickListener(new View.OnClickListener() {
 

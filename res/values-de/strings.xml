@@ -47,4 +47,15 @@
     <string name="accepted">Akzeptiert</string>
     <string name="frozen">Eingefroren</string>
     <string name="voting">Abstimmung</string>
+    <string name="votingends">Abstimmungsende</string>
+    <string name="lastVotingEnded">Abstimmung beendet</string>
+    <string name="lastVotingStarted">Abstimmungsbeginn</string>
+    <string name="lastFrozen">Eingefroren</string>
+    <string name="lastClosed">Beendet</string>
+    <string name="lastRevoked">Zurückgezogen</string>
+    <string name="lastNeuerEntwurf">Neuer Entwurf</string>
+    <string name="lastErzeugt">Neues Thema</string>
+    <string name="supporter">Unterstützer</string>
+    <string name="members">Mitglieder</string>
+
 </resources>
