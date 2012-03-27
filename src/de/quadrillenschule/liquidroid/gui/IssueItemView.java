@@ -216,7 +216,7 @@ public class IssueItemView extends LinearLayout implements OnClickListener {
 
             public void onClick(View arg0) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-                builder.setMessage(activity.getString(i.getIntlStateResId())+"\n"+i.current_draft_content).setNeutralButton(R.string.open_browser, new android.content.DialogInterface.OnClickListener() {
+                builder.setMessage("Status: "+activity.getString(i.getIntlStateResId())+"\n\n"+i.current_draft_content).setNeutralButton(R.string.open_browser, new android.content.DialogInterface.OnClickListener() {
 
                     public void onClick(DialogInterface arg0, int arg1) {
                         Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(i.getLqfbInstance().getWebUrl() + "initiative/show/" + i.id + ".html"));

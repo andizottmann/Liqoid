@@ -28,8 +28,11 @@ public class Issues extends MultiInstanceInitiativen {
         String[] selectedissues_str = instancePrefs.getString("selectedissues", "0").split(":");
         ArrayList<Integer> selectedIssues = new ArrayList<Integer>();
         for (String s : selectedissues_str) {
-           
+           try {
                 selectedIssues.add(Integer.parseInt(s));
+            } catch (NumberFormatException nfe){
+            //Must be an empty entry
+            }
           
         }
 

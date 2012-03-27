@@ -128,7 +128,11 @@ public class InitiativenFromAPIParser extends DefaultHandler {
         }
 
         if (qName.equals("supporter_count")) {
+            try {
             currentInitiative.supporter_count = Integer.parseInt(charBuff.toString());
+            } catch (NumberFormatException e){
+             currentInitiative.supporter_count =0;
+            }
         }
 
         if (qName.equals("issue_verification_time")) {
