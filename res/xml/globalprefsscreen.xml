@@ -12,12 +12,6 @@
             android:defaultValue="true"
         />
         <CheckBoxPreference
-            android:key="pulltorefresh"
-            android:summary="Enable or disable Pull-to-refresh lists"
-            android:title="Enable Pull-To-Refresh"
-            android:defaultValue="false"
-        />
-        <CheckBoxPreference
             android:key="animations"
             android:summary="Enable or disable animations"
             android:title="Animations"

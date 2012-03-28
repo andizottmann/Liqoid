@@ -21,7 +21,6 @@ import de.quadrillenschule.liquidroid.model.CachedAPI1Queries;
 import de.quadrillenschule.liquidroid.model.LQFBInstance;
 import de.quadrillenschule.liquidroid.model.LQFBInstances;
 import de.quadrillenschule.liquidroid.tools.CrashLog;
-import eu.erikw.PullToRefreshListView;
 import java.io.File;
 import java.util.ArrayList;
 

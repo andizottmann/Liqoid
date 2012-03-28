@@ -11,13 +11,7 @@
             android:title="Vibration"
             android:defaultValue="true"
         />
-           <CheckBoxPreference
-            android:key="pulltorefresh"
-            android:summary="Pull-to-refresh Listen aktivieren"
-            android:title="Pull-To-Refresh"
-            android:defaultValue="false"
-        />
-            <CheckBoxPreference
+        <CheckBoxPreference
             android:key="animations"
             android:summary="Animationen"
             android:title="Animationen ein- und ausschalten"
@@ -69,7 +63,7 @@
             android:entryValues="@array/limitInMinsValues"
         />
     </PreferenceCategory>
-<PreferenceCategory
+    <PreferenceCategory
         android:title="Offline cache"
         android:key="offlinecache">
         <CheckBoxPreference

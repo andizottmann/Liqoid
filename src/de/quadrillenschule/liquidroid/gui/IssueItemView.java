@@ -62,13 +62,14 @@ public class IssueItemView extends LinearLayout {
         RelativeLayout rl = new RelativeLayout(activity);
         rl.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
         rl.setPadding(0, 0, 0, 0);
+
         expandButton = new Button(activity, null, android.R.attr.buttonStyleSmall);
         expandButton.setBackgroundColor(itemSpecificColorcode());
         expandButton.setTypeface(Typeface.MONOSPACE);
         expandButtonSetText();
+
         LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.FILL_PARENT);
         this.addView(expandButton, lp);
-
 
         statusLine = new TextView(activity);
         rlp = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
@@ -227,17 +228,13 @@ public class IssueItemView extends LinearLayout {
             expandView.removeAllViews();
             expandview = false;
         } else {
-            expandView.addView(generateIniButton(initiative));
+            expandView.addView(generateIniButton(initiative), new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
             for (Initiative i : initiative.getConcurrentInis()) {
-
-
-                expandView.addView(generateIniButton(i));
-
-            }
+              expandView.addView(generateIniButton(i), new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+           }
             expandview = true;
         }
-        expandView.forceLayout();
-        this.forceLayout();
+      
 
     }
 

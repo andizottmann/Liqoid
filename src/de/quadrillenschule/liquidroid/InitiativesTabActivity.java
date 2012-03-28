@@ -29,8 +29,6 @@ import de.quadrillenschule.liquidroid.model.LQFBInstance;
 import de.quadrillenschule.liquidroid.model.LQFBInstances;
 import de.quadrillenschule.liquidroid.model.MultiInstanceInitiativen;
 import de.quadrillenschule.liquidroid.model.RefreshInisListThread;
-import eu.erikw.PullToRefreshListView;
-import eu.erikw.PullToRefreshListView.OnRefreshListener;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -101,27 +99,8 @@ public class InitiativesTabActivity extends Activity implements RefreshInisListT
         inisListAdapter = getInitiativenListAdapter();
         filterList();
         sortList();
-        final PullToRefreshListView listView = (PullToRefreshListView) findViewById(R.id.initiativenList);
-        listView.enabled = ((LiqoidApplication) getApplication()).getGlobalPreferences().getBoolean("pulltorefresh", false);
-        listView.setTextPullToRefresh(getString(R.string.ptr_pull_to_refresh));
-        listView.setTextReleaseToRefresh(getString(R.string.ptr_release_to_refresh));
-        listView.setTextRefreshing(getString(R.string.ptr_refreshing));
+        final ListView listView = (ListView) findViewById(R.id.initiativenList);
         listView.setAdapter(inisListAdapter);
-        listView.setOnRefreshListener(new OnRefreshListener() {
-
-            @Override
-            public void onRefresh() {
-                refreshInisList(true);
-                listView.postDelayed(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        listView.onRefreshComplete();
-                    }
-                }, 2000);
-            }
-        });
-
         inisListAdapter.notifyDataSetChanged();
 
 

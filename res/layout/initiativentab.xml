@@ -27,13 +27,13 @@
     android:gestureStrokeType="multiple"
     android:eventsInterceptionEnabled="true"
     android:orientation="vertical">
-        <eu.erikw.PullToRefreshListView
+        <ListView
      android:id="@+id/initiativenList"
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent"
          android:layout_weight="1"
-           android:background="@android:color/white"
-        android:cacheColorHint="@android:color/white"
+        android:cacheColorHint="#fff5f5f5"
+        android:background="#fff5f5f5"
     
 />
     </android.gesture.GestureOverlayView>
