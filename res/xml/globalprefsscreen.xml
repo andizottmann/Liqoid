@@ -48,10 +48,10 @@
             android:entryValues="@array/limitInDaysValues"
         />
     </PreferenceCategory>
- <PreferenceCategory
+    <PreferenceCategory
         android:title="Update cycles"
         android:key="updatecycles">
-              <ListPreference
+        <ListPreference
             android:key="maxdataage"
             android:title="Maximal dataage"
             android:summary="Download is forced when you refresh."
@@ -67,5 +67,15 @@
             android:entries="@array/limitInMins"
             android:entryValues="@array/limitInMinsValues"
         />
-</PreferenceCategory>
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="Offline cache"
+        android:key="offlinecache">
+        <CheckBoxPreference
+            android:key="clearcache"
+            android:summary="Clear cache"
+            android:title="Clears the offline cache. All data will be downloaded again."
+            android:defaultValue="false"
+        />
+    </PreferenceCategory>
 </PreferenceScreen>

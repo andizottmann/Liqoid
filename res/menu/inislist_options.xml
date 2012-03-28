@@ -4,15 +4,15 @@
           android:icon="@drawable/ic_menu_refresh"
           android:title="@string/menu_refresh"/>
     <item android:id="@+id/sort_inislist"
-          android:icon="@drawable/ic_menu_sort_by_size"
+          android:icon="@android:drawable/ic_menu_sort_by_size"
           android:title="@string/reversesort"/>
     <item android:id="@+id/toggleselectedfilter"
           android:icon="@drawable/ic_menu_star"
           android:title="@string/filterfavorites"/>
     <item android:id="@+id/prefs"
-          android:icon="@drawable/ic_menu_manage"
+          android:icon="@android:drawable/ic_menu_manage"
           android:title="@string/prefs"/>
     <item android:id="@+id/about"
-          android:icon="@drawable/ic_menu_info_details"
+          android:icon="@android:drawable/ic_menu_info_details"
           android:title="@string/about"/>
 </menu>

@@ -61,17 +61,11 @@ public class IssueItemView extends LinearLayout {
         RelativeLayout.LayoutParams rlp;
         RelativeLayout rl = new RelativeLayout(activity);
         rl.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
-        rl.setPadding(4, 2, 2, 2);
-        expandButton = new Button(activity);
+        rl.setPadding(0, 0, 0, 0);
+        expandButton = new Button(activity, null, android.R.attr.buttonStyleSmall);
         expandButton.setBackgroundColor(itemSpecificColorcode());
         expandButton.setTypeface(Typeface.MONOSPACE);
         expandButtonSetText();
-        expandButton.setOnClickListener(new OnClickListener() {
-
-            public void onClick(View arg0) {
-                expand();
-            }
-        });
         LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.FILL_PARENT);
         this.addView(expandButton, lp);
 
@@ -151,7 +145,6 @@ public class IssueItemView extends LinearLayout {
 
         rlp = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
         rlp.addRule(RelativeLayout.BELOW, areaView.getId());
-        //   rlp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
         rlp.addRule(RelativeLayout.ALIGN_TOP);
         rlp.addRule(RelativeLayout.ALIGN_LEFT);
         issueView.setId(411);
@@ -211,7 +204,7 @@ public class IssueItemView extends LinearLayout {
     }
 
     public void issueButtonSetText() {
-        String text = "Thema: "+initiative.name + "<font color=\"#009010\"> / Alt: <b>" + ((int) initiative.getConcurrentInis().size()) + "</b></font>";
+        String text = "Thema: " + initiative.name + "<font color=\"#009010\"> / Alt: <b>" + ((int) initiative.getConcurrentInis().size()) + "</b></font>";
         issueButton.setText(Html.fromHtml(text));
         issueButton.setTextOff(Html.fromHtml(text));
         issueButton.setTextOn(Html.fromHtml(text));
@@ -219,34 +212,33 @@ public class IssueItemView extends LinearLayout {
 
     public void expandButtonSetText() {
         String text = Utils.lessThanDays(itemSpecificDelta());
-
-        expandButton.setText(text);
+        String retval = "\n";
+        for (Character c : text.toCharArray()) {
+            retval += c + "\n";
+        }
+        expandButton.setText(retval);
 
     }
 
     public void expand() {
         if (expandview) {
-            // issueButton.setText(Html.fromHtml(initiative.name + "<font color=\"#009010\"> / Alt: <b>" + ((int) initiative.getConcurrentInis().size()) + "</b></font>"));
             issueButtonSetText();
             statusLine.setText(Html.fromHtml(getStatusText()));
-
             expandView.removeAllViews();
             expandview = false;
-            //    expandButtonSetText();
         } else {
-            //    expandView.addView(favStarCheckBox);
-            // expandView.addView();
             expandView.addView(generateIniButton(initiative));
             for (Initiative i : initiative.getConcurrentInis()) {
+
+
                 expandView.addView(generateIniButton(i));
 
             }
-            //     issueButton.setText("\u2191\u2191\u2191 " + activity.getString(R.string.collapse) + " \u2191\u2191\u2191");
-
-            //statusLine.setText(Html.fromHtml(getStatusText() + "<br>" + string + "<br>"));
             expandview = true;
-            //    expandButtonSetText();
         }
+        expandView.forceLayout();
+        this.forceLayout();
+
     }
 
     public Button generateIniButton(final Initiative i) {
@@ -282,7 +274,7 @@ public class IssueItemView extends LinearLayout {
         if (i.getQuorum() > i.supporter_count) {
             quorumcolor = "#d00010";//red
         }
-        retval.setText(Html.fromHtml("Ini: "+i.name + "<font color=\"#009010\"><br>" + activity.getString(R.string.supporter) + ":</font><font color=\"" + quorumcolor + "\"><b>" + i.supporter_count + " / " + i.getQuorum() + "</b></font>"));
+        retval.setText(Html.fromHtml("Ini: " + i.name + "<font color=\"#009010\"><br>" + activity.getString(R.string.supporter) + ":</font><font color=\"" + quorumcolor + "\"><b>" + i.supporter_count + " / " + i.getQuorum() + "</b></font>"));
         retval.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
         retval.setGravity(Gravity.LEFT);
         return retval;

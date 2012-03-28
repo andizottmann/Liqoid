@@ -43,7 +43,7 @@ public class LiqoidApplication extends Application implements SharedPreferences.
     @Override
     public void onCreate() {
         Thread.setDefaultUncaughtExceptionHandler(new CrashLog(new File(getExternalFilesDir(null), "liqoid.log")));
-        cachedAPI1Queries = new CachedAPI1Queries(getExternalCacheDir(),getGlobalPreferences());
+        cachedAPI1Queries = new CachedAPI1Queries(getExternalCacheDir(), getGlobalPreferences());
         lqfbInstances = new LQFBInstances(this);
         lqfbInstanceChangeListeners = new ArrayList<LQFBInstanceChangeListener>();
         getGlobalPreferences().registerOnSharedPreferenceChangeListener(this);
@@ -193,6 +193,14 @@ public class LiqoidApplication extends Application implements SharedPreferences.
     }
 
     public void onSharedPreferenceChanged(SharedPreferences arg0, String arg1) {
-        
+        if (arg1.equals("clearcache")) {
+            if (getGlobalPreferences().getBoolean("clearcache", false)) {
+                File cachedir = getExternalCacheDir();
+                for (File f : cachedir.listFiles()) {
+                    f.delete();
+                }
+                getGlobalPreferences().edit().putBoolean("clearcache", false);
+            }
+        }
     }
 }

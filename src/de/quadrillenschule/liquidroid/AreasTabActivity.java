@@ -83,6 +83,7 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
 
     }
 
+   
     @Override
     public void onResume() {
         super.onResume();
