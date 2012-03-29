@@ -47,9 +47,7 @@ public class IssueItemView extends LinearLayout {
     LinearLayout expandView;
     ImageView colorView;
     LinearLayout issueView;
-    //LinearLayout contentContainer, statusContainer;
-    // RelativeLayout contentContainer;
-    Button expandButton;
+    TextView colorIndicator;
     private boolean expandview = false;
 
     public IssueItemView(InitiativesTabActivity activity, Initiative initiative) {
@@ -63,13 +61,16 @@ public class IssueItemView extends LinearLayout {
         rl.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
         rl.setPadding(0, 0, 0, 0);
 
-        expandButton = new Button(activity, null, android.R.attr.buttonStyleSmall);
-        expandButton.setBackgroundColor(itemSpecificColorcode());
-        expandButton.setTypeface(Typeface.MONOSPACE);
+        colorIndicator = new Button(activity, null, android.R.attr.buttonStyleSmall);
+        colorIndicator.setBackgroundColor(itemSpecificColorcode());
+        colorIndicator.setTypeface(Typeface.MONOSPACE);
+        colorIndicator.setTextSize(11);
+        colorIndicator.setPadding(2, 2, 2, 2);
         expandButtonSetText();
 
-        LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.FILL_PARENT);
-        this.addView(expandButton, lp);
+        LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.FILL_PARENT, 0.1f);
+
+        this.addView(colorIndicator, lp);
 
         statusLine = new TextView(activity);
         rlp = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
@@ -79,6 +80,7 @@ public class IssueItemView extends LinearLayout {
         statusLine.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
         statusLine.setTextColor(Color.parseColor("#108020"));
         statusLine.setSingleLine();
+        statusLine.setPadding(2, 2, 2, 2);
         statusLine.setId(2);
         rl.addView(statusLine, rlp);
 
@@ -149,6 +151,7 @@ public class IssueItemView extends LinearLayout {
         rlp.addRule(RelativeLayout.ALIGN_TOP);
         rlp.addRule(RelativeLayout.ALIGN_LEFT);
         issueView.setId(411);
+
         rl.addView(issueView, rlp);
 
         expandView = new LinearLayout(activity);
@@ -160,8 +163,8 @@ public class IssueItemView extends LinearLayout {
         rlp.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
         expandView.setId(5);
         rl.addView(expandView, rlp);
-
-        this.addView(rl);
+        lp = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.FILL_PARENT, 1f);
+        this.addView(rl, lp);
         this.forceLayout();
     }
 
@@ -205,7 +208,7 @@ public class IssueItemView extends LinearLayout {
     }
 
     public void issueButtonSetText() {
-        String text = "Thema: " + initiative.name + "<font color=\"#009010\"> / Alt: <b>" + ((int) initiative.getConcurrentInis().size()) + "</b></font>";
+        String text = "Thema: " + initiative.name + "<font color=\"#009010\"> / Inis: <b>" + ((int) 1 + initiative.getConcurrentInis().size()) + "</b></font>";
         issueButton.setText(Html.fromHtml(text));
         issueButton.setTextOff(Html.fromHtml(text));
         issueButton.setTextOn(Html.fromHtml(text));
@@ -213,11 +216,12 @@ public class IssueItemView extends LinearLayout {
 
     public void expandButtonSetText() {
         String text = Utils.lessThanDays(itemSpecificDelta());
-        String retval = "\n";
+        String retval = "";
         for (Character c : text.toCharArray()) {
             retval += c + "\n";
         }
-        expandButton.setText(retval);
+
+        colorIndicator.setText(retval);
 
     }
 
@@ -226,15 +230,23 @@ public class IssueItemView extends LinearLayout {
             issueButtonSetText();
             statusLine.setText(Html.fromHtml(getStatusText()));
             expandView.removeAllViews();
+
             expandview = false;
         } else {
+            TextView tv = new TextView(activity);
+            tv.setText(activity.getString(R.string.initiatives) + ": " + ((int) 1 + initiative.getConcurrentInis().size()));
+            tv.setTextColor(Color.BLACK);
+            tv.setPadding(2, 2, 2, 2);
+            expandView.addView(tv);
             expandView.addView(generateIniButton(initiative), new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
             for (Initiative i : initiative.getConcurrentInis()) {
-              expandView.addView(generateIniButton(i), new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-           }
+                expandView.addView(generateIniButton(i), new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+            }
             expandview = true;
         }
-      
+        colorIndicator.setPadding(2, 2, 2, 2);
+
+        this.getParent().requestLayout();
 
     }
 

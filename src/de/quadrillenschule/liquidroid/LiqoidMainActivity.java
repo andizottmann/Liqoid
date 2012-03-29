@@ -58,14 +58,11 @@ public class LiqoidMainActivity extends TabActivity implements GestureOverlayVie
         TextView v = new TextView(this);
         int tabheight = (int) (v.getTextSize() * 2.7);
 
-        tabHost.setCurrentTab(3);
         for (int i = 0; i < tabHost.getTabWidget().getChildCount(); i++) {
             tabHost.getTabWidget().getChildAt(i).getLayoutParams().height = tabheight;
 
-
-
         }
-        lastTab = 3;
+        lastTab = tabHost.getCurrentTab();
         lastTabView = tabHost.getCurrentView();
 
         tabHost.setOnTabChangedListener(this);

@@ -198,7 +198,7 @@ public class LiqoidApplication extends Application implements SharedPreferences.
                 for (File f : cachedir.listFiles()) {
                     f.delete();
                 }
-                getGlobalPreferences().edit().putBoolean("clearcache", false);
+                getGlobalPreferences().edit().putBoolean("clearcache", false).commit();
             }
         }
     }
