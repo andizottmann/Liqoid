@@ -63,14 +63,5 @@
             android:entryValues="@array/limitInMinsValues"
         />
     </PreferenceCategory>
-    <PreferenceCategory
-        android:title="Offline cache"
-        android:key="offlinecache">
-        <CheckBoxPreference
-            android:key="clearcache"
-            android:summary="Cache löschen"
-            android:title="Löscht den kompletten Cache, die Daten werden neu heruntergeladen."
-            android:defaultValue="false"
-        />
-    </PreferenceCategory>
+    
 </PreferenceScreen>

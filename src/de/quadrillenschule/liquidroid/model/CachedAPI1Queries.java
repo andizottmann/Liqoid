@@ -123,24 +123,30 @@ public class CachedAPI1Queries {
         }
         if (now - cachefile.lastModified() < Long.parseLong(globalPrefs.getString("mindataage", "180000"))) {
             return false;
-        } else {
-            if ((state.equals("new")&&hasNewerInis(instance.getMaxIni(), instance, apiUrl))) {
+        }
+
+        if (area != null) {
+            if (area.hasSelectedInititiativen(instance.areas)) {
                 return true;
             }
-            if (area != null) {
-                for (Initiative i : area.getInitiativen()) {
-                    if ((now - i.getDateForNextEvent().getTime()) > 0) {
-                        return true;
-                    }
+            for (Initiative i : area.getInitiativen()) {
+                if ((now - i.getDateForNextEvent().getTime()) > 0) {
+                    return true;
                 }
             }
-            return false;
         }
+        if ((state.equals("new") && hasNewerInis(instance.getMaxIni(), instance, apiUrl))) {
+            return true;
+        }
+        return false;
+
 
     }
 
     public boolean hasNewerInis(int oldmax, LQFBInstance instance, String api) {
-        if (!api.startsWith("http")){return false;}
+        if (!api.startsWith("http")) {
+            return false;
+        }
         SAXParserFactory factory = SAXParserFactory.newInstance();
         SAXParser saxparser;
         Area tempArea = new Area(instance.instancePrefs);

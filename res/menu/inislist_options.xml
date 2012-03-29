@@ -12,6 +12,9 @@
     <item android:id="@+id/prefs"
           android:icon="@android:drawable/ic_menu_manage"
           android:title="@string/prefs"/>
+    <item android:id="@+id/clearcache"
+         android:icon="@android:drawable/ic_menu_close_clear_cancel"
+          android:title="@string/clearcache"/>
     <item android:id="@+id/about"
           android:icon="@android:drawable/ic_menu_info_details"
           android:title="@string/about"/>

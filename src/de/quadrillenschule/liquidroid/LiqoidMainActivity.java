@@ -70,13 +70,7 @@ public class LiqoidMainActivity extends TabActivity implements GestureOverlayVie
         ((LiqoidApplication) getApplication()).statusLine = ((TextView) findViewById(R.id.statusline));
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-         ((LiqoidApplication) getApplication()).lastActivity=this;
-        //    ((LiqoidApplication) getApplication()).fireLQFBInstanceChangedEvent();
-
-    }
+   
     private long ANIMATION_DURATION = 600;
 
     public Animation inFromRightAnimation() {

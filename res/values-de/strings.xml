@@ -61,6 +61,7 @@
     <string name="collapse">Zuklappen</string>
     <string name="initiatives">Initiativen</string>
     <string name="clearcachequestion">Willst Du den Cache wirklich löschen?</string>
+    <string name="clearcache">Cache löschen</string>
 
 
 </resources>

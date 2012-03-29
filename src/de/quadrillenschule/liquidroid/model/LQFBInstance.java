@@ -76,8 +76,7 @@ public class LQFBInstance {
             return -1;
         } catch (ParserConfigurationException ex) {
             return -1;
-        }
-          } catch (IllegalArgumentException ex) {
+        } catch (IllegalArgumentException ex) {
             return -1;
         }
         areas = areaParser.areas;
@@ -113,21 +112,23 @@ public class LQFBInstance {
         //     area.getInitiativen().clear();
         iniParser = new InitiativenFromAPI1Parser(area, this);
         String[] states = {"new", "accepted", "frozen", "voting"};
-
+int retval=0;
 
         for (String state : states) {
             try {
                 saxparser = factory.newSAXParser();
                 saxparser.parse(cachedAPI1Queries.queryInputStream(this, area, "initiative", "&area_id=" + area.getId() + "&state=" + state, apiUrl, getDeveloperkey(), state, forceNetwork, noDownload), iniParser);
             } catch (ParserConfigurationException ex) {
-                Logger.getLogger(LQFBInstance.class.getName()).log(Level.SEVERE, null, ex);
+                retval= -1;
             } catch (SAXException ex) {
-                Logger.getLogger(LQFBInstance.class.getName()).log(Level.SEVERE, null, ex);
+                 retval= -1;
             } catch (IOException ex) {
-                Logger.getLogger(LQFBInstance.class.getName()).log(Level.SEVERE, null, ex);
+                 retval= -1;
+            } catch (IllegalArgumentException ex) {
+                 retval= -1;
             }
         }
-        return 0;
+        return retval;
     }
 
     /**

@@ -212,14 +212,14 @@ public class InitiativesTabActivity extends Activity implements RefreshInisListT
                 sortList();
                 return true;
             case R.id.toggleselectedfilter:
-
                 filterOnlySelected = !filterOnlySelected;
                 refreshInisList(false);
-
                 return true;
             case R.id.about:
                 ((LiqoidApplication) getApplication()).aboutDialog(this).show();
-
+                return true;
+            case R.id.clearcache:
+                ((LiqoidApplication) getApplication()).clearCache(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -272,7 +272,7 @@ public class InitiativesTabActivity extends Activity implements RefreshInisListT
                 return true;
             case R.id.calendar:
                 try {
-                  //  Initiative ini = ((IssueItemView) contextMenuView.getParent().getParent()).initiative;
+                    //  Initiative ini = ((IssueItemView) contextMenuView.getParent().getParent()).initiative;
                     Intent intent = new Intent(Intent.ACTION_EDIT);
                     intent.setType("vnd.android.cursor.item/event");
                     intent.putExtra("beginTime", relevantCalendarTime(ini));
@@ -285,7 +285,7 @@ public class InitiativesTabActivity extends Activity implements RefreshInisListT
                 return true;
             case R.id.calendar_voting:
                 try {
-                //    Initiative ini = ((IssueItemView) contextMenuView.getParent().getParent()).initiative;
+                    //    Initiative ini = ((IssueItemView) contextMenuView.getParent().getParent()).initiative;
                     Intent intent = new Intent(Intent.ACTION_EDIT);
                     intent.setType("vnd.android.cursor.item/event");
                     intent.putExtra("beginTime", ini.getDateForStartVoting().getTime());

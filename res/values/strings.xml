@@ -62,8 +62,9 @@
     <string name="collapse">Hide</string>
     <string name="initiatives">Initiatives</string>
     <string name="clearcachequestion">Do you really want to clear the cache?</string>
+    <string name="clearcache">Clear cache</string>
 
-    <string name="fullcredits">Hello this is Liqoid V 0.1.10!\n Developer: @andizottmann\n
+    <string name="fullcredits">Hello this is Liqoid V 0.1.13!\n Developer: @andizottmann\n
     All CC-BY-SA 3.0 DE\n
     Thanks to:\n@nlohmann @darkbln @viirus42 @LarsUlrich92 @Bocki_NBG  @threehoursleep @PiratenCup @mockfrog @Iceman
     @bridgerdier @hubx @larswestphal @Piratonym Tokamak  @mon3yp3nny @RedDog

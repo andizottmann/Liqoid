@@ -28,7 +28,7 @@ import java.util.ArrayList;
  *
  * @author andi
  */
-public class LiqoidApplication extends Application implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class LiqoidApplication extends Application {
 
     public LQFBInstances lqfbInstances;
     ArrayList<LQFBInstanceChangeListener> lqfbInstanceChangeListeners;
@@ -45,7 +45,6 @@ public class LiqoidApplication extends Application implements SharedPreferences.
         cachedAPI1Queries = new CachedAPI1Queries(getExternalCacheDir(), getGlobalPreferences());
         lqfbInstances = new LQFBInstances(this);
         lqfbInstanceChangeListeners = new ArrayList<LQFBInstanceChangeListener>();
-        getGlobalPreferences().registerOnSharedPreferenceChangeListener(this);
     }
 
     public void statusLineText(String text) {
@@ -190,25 +189,24 @@ public class LiqoidApplication extends Application implements SharedPreferences.
         AlertDialog alert = builder.create();
         return alert;
     }
-public Activity lastActivity=null;
-    public void onSharedPreferenceChanged(SharedPreferences arg0, String arg1) {
-        if (arg1.equals("clearcache")) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(lastActivity);
-            builder.setMessage(R.string.clearcachequestion).setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
 
-                public void onClick(DialogInterface arg0, int arg1) {
-                    if (getGlobalPreferences().getBoolean("clearcache", false)) {
-                        File cachedir = getExternalCacheDir();
-                        for (File f : cachedir.listFiles()) {
-                            f.delete();
-                        }
-                        getGlobalPreferences().edit().putBoolean("clearcache", false).commit();
-                    }
+    public void clearCache(Activity activity) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        builder.setMessage(R.string.clearcachequestion).setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface arg0, int arg1) {
+
+                File cachedir = getExternalCacheDir();
+                for (File f : cachedir.listFiles()) {
+                    f.delete();
                 }
-            });
-            AlertDialog ad = builder.create();
-            ad.show();
-        }
+
+            }
+        });
+        AlertDialog ad = builder.create();
+        ad.show();
+
         ;
     }
 }

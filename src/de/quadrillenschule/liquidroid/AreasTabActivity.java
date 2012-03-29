@@ -83,7 +83,6 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
 
     }
 
-   
     @Override
     public void onResume() {
         super.onResume();
@@ -162,6 +161,9 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
                 return true;
             case R.id.about:
                 ((LiqoidApplication) getApplication()).aboutDialog(this).show();
+                return true;
+            case R.id.clearcache:
+                ((LiqoidApplication) getApplication()).clearCache(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
