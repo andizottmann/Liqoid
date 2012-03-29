@@ -73,6 +73,7 @@ public class LiqoidMainActivity extends TabActivity implements GestureOverlayVie
     @Override
     public void onResume() {
         super.onResume();
+         ((LiqoidApplication) getApplication()).lastActivity=this;
         //    ((LiqoidApplication) getApplication()).fireLQFBInstanceChangedEvent();
 
     }

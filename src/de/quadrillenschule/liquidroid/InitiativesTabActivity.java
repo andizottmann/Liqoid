@@ -242,11 +242,14 @@ public class InitiativesTabActivity extends Activity implements RefreshInisListT
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
+        Initiative ini = ((IssueItemView) contextMenuView.getParent().getParent().getParent()).initiative;
+
         switch (item.getItemId()) {
+
             case R.id.open_browser_ini:
                 try {
-                    String issueid = ((IssueItemView) contextMenuView.getParent().getParent()).initiative.issue_id + "";
-                    String url = ((IssueItemView) contextMenuView.getParent().getParent()).initiative.getLqfbInstance().getWebUrl() + "issue/show/" + issueid + ".html";
+                    String issueid = ini.issue_id + "";
+                    String url = ini.getLqfbInstance().getWebUrl() + "issue/show/" + issueid + ".html";
                     Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                     myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
                     startActivity(myIntent);
@@ -256,8 +259,8 @@ public class InitiativesTabActivity extends Activity implements RefreshInisListT
                 return true;
             case R.id.share_ini:
                 try {
-                    String issueid = ((IssueItemView) contextMenuView.getParent().getParent()).initiative.issue_id + "";
-                    String url = ((IssueItemView) contextMenuView.getParent().getParent()).initiative.getLqfbInstance().getWebUrl() + "issue/show/" + issueid + ".html";
+                    String issueid = ini.issue_id + "";
+                    String url = ini.getLqfbInstance().getWebUrl() + "issue/show/" + issueid + ".html";
                     Intent intent = new Intent(android.content.Intent.ACTION_SEND);
                     intent.setType("text/plain");
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
@@ -269,7 +272,7 @@ public class InitiativesTabActivity extends Activity implements RefreshInisListT
                 return true;
             case R.id.calendar:
                 try {
-                    Initiative ini = ((IssueItemView) contextMenuView.getParent().getParent()).initiative;
+                  //  Initiative ini = ((IssueItemView) contextMenuView.getParent().getParent()).initiative;
                     Intent intent = new Intent(Intent.ACTION_EDIT);
                     intent.setType("vnd.android.cursor.item/event");
                     intent.putExtra("beginTime", relevantCalendarTime(ini));
@@ -282,7 +285,7 @@ public class InitiativesTabActivity extends Activity implements RefreshInisListT
                 return true;
             case R.id.calendar_voting:
                 try {
-                    Initiative ini = ((IssueItemView) contextMenuView.getParent().getParent()).initiative;
+                //    Initiative ini = ((IssueItemView) contextMenuView.getParent().getParent()).initiative;
                     Intent intent = new Intent(Intent.ACTION_EDIT);
                     intent.setType("vnd.android.cursor.item/event");
                     intent.putExtra("beginTime", ini.getDateForStartVoting().getTime());

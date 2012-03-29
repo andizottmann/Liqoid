@@ -60,6 +60,7 @@
     <string name="save">Speichern</string>
     <string name="collapse">Zuklappen</string>
     <string name="initiatives">Initiativen</string>
+    <string name="clearcachequestion">Willst Du den Cache wirklich löschen?</string>
 
 
 </resources>

@@ -172,7 +172,7 @@ public class LiqoidApplication extends Application implements SharedPreferences.
 
     public AlertDialog aboutDialog(final Activity context) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setMessage(getString(R.string.fullcredits)).setCancelable(false).setNeutralButton(R.string.projecthome, new DialogInterface.OnClickListener() {
+        builder.setMessage(getString(R.string.fullcredits)).setNeutralButton(R.string.projecthome, new DialogInterface.OnClickListener() {
 
             public void onClick(DialogInterface arg0, int arg1) {
                 Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.projecthomeurl)));
@@ -190,16 +190,25 @@ public class LiqoidApplication extends Application implements SharedPreferences.
         AlertDialog alert = builder.create();
         return alert;
     }
-
+public Activity lastActivity=null;
     public void onSharedPreferenceChanged(SharedPreferences arg0, String arg1) {
         if (arg1.equals("clearcache")) {
-            if (getGlobalPreferences().getBoolean("clearcache", false)) {
-                File cachedir = getExternalCacheDir();
-                for (File f : cachedir.listFiles()) {
-                    f.delete();
+            AlertDialog.Builder builder = new AlertDialog.Builder(lastActivity);
+            builder.setMessage(R.string.clearcachequestion).setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+
+                public void onClick(DialogInterface arg0, int arg1) {
+                    if (getGlobalPreferences().getBoolean("clearcache", false)) {
+                        File cachedir = getExternalCacheDir();
+                        for (File f : cachedir.listFiles()) {
+                            f.delete();
+                        }
+                        getGlobalPreferences().edit().putBoolean("clearcache", false).commit();
+                    }
                 }
-                getGlobalPreferences().edit().putBoolean("clearcache", false).commit();
-            }
+            });
+            AlertDialog ad = builder.create();
+            ad.show();
         }
+        ;
     }
 }

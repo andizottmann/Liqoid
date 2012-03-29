@@ -77,6 +77,9 @@ public class LQFBInstance {
         } catch (ParserConfigurationException ex) {
             return -1;
         }
+          } catch (IllegalArgumentException ex) {
+            return -1;
+        }
         areas = areaParser.areas;
 
         return 0;
