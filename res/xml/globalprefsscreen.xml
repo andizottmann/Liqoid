@@ -17,6 +17,12 @@
             android:title="Animations"
             android:defaultValue="false"
         />
+        <CheckBoxPreference
+            android:key="gestures"
+            android:summary="Enable or disable swipe gestures"
+            android:title="Gestures"
+            android:defaultValue="true"
+        />
         <ListPreference
             android:key="redlimit"
             android:title="Limit for red indicator"

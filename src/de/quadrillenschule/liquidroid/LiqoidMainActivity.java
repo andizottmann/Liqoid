@@ -69,8 +69,6 @@ public class LiqoidMainActivity extends TabActivity implements GestureOverlayVie
 
         ((LiqoidApplication) getApplication()).statusLine = ((TextView) findViewById(R.id.statusline));
     }
-
-   
     private long ANIMATION_DURATION = 600;
 
     public Animation inFromRightAnimation() {
@@ -122,7 +120,7 @@ public class LiqoidMainActivity extends TabActivity implements GestureOverlayVie
     private View lastTabView;
 
     public void onTabChanged(String tabId) {
-         if (lastTab == tabHost.getCurrentTab()) {
+        if (lastTab == tabHost.getCurrentTab()) {
             return;
         }
         if (((LiqoidApplication) getApplication()).getGlobalPreferences().getBoolean("animations", false)) {
@@ -141,6 +139,9 @@ public class LiqoidMainActivity extends TabActivity implements GestureOverlayVie
     }
 
     public void onGesturePerformed(GestureOverlayView overlay, Gesture gesture) {
+        if (!((LiqoidApplication) getApplication()).getGlobalPreferences().getBoolean("gestures", true)) {
+            return;
+        }
         ArrayList<Prediction> predictions = gestureLibrary.recognize(gesture);
 
         // We want at least one prediction

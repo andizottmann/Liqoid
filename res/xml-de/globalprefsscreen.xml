@@ -13,9 +13,15 @@
         />
         <CheckBoxPreference
             android:key="animations"
-            android:summary="Animationen"
-            android:title="Animationen ein- und ausschalten"
+            android:summary="Animationen ein- und ausschalten"
+            android:title="Animationen"
             android:defaultValue="false"
+        />
+        <CheckBoxPreference
+            android:key="gestures"
+            android:summary="Gesten  ein- und ausschalten"
+            android:title="Gestures"
+            android:defaultValue="true"
         />
     </PreferenceCategory>
     <PreferenceCategory
