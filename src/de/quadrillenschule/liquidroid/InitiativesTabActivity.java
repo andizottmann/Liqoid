@@ -42,7 +42,6 @@ public class InitiativesTabActivity extends Activity implements RefreshInisListT
     public InitiativenListAdapter inisListAdapter;
     public MultiInstanceInitiativen allInis;
     ProgressDialog progressDialog;
-    //   private boolean pauseDownload = false;
     protected boolean sortNewestFirst = true;
     protected boolean filterOnlySelected = false;
     public RefreshInisListThread ralt;
