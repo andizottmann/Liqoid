@@ -4,6 +4,7 @@
  */
 package de.quadrillenschule.liquidroid.gui;
 
+import android.app.Activity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
@@ -18,12 +19,12 @@ public class InitiativenListAdapter extends ArrayAdapter<Initiative>  {
 
     protected MultiInstanceInitiativen initiativen;
     private int viewId;
-    protected InitiativesTabActivity activity;
+    protected Activity activity;
 
     public InitiativenListAdapter(InitiativesTabActivity activity, MultiInstanceInitiativen initiativen, int viewId) {
-        super(activity, NO_SELECTION, initiativen);
+        super(activity.getActivity(), NO_SELECTION, initiativen);
         this.initiativen = initiativen;
-        this.activity = activity;
+        this.activity = activity.getActivity();
     }
 
     @Override

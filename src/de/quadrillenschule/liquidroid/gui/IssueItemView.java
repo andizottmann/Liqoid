@@ -4,6 +4,7 @@
  */
 package de.quadrillenschule.liquidroid.gui;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -39,7 +40,7 @@ import de.quadrillenschule.liquidroid.R;
  */
 public class IssueItemView extends LinearLayout {
 
-    InitiativesTabActivity activity;
+    Activity activity;
     public Initiative initiative;
     CheckBox favStarCheckBox;
     ToggleButton issueButton;
@@ -50,7 +51,7 @@ public class IssueItemView extends LinearLayout {
     TextView colorIndicator;
     private boolean expandview = false;
 
-    public IssueItemView(InitiativesTabActivity activity, Initiative initiative) {
+    public IssueItemView(Activity activity, Initiative initiative) {
         super(activity);
         this.activity = activity;
         this.initiative = initiative;
@@ -189,7 +190,7 @@ public class IssueItemView extends LinearLayout {
     }
 
     protected String getStatusText() {
-        DateFormat formatter = new SimpleDateFormat(activity.getDateFormat());
+        DateFormat formatter = new SimpleDateFormat(activity.getString(R.string.dateformat));
         return " <b><font color=black> " + activity.getString(initiative.getIntlStateResId()) + "</font> - <font color=blue>" + formatter.format(initiative.issue_created) + "</font></b>";
     }
 

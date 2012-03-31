@@ -58,6 +58,7 @@ public class AreasTabActivity extends Fragment implements LQFBInstanceChangeList
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.areastab, container, false);
+
         final Spinner instanceSpinner = (Spinner) v.findViewById(R.id.instanceSelector);
         adapter = new LQFBInstancesListAdapter(v.getContext(), ((LiqoidApplication) this.getActivity().getApplication()).lqfbInstances, android.R.layout.simple_spinner_item, getActivity());
         //  LQFBInstancesListAdapter

@@ -4,6 +4,7 @@
  */
 package de.quadrillenschule.liquidroid.gui;
 
+import android.app.Activity;
 import android.view.View;
 import android.view.ViewGroup;
 import de.quadrillenschule.liquidroid.InitiativesTabActivity;

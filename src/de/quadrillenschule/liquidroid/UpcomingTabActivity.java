@@ -19,7 +19,7 @@ public class UpcomingTabActivity extends InitiativesTabActivity {
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-        ((TextView) findViewById(R.id.tabinis_title)).setText(R.string.tab_upcoming);
+        ((TextView) getActivity().findViewById(R.id.tabinis_title)).setText(R.string.tab_upcoming);
     }
 
     @Override

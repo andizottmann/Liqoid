@@ -4,10 +4,12 @@
  */
 package de.quadrillenschule.liquidroid.gui;
 
+import android.app.Activity;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import de.quadrillenschule.liquidroid.InitiativesTabActivity;
 import de.quadrillenschule.liquidroid.LiqoidApplication;
+import de.quadrillenschule.liquidroid.R;
 import de.quadrillenschule.liquidroid.model.Initiative;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -18,13 +20,13 @@ import java.text.SimpleDateFormat;
  */
 public class UpcomingEventsIssueItemView extends IssueItemView {
 
-    public UpcomingEventsIssueItemView(InitiativesTabActivity activity, Initiative initiative) {
+    public UpcomingEventsIssueItemView(Activity activity, Initiative initiative) {
         super(activity, initiative);
     }
 
     @Override
     protected String getStatusText() {
-        DateFormat formatter = new SimpleDateFormat(activity.getDateFormat());
+        DateFormat formatter = new SimpleDateFormat(activity.getString(R.string.dateformat));
         return "<b><font color=black> ->" + activity.getString(initiative.nextEventIntlResId()) + "</font> - <font color=blue>" + formatter.format(initiative.getDateForNextEvent()) + "</font></b>";
     }
 

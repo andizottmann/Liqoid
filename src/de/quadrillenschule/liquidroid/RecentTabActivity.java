@@ -18,7 +18,7 @@ public class RecentTabActivity extends InitiativesTabActivity {
  @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-        ((TextView) findViewById(R.id.tabinis_title)).setText(R.string.tab_recent);
+        ((TextView) getActivity().findViewById(R.id.tabinis_title)).setText(R.string.tab_recent);
     }
     @Override
     public void filterList() {

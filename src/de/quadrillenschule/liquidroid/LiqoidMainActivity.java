@@ -15,6 +15,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
@@ -30,6 +31,8 @@ public class LiqoidMainActivity extends FragmentActivity {
     GestureLibrary gestureLibrary;
     ViewPager mViewPager;
     MyAdapter mTabsAdapter;
+    AreasTabActivity ata;
+    InitiativesTabActivity inis;
 
     /** Called when the activity is first created. */
     @Override
@@ -37,107 +40,59 @@ public class LiqoidMainActivity extends FragmentActivity {
 
         super.onCreate(savedInstanceState);
 
-        gestureLibrary = GestureLibraries.fromRawResource(this, R.raw.gestures);
-        if (!gestureLibrary.load()) {
-            finish();
-        }
+        ata = new AreasTabActivity();
+        ata.onCreate(savedInstanceState);
 
+        inis = new InitiativesTabActivity();
+        inis.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
         Resources res = getResources(); // Resource object to get Drawables
         mViewPager = (ViewPager) findViewById(R.id.pager);
 
         TabHost.TabSpec spec;  // Resusable TabSpec for each tab
-        mTabsAdapter = new MyAdapter(getSupportFragmentManager());
+        mTabsAdapter = new MyAdapter(getSupportFragmentManager(), ata, inis);
         mViewPager.setAdapter(mTabsAdapter);
-
-        // Intent intent;  // Reusable Intent for each tab
-        // intent = new Intent().setClass(this, UpcomingTabActivity.class);
-        //  spec = tabHost.newTabSpec("upcoming").setIndicator(res.getString(R.string.tab_upcoming));
-        // mTabsAdapter.addTab(spec);
-        //   mTabsAdapter.addTab(spec,AreasTabActivity.class,null);
-
-//        intent = new Intent().setClass(this, RecentTabActivity.class);
-//        spec = tabHost.newTabSpec("recent").setIndicator(res.getString(R.string.tab_recent)).setContent(intent);
-//        tabHost.addTab(spec);
-//
-//        intent = new Intent().setClass(this, InitiativesTabActivity.class);
-//        spec = tabHost.newTabSpec("inis").setIndicator(res.getString(R.string.tab_inis)).setContent(intent);
-//        tabHost.addTab(spec);
-//
-//        intent = new Intent().setClass(this, AreasTabActivity.class);
-//        spec = tabHost.newTabSpec("areas").setIndicator(res.getString(R.string.tab_areas)).setContent(intent);
-//        tabHost.addTab(spec);
-
-
-
         ((LiqoidApplication) getApplication()).statusLine = ((TextView) findViewById(R.id.statusline));
 
-    }
-    private long ANIMATION_DURATION = 600;
 
-    public Animation inFromRightAnimation() {
-
-        Animation inFromRight = new TranslateAnimation(
-                Animation.RELATIVE_TO_PARENT, +1.0f,
-                Animation.RELATIVE_TO_PARENT, 0.0f,
-                Animation.RELATIVE_TO_PARENT, 0.0f,
-                Animation.RELATIVE_TO_PARENT, 0.0f);
-        inFromRight.setDuration(ANIMATION_DURATION);
-        inFromRight.setInterpolator(new AccelerateInterpolator());
-        return inFromRight;
     }
 
-    public Animation inFromLeftAnimation() {
-        Animation outtoLeft = new TranslateAnimation(
-                Animation.RELATIVE_TO_PARENT, -1.0f,
-                Animation.RELATIVE_TO_PARENT, 0.0f,
-                Animation.RELATIVE_TO_PARENT, 0.0f,
-                Animation.RELATIVE_TO_PARENT, 0.0f);
-        outtoLeft.setDuration(ANIMATION_DURATION);
-        outtoLeft.setInterpolator(new AccelerateInterpolator());
-        return outtoLeft;
+    public boolean onCreateOptionsMenu(Menu menu) {
+        switch (mViewPager.getCurrentItem()) {
+            case 0:
+                return inis.onCreateOptionsMenu(menu);
+            case 1:
+                return ata.onCreateOptionsMenu(menu);
+        }
+        return false;
     }
 
-    public Animation outToRightAnimation() {
+    static class MyAdapter extends FragmentPagerAdapter {
 
-        Animation inFromRight = new TranslateAnimation(
-                Animation.RELATIVE_TO_PARENT, 0.0f,
-                Animation.RELATIVE_TO_PARENT, 1.0f,
-                Animation.RELATIVE_TO_PARENT, 0.0f,
-                Animation.RELATIVE_TO_PARENT, 0.0f);
-        inFromRight.setDuration(ANIMATION_DURATION);
-        inFromRight.setInterpolator(new AccelerateInterpolator());
-        return inFromRight;
-    }
+        AreasTabActivity ata;
+        InitiativesTabActivity inis;
 
-    public Animation outToLeftAnimation() {
-        Animation outtoLeft = new TranslateAnimation(
-                Animation.RELATIVE_TO_PARENT, 0.0f,
-                Animation.RELATIVE_TO_PARENT, -1.0f,
-                Animation.RELATIVE_TO_PARENT, 0.0f,
-                Animation.RELATIVE_TO_PARENT, 0.0f);
-        outtoLeft.setDuration(ANIMATION_DURATION);
-        outtoLeft.setInterpolator(new AccelerateInterpolator());
-        return outtoLeft;
-    }
-    private int lastTab = 3;
-    private View lastTabView;
-
-    public static class MyAdapter extends FragmentPagerAdapter {
-
-        public MyAdapter(FragmentManager fm) {
+        public MyAdapter(FragmentManager fm, AreasTabActivity ata, InitiativesTabActivity inis) {
             super(fm);
+            this.ata = ata;
+            this.inis = inis;
         }
 
         @Override
         public int getCount() {
-            return 1;
+            return 2;
         }
 
         @Override
         public Fragment getItem(int position) {
-            return new AreasTabActivity();
+            switch (position) {
+                case 0:
+                    return inis;
+                case 1:
+                    return ata;
+            }
+            return null;
         }
     }
 }
