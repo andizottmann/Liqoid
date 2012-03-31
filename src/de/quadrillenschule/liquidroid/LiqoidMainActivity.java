@@ -1,6 +1,7 @@
 package de.quadrillenschule.liquidroid;
 
 import android.app.TabActivity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.gesture.Gesture;
@@ -9,18 +10,26 @@ import android.gesture.GestureLibrary;
 import android.gesture.GestureOverlayView;
 import android.gesture.Prediction;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.TabHost;
+import android.widget.TabWidget;
 import android.widget.TextView;
 import java.util.ArrayList;
 
-public class LiqoidMainActivity extends TabActivity implements GestureOverlayView.OnGesturePerformedListener, TabHost.OnTabChangeListener {
+public class LiqoidMainActivity extends FragmentActivity {
 
-    TabHost tabHost;
     GestureLibrary gestureLibrary;
+    ViewPager mViewPager;
+    MyAdapter mTabsAdapter;
 
     /** Called when the activity is first created. */
     @Override
@@ -36,38 +45,34 @@ public class LiqoidMainActivity extends TabActivity implements GestureOverlayVie
         setContentView(R.layout.main);
 
         Resources res = getResources(); // Resource object to get Drawables
-        tabHost = getTabHost();  // The activity TabHost
+        mViewPager = (ViewPager) findViewById(R.id.pager);
+
         TabHost.TabSpec spec;  // Resusable TabSpec for each tab
+        mTabsAdapter = new MyAdapter(getSupportFragmentManager());
+        mViewPager.setAdapter(mTabsAdapter);
 
-        Intent intent;  // Reusable Intent for each tab
-        intent = new Intent().setClass(this, UpcomingTabActivity.class);
-        spec = tabHost.newTabSpec("upcoming").setIndicator(res.getString(R.string.tab_upcoming)).setContent(intent);
-        tabHost.addTab(spec);
+        // Intent intent;  // Reusable Intent for each tab
+        // intent = new Intent().setClass(this, UpcomingTabActivity.class);
+        //  spec = tabHost.newTabSpec("upcoming").setIndicator(res.getString(R.string.tab_upcoming));
+        // mTabsAdapter.addTab(spec);
+        //   mTabsAdapter.addTab(spec,AreasTabActivity.class,null);
 
-        intent = new Intent().setClass(this, RecentTabActivity.class);
-        spec = tabHost.newTabSpec("recent").setIndicator(res.getString(R.string.tab_recent)).setContent(intent);
-        tabHost.addTab(spec);
+//        intent = new Intent().setClass(this, RecentTabActivity.class);
+//        spec = tabHost.newTabSpec("recent").setIndicator(res.getString(R.string.tab_recent)).setContent(intent);
+//        tabHost.addTab(spec);
+//
+//        intent = new Intent().setClass(this, InitiativesTabActivity.class);
+//        spec = tabHost.newTabSpec("inis").setIndicator(res.getString(R.string.tab_inis)).setContent(intent);
+//        tabHost.addTab(spec);
+//
+//        intent = new Intent().setClass(this, AreasTabActivity.class);
+//        spec = tabHost.newTabSpec("areas").setIndicator(res.getString(R.string.tab_areas)).setContent(intent);
+//        tabHost.addTab(spec);
 
-        intent = new Intent().setClass(this, InitiativesTabActivity.class);
-        spec = tabHost.newTabSpec("inis").setIndicator(res.getString(R.string.tab_inis)).setContent(intent);
-        tabHost.addTab(spec);
 
-        intent = new Intent().setClass(this, AreasTabActivity.class);
-        spec = tabHost.newTabSpec("areas").setIndicator(res.getString(R.string.tab_areas)).setContent(intent);
-        tabHost.addTab(spec);
-        TextView v = new TextView(this);
-        int tabheight = (int) (v.getTextSize() * 2.7);
-
-        for (int i = 0; i < tabHost.getTabWidget().getChildCount(); i++) {
-            tabHost.getTabWidget().getChildAt(i).getLayoutParams().height = tabheight;
-
-        }
-        lastTab = tabHost.getCurrentTab();
-        lastTabView = tabHost.getCurrentView();
-
-        tabHost.setOnTabChangedListener(this);
 
         ((LiqoidApplication) getApplication()).statusLine = ((TextView) findViewById(R.id.statusline));
+
     }
     private long ANIMATION_DURATION = 600;
 
@@ -119,55 +124,20 @@ public class LiqoidMainActivity extends TabActivity implements GestureOverlayVie
     private int lastTab = 3;
     private View lastTabView;
 
-    public void onTabChanged(String tabId) {
-        if (lastTab == tabHost.getCurrentTab()) {
-            return;
+    public static class MyAdapter extends FragmentPagerAdapter {
+
+        public MyAdapter(FragmentManager fm) {
+            super(fm);
         }
-        if (((LiqoidApplication) getApplication()).getGlobalPreferences().getBoolean("animations", false)) {
-            if (lastTab > tabHost.getCurrentTab()) {
-                tabHost.getCurrentView().setAnimation(inFromLeftAnimation());
-                lastTabView.setAnimation(outToRightAnimation());
 
-            } else {
-                tabHost.getCurrentView().setAnimation(inFromRightAnimation());
-                lastTabView.setAnimation(outToLeftAnimation());
-
-            }
+        @Override
+        public int getCount() {
+            return 1;
         }
-        lastTab = tabHost.getCurrentTab();
-        lastTabView = tabHost.getCurrentView();
-    }
 
-    public void onGesturePerformed(GestureOverlayView overlay, Gesture gesture) {
-        if (!((LiqoidApplication) getApplication()).getGlobalPreferences().getBoolean("gestures", true)) {
-            return;
-        }
-        ArrayList<Prediction> predictions = gestureLibrary.recognize(gesture);
-
-        // We want at least one prediction
-        if (predictions.size() > 0) {
-            Prediction prediction = predictions.get(0);
-            // We want at least some confidence in the result
-            if (prediction.score > 1.0) {
-                int base = tabHost.getCurrentTab();
-
-                // Show the spell
-                if (prediction.name.equals("right")) {
-                    if (base <= 0) {
-                        return;
-                    }
-                    tabHost.setCurrentTab(base - 1);
-                }
-                if (prediction.name.equals("left")) {
-                    if (base > 2) {
-                        return;
-                    }
-                    tabHost.setCurrentTab(base + 1);
-
-                }
-
-
-            }
+        @Override
+        public Fragment getItem(int position) {
+            return new AreasTabActivity();
         }
     }
 }

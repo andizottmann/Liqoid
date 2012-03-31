@@ -54,7 +54,7 @@ public class InitiativesTabActivity extends Activity implements RefreshInisListT
         setContentView(R.layout.initiativentab);
         GestureOverlayView gestures = (GestureOverlayView) findViewById(R.id.allinisgestures);
         gestures.setGestureVisible(false);
-        gestures.addOnGesturePerformedListener((LiqoidMainActivity) getParent());
+      //  gestures.addOnGesturePerformedListener((LiqoidMainActivity) getParent());
         ((TextView) findViewById(R.id.tabinis_title)).setText(R.string.tab_inis);
 
 

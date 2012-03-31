@@ -1,18 +1,10 @@
-
-<TabHost xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@android:id/tabhost"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-        android:background="#000000"
-         >
-  
-    <LinearLayout
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:padding="0dp"
         >
-             <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             <RelativeLayout
     android:layout_width="fill_parent"
     android:layout_height="wrap_content">
             <LinearLayout
@@ -31,17 +23,9 @@
             </LinearLayout>
         </RelativeLayout>
    
-        <TabWidget
-            android:id="@android:id/tabs"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:tabStripEnabled="false"
-            />
-        <FrameLayout
-            android:id="@android:id/tabcontent"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-           />
+        <android.support.v4.view.ViewPager
+        android:id="@+id/pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
        
     </LinearLayout>
-</TabHost>
