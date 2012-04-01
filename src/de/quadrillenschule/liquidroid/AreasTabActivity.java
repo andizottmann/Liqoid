@@ -8,14 +8,12 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.gesture.GestureOverlayView;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.ListFragment;
 import android.text.Html;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -53,11 +51,12 @@ public class AreasTabActivity extends Fragment implements LQFBInstanceChangeList
     private LQFBInstance currentDownloadInstance = null;
     //  private boolean pauseDownload = false;
     ArrayAdapter adapter;
-
+    Activity mainActivity;
+View v;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.areastab, container, false);
+        v = inflater.inflate(R.layout.areastab, container, false);
 
         final Spinner instanceSpinner = (Spinner) v.findViewById(R.id.instanceSelector);
         adapter = new LQFBInstancesListAdapter(v.getContext(), ((LiqoidApplication) this.getActivity().getApplication()).lqfbInstances, android.R.layout.simple_spinner_item, getActivity());
@@ -87,27 +86,10 @@ public class AreasTabActivity extends Fragment implements LQFBInstanceChangeList
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-        //   setContentView(R.layout.areastab);
-
-
-
-        //   TextView tv=new TextView(instanceSpinner.getContext());
-
-       
+           
 
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        if ((((LiqoidApplication) getActivity().getApplication()).dataIntegrityCheck()) && (areasListAdapter == null)) {
-            onlyUpdateAreasListFromMemory();
-        }
-        if (!(((LiqoidApplication) getActivity().getApplication()).dataIntegrityCheck()) && (areasListAdapter == null)) {
-            refreshAreasList(false);
-        }
-
-    }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
@@ -151,122 +133,29 @@ public class AreasTabActivity extends Fragment implements LQFBInstanceChangeList
     }
 
   
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater =  getActivity().getMenuInflater();
-        inflater.inflate(R.menu.areaslist_options, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
-        switch (item.getItemId()) {
-            case R.id.prefs:
-                startActivity(new Intent( getActivity(), GlobalPrefsActivity.class));
-                return true;
-            case R.id.refresh_areaslist:
-                refreshAreasList(true);
-                return true;
-            case R.id.unlock_instance:
-                ((LiqoidApplication)  getActivity().getApplication()).unlockInstancesDialog( getActivity()).show();
-                return true;
-            case R.id.lock_instance:
-                ((LiqoidApplication)  getActivity().getApplication()).lockInstancesDialog( getActivity()).show();
-                return true;
-            case R.id.about:
-                ((LiqoidApplication)  getActivity().getApplication()).aboutDialog( getActivity()).show();
-                return true;
-            case R.id.clearcache:
-                ((LiqoidApplication)  getActivity().getApplication()).clearCache( getActivity());
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    public void refreshAreasList(boolean force) {
-        if (force) {
-            for (LQFBInstance li : ((LiqoidApplication)  getActivity().getApplication()).lqfbInstances) {
-                li.pauseDownload = false;
-            }
-        }
-        RefreshInisListThread rilt = new RefreshInisListThread(force, this, handler, ((LiqoidApplication)  getActivity().getApplication()));
-        rilt.start();
-        //   RefreshAreasListThread ralt = new RefreshAreasListThread(force, this);
-        //  ralt.start();
-    }
 
     public void finishedRefreshInisList(MultiInstanceInitiativen newInis) {
-        areasListAdapter = new AreasListAdapter(this, ((LiqoidApplication)  getActivity().getApplication()).lqfbInstances.getSelectedInstance().areas, R.id.areasList);
-
-
-
+        areasListAdapter = new AreasListAdapter(mainActivity, ((LiqoidApplication) mainActivity.getApplication()).lqfbInstances.getSelectedInstance().areas, R.id.areasList);
     }
-    private Handler handler = new Handler() {
+   
 
-        @Override
-        public void handleMessage(Message msg) {
-            //Update status line
-            long dataage = ((LiqoidApplication) getActivity(). getApplication()).cachedAPI1Queries.dataage;
-            DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            String dataagestr = formatter.format(new Date(dataage));
-            String prefix = "";
-            if (currentDownloadInstance != null) {
-                if (currentDownloadInstance.pauseDownload) {
-                    prefix = "Offline - ";
-                }
-            }
-
-            ((LiqoidApplication)  getActivity().getApplication()).statusLineText(prefix +  getActivity().getApplicationContext().getString(R.string.dataage) + ": " + dataagestr);
-            if ((msg.what == RefreshInisListThread.UPDATING)) {
-                progressDialog = ProgressDialog.show( getActivity(), "",
-                         getActivity().getApplicationContext().getString(R.string.updating) + "...", true);
-
-            }
-            if (currentDownloadInstance != null) {
-                //update progressdialog
-                if ((msg.what == RefreshInisListThread.DOWNLOADING) && (!currentDownloadInstance.pauseDownload)) {
-                    progressDialog.setMessage(
-                             getActivity().getApplicationContext().getString(R.string.downloading) + "\n" + ((LiqoidApplication)  getActivity().getApplication()).lqfbInstances.getSelectedInstance().getName() + "...");
-
-                }
-            }
-            if (msg.what == RefreshInisListThread.FINISH_OK) {
-                try {
-                    progressDialog.cancel();
-                } catch (Exception e) {
-                    //Sometimes it is not attached anymore
-                    progressDialog = null;
-                }
-                final ListView listview = (ListView)  getActivity().findViewById(R.id.areasList);
+     public void onFinishOk(){
+         final ListView listview = (ListView) v.findViewById(R.id.areasList);
                 listview.setAdapter(areasListAdapter);
-            }
-            if (progressDialog != null) {
-                if (msg.what == RefreshInisListThread.DOWNLOAD_ERROR) {
-                    progressDialog.setMessage( getActivity().getApplicationContext().getString(R.string.download_error));
-
-                }
-                if (msg.what == RefreshInisListThread.DOWNLOAD_RETRY) {
-                    progressDialog.setMessage( getActivity().getApplicationContext().getString(R.string.downloading));
-
-                }
-            }
-
-        }
-    };
+    }
 
     public void onlyUpdateAreasListFromMemory() {
         //  refreshAreasList(false);
-        areasListAdapter = new AreasListAdapter(this, ((LiqoidApplication)  getActivity().getApplication()).lqfbInstances.getSelectedInstance().areas, R.id.areasList);
-        final ListView listview = (ListView)  getActivity().findViewById(R.id.areasList);
+        areasListAdapter = new AreasListAdapter(mainActivity, ((LiqoidApplication)  mainActivity.getApplication()).lqfbInstances.getSelectedInstance().areas, R.id.areasList);
+        final ListView listview = (ListView)  v.findViewById(R.id.areasList);
         listview.setAdapter(areasListAdapter);
 
     }
 
     //Instances Spinner item selected
     public void onItemSelected(AdapterView<?> arg0, View arg1, int i, long arg3) {
-        LQFBInstances ls = ((LiqoidApplication)  getActivity().getApplication()).lqfbInstances;
-        ls.setSelectedInstance(((LiqoidApplication)  getActivity().getApplication()).lqfbInstances.get(i).getShortName());
-        ((LiqoidApplication)  getActivity().getApplication()).fireLQFBInstanceChangedEvent();
+        LQFBInstances ls = ((LiqoidApplication)  mainActivity.getApplication()).lqfbInstances;
+        ls.setSelectedInstance(((LiqoidApplication)  mainActivity.getApplication()).lqfbInstances.get(i).getShortName());
+        ((LiqoidApplication)  mainActivity.getApplication()).fireLQFBInstanceChangedEvent();
     }
 }

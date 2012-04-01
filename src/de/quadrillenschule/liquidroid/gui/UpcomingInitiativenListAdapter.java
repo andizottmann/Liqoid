@@ -16,8 +16,8 @@ import de.quadrillenschule.liquidroid.model.MultiInstanceInitiativen;
  */
 public class UpcomingInitiativenListAdapter extends InitiativenListAdapter {
 
-    public UpcomingInitiativenListAdapter(InitiativesTabActivity activity, MultiInstanceInitiativen initiativen, int viewId) {
-        super(activity, initiativen, viewId);
+    public UpcomingInitiativenListAdapter(Activity activity, MultiInstanceInitiativen initiativen, int viewId) {
+        super(activity, initiativen);
     }
   
 

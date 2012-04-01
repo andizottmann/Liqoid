@@ -14,30 +14,30 @@ import de.quadrillenschule.liquidroid.InitiativesTabActivity;
 import de.quadrillenschule.liquidroid.model.Initiative;
 import de.quadrillenschule.liquidroid.model.MultiInstanceInitiativen;
 
-
-public class InitiativenListAdapter extends ArrayAdapter<Initiative>  {
+public class InitiativenListAdapter extends ArrayAdapter<Initiative> {
 
     protected MultiInstanceInitiativen initiativen;
-    private int viewId;
-    protected Activity activity;
+     protected Activity activity;
 
-    public InitiativenListAdapter(InitiativesTabActivity activity, MultiInstanceInitiativen initiativen, int viewId) {
-        super(activity.getActivity(), NO_SELECTION, initiativen);
+
+    public InitiativenListAdapter( Activity activity, MultiInstanceInitiativen initiativen) {
+        super(activity, NO_SELECTION, initiativen);
         this.initiativen = initiativen;
-        this.activity = activity.getActivity();
+
+        this.activity = activity;
     }
 
     @Override
     public View getView(int position, View convertview, ViewGroup parent) {
-         if (initiativen.size() <= position) {
+        if (initiativen.size() <= position) {
             return null;
         }
-         View retval= getInternalView(position);
-          return retval;
+        View retval = getInternalView(position);
+        return retval;
     }
 
-    protected View getInternalView(int position){
-      IssueItemView retval = new IssueItemView(activity, initiativen.get(position));
+    protected View getInternalView(int position) {
+        IssueItemView retval = new IssueItemView(activity, initiativen.get(position));
 
         return retval;
     }

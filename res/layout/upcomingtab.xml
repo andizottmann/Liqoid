@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:orientation="vertical"
+	 android:background="#fff5f5f5"
+        xmlns:android="http://schemas.android.com/apk/res/android">
+       
+    <TextView
+         android:id="@+id/tabupcoming_title"
+
+        android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+        android:text="@string/tab_upcoming"
+        android:textColor="#009010"
+         android:gravity="center_vertical|center_horizontal"
+        android:textStyle="bold"
+        android:textSize="18dp"
+                />
+  
+    <ListView
+     android:id="@+id/upcomingList"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+         android:layout_weight="1"
+        android:cacheColorHint="#fff5f5f5"
+        android:background="#fff5f5f5"
+    
+/>
+  
+</LinearLayout>

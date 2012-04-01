@@ -23,10 +23,10 @@ public class AreasListAdapter extends ArrayAdapter<Area> {
 
     private Areas areas;
     private int viewId;
-    private AreasTabActivity activity;
+    private Activity activity;
 
-    public AreasListAdapter(AreasTabActivity activity, Areas values, int viewId) {
-        super(activity.getActivity(), NO_SELECTION, values);
+    public AreasListAdapter(Activity activity, Areas values, int viewId) {
+        super(activity, NO_SELECTION, values);
         //  this.context = pcontext;
         this.areas = values;
         this.activity = activity;
@@ -35,7 +35,7 @@ public class AreasListAdapter extends ArrayAdapter<Area> {
 
     @Override
     public View getView(int position, View convertview, ViewGroup parent) {
-        CheckBox retval = new CheckBox(activity.getActivity());
+        CheckBox retval = new CheckBox(activity);
 
         retval.setTextColor(Color.BLACK);
         retval.setBackgroundColor(Color.argb(255, 245, 245, 245));
@@ -53,8 +53,8 @@ public class AreasListAdapter extends ArrayAdapter<Area> {
                 areas.setSelectedArea(myarea, value);
 
                 try {
-                    if (((LiqoidApplication) activity.getActivity().getApplication()).getGlobalPreferences().getBoolean("vibrate", true)) {
-                        Vibrator v = (Vibrator) activity.getActivity().getSystemService(Context.VIBRATOR_SERVICE);
+                    if (((LiqoidApplication) activity.getApplication()).getGlobalPreferences().getBoolean("vibrate", true)) {
+                        Vibrator v = (Vibrator) activity.getSystemService(Context.VIBRATOR_SERVICE);
                         v.vibrate(30);
                     }
                 } catch (Exception e) {

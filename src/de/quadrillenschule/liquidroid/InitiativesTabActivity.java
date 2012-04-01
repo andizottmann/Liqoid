@@ -8,11 +8,8 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.gesture.GestureOverlayView;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -23,18 +20,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.TextView;
 import de.quadrillenschule.liquidroid.gui.InitiativenListAdapter;
 import de.quadrillenschule.liquidroid.gui.IssueItemView;
 import de.quadrillenschule.liquidroid.model.Area;
 import de.quadrillenschule.liquidroid.model.Initiative;
 import de.quadrillenschule.liquidroid.model.LQFBInstance;
-import de.quadrillenschule.liquidroid.model.LQFBInstances;
 import de.quadrillenschule.liquidroid.model.MultiInstanceInitiativen;
 import de.quadrillenschule.liquidroid.model.RefreshInisListThread;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  *
@@ -48,53 +40,37 @@ public class InitiativesTabActivity extends Fragment implements RefreshInisListT
     protected boolean sortNewestFirst = true;
     protected boolean filterOnlySelected = false;
     public RefreshInisListThread ralt;
+    public Activity mainActivity;
+    View v;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.initiativentab, container, false);
-       
-      //  ((TextView) v.findViewById(R.id.tabinis_title)).setText(R.string.tab_inis);
+        v = inflater.inflate(R.layout.initiativentab, container, false);
+          final ListView listview = getListView();
+        if (inisListAdapter == null) {
+            inisListAdapter = getInitiativenListAdapter();
 
+        }
+        listview.setAdapter(inisListAdapter);
         return v;
     }
+
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-         allInis = new MultiInstanceInitiativen();
-
-
+        allInis = new MultiInstanceInitiativen();
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (((LiqoidApplication) getActivity().getApplication()).dataIntegrityCheck() && (inisListAdapter == null)) {
-            createInisListAdapter();
-
-        }
-        if (!((LiqoidApplication) getActivity().getApplication()).dataIntegrityCheck() && (inisListAdapter == null)) {
-            refreshInisList(false);
-            LQFBInstances.selectionUpdatesForRefresh = false;
-
-        }
-        if (LQFBInstances.selectionUpdatesForRefresh) {
-            refreshInisList(false);
-        }
-    }
-
-    @Override
+    /*   @Override
     public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        if (((LiqoidApplication) getActivity().getApplication()).dataIntegrityCheck() && (inisListAdapter == null)) {
-            createInisListAdapter();
+    super.onConfigurationChanged(newConfig);
+    if (((LiqoidApplication) getActivity().getApplication()).dataIntegrityCheck() && (inisListAdapter == null)) {
+    createInisListAdapter();
 
-        }
-       
-       
     }
-
+    }*/
     void createInisListAdapter() {
         allInis = new MultiInstanceInitiativen();
         for (LQFBInstance myInstance : ((LiqoidApplication) getActivity().getApplication()).lqfbInstances) {
@@ -107,78 +83,12 @@ public class InitiativesTabActivity extends Fragment implements RefreshInisListT
         inisListAdapter = getInitiativenListAdapter();
         filterList();
         sortList();
-        final ListView listView = (ListView) getActivity().findViewById(R.id.initiativenList);
+        final ListView listView = getListView();
         listView.setAdapter(inisListAdapter);
         inisListAdapter.notifyDataSetChanged();
-
-
     }
 
-    public void refreshInisList(boolean download) {
-        LQFBInstances.selectionUpdatesForRefresh = false;
-        ralt = new RefreshInisListThread(download, this, handler, (LiqoidApplication) getActivity().getApplication());
-        ralt.start();
-    }
-    public Handler handler = new Handler() {
-
-        @Override
-        public void handleMessage(Message msg) {
-
-            //Setting the status line text
-            long dataage = ralt.overallDataAge;
-            DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            String dataagestr = formatter.format(new Date(dataage));
-            String prefix = "";
-            if (ralt.currentInstance != null) {
-                if (ralt.currentInstance.pauseDownload) {
-                    prefix += "Offline - ";
-                }
-            }
-            if (!ralt.dataComplete) {
-                prefix += getString(R.string.datanotcomplete) + " - ";
-            }
-            ((LiqoidApplication) getActivity().getApplication()).statusLineText(prefix + getActivity().getApplicationContext().getString(R.string.dataage) + ": " + dataagestr);
-
-            //Updating status of progressdialog
-            if ((msg.what == RefreshInisListThread.DOWNLOADING)) {
-                progressDialog.setMessage(getActivity().getApplicationContext().getString(R.string.downloading) + "\n" + ralt.currentlyDownloadedArea + "...");
-            }
-            if ((msg.what == RefreshInisListThread.DOWNLOADING_INSTANCE)) {
-                progressDialog.setMessage(getActivity().getApplicationContext().getString(R.string.downloading) + "\n" + ralt.currentlyDownloadedInstance + "...");
-            }
-            if (msg.what == RefreshInisListThread.UPDATING) {
-
-                progressDialog = ProgressDialog.show(getActivity(), "",
-                        getActivity().getApplicationContext().getString(R.string.updating) + "...", true);
-            }
-            if (msg.what == RefreshInisListThread.FINISH_OK) {
-                try {
-                    progressDialog.dismiss();
-                } catch (Exception e) {
-                    //Sometimes it is not attached anymore
-                    progressDialog = null;
-                }
-                final ListView listview = (ListView) getActivity().findViewById(R.id.initiativenList);
-                listview.setAdapter(inisListAdapter);
-                getActivity().findViewById(R.id.initiativenList).refreshDrawableState();
-                if (allInis.size() == 0) {
-                    ((LiqoidApplication) getActivity().getApplication()).toast(getActivity().getApplicationContext(), getString(R.string.noareasselected));
-                }
-            }
-            if (ralt.currentInstance != null) {
-                if ((progressDialog != null) && (!ralt.currentInstance.pauseDownload)) {
-                    if (msg.what == RefreshInisListThread.DOWNLOAD_ERROR) {
-                        progressDialog.setMessage(getActivity().getApplicationContext().getString(R.string.download_error));
-                    }
-                    if (msg.what == RefreshInisListThread.DOWNLOAD_RETRY) {
-                        progressDialog.setMessage(getActivity().getApplicationContext().getString(R.string.downloading) + "\n" + ralt.currentlyDownloadedArea + " @ " + ralt.currentlyDownloadedInstance);
-                    }
-                }
-            }
-        }
-    };
-
-  //  @Override
+    //  @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getActivity().getMenuInflater();
         inflater.inflate(R.menu.inislist_options, menu);
@@ -205,37 +115,8 @@ public class InitiativesTabActivity extends Fragment implements RefreshInisListT
 
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
-        switch (item.getItemId()) {
-            case R.id.prefs:
-                startActivity(new Intent(getActivity(), GlobalPrefsActivity.class));
-                return true;
-            case R.id.refresh_inislist:
-                refreshInisList(true);
-                return true;
-            case R.id.sort_inislist:
-                sortNewestFirst = !sortNewestFirst;
-                sortList();
-                return true;
-            case R.id.toggleselectedfilter:
-                filterOnlySelected = !filterOnlySelected;
-                refreshInisList(false);
-                return true;
-            case R.id.about:
-                ((LiqoidApplication) getActivity().getApplication()).aboutDialog(getActivity()).show();
-                return true;
-            case R.id.clearcache:
-                ((LiqoidApplication) getActivity().getApplication()).clearCache(getActivity());
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
     public InitiativenListAdapter getInitiativenListAdapter() {
-        return new InitiativenListAdapter(this, allInis, R.id.initiativenList);
+        return new InitiativenListAdapter(mainActivity, allInis);
     }
     private View contextMenuView;
 
@@ -315,12 +196,28 @@ public class InitiativesTabActivity extends Fragment implements RefreshInisListT
     public static final int GREY_COLOR = 0, ORANGE_COLOR = 1, RED_COLOR = 2, YELLOW_COLOR = 3;
 
     public void finishedRefreshInisList(MultiInstanceInitiativen newInis) {
+
         allInis = newInis;
         inisListAdapter = getInitiativenListAdapter();
         filterList();
         sortList();
         inisListAdapter.notifyDataSetChanged();
+    }
 
+    public ListView getListView(){
+    return (ListView) v.findViewById(R.id.initiativenList);
+    }
+    public void onFinishOk() {
+        final ListView listview = getListView();
+        if (inisListAdapter == null) {
+            inisListAdapter = getInitiativenListAdapter();
+
+        }
+        listview.setAdapter(inisListAdapter);
+        getListView().refreshDrawableState();
+        if (allInis.size() == 0) {
+            ((LiqoidApplication) mainActivity.getApplication()).toast(mainActivity.getApplicationContext(), getString(R.string.noareasselected));
+        }
     }
 
     public String getDateFormat() {
