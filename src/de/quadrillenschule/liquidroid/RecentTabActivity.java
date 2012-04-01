@@ -74,6 +74,6 @@ public class RecentTabActivity extends InitiativesTabActivity {
 
     @Override
     public InitiativenListAdapter getInitiativenListAdapter() {
-        return new RecentInitiativenListAdapter(mainActivity, allInis, R.id.recentList);
+        return new RecentInitiativenListAdapter(mainActivity, allInis);
     }
 }

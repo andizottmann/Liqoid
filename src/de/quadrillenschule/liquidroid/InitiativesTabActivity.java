@@ -47,7 +47,7 @@ public class InitiativesTabActivity extends Fragment implements RefreshInisListT
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.initiativentab, container, false);
-          final ListView listview = getListView();
+        final ListView listview = getListView();
         if (inisListAdapter == null) {
             inisListAdapter = getInitiativenListAdapter();
 
@@ -204,20 +204,20 @@ public class InitiativesTabActivity extends Fragment implements RefreshInisListT
         inisListAdapter.notifyDataSetChanged();
     }
 
-    public ListView getListView(){
-    return (ListView) v.findViewById(R.id.initiativenList);
+    public ListView getListView() {
+        
+        return (ListView) v.findViewById(R.id.initiativenList);
     }
-    public void onFinishOk() {
-        final ListView listview = getListView();
-        if (inisListAdapter == null) {
-            inisListAdapter = getInitiativenListAdapter();
 
-        }
+    public void onFinishOk() {
+        inisListAdapter = getInitiativenListAdapter();
+        filterList();
+        sortList();
+        try {
+          final ListView listview = getListView();
+
         listview.setAdapter(inisListAdapter);
-        getListView().refreshDrawableState();
-        if (allInis.size() == 0) {
-            ((LiqoidApplication) mainActivity.getApplication()).toast(mainActivity.getApplicationContext(), getString(R.string.noareasselected));
-        }
+        } catch (NullPointerException npe){}
     }
 
     public String getDateFormat() {

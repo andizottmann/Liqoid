@@ -73,6 +73,6 @@ public class UpcomingTabActivity extends InitiativesTabActivity {
     }
     @Override
     public InitiativenListAdapter getInitiativenListAdapter() {
-        return new UpcomingInitiativenListAdapter(mainActivity, allInis, R.id.upcomingList);
+        return new UpcomingInitiativenListAdapter(mainActivity, allInis);
     }
 }

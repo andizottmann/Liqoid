@@ -63,7 +63,6 @@ public class LiqoidMainActivity extends FragmentActivity implements RefreshInisL
         Resources res = getResources(); // Resource object to get Drawables
         mViewPager = (ViewPager) findViewById(R.id.pager);
 
-        TabHost.TabSpec spec;  // Resusable TabSpec for each tab
         mTabsAdapter = new MyAdapter(getSupportFragmentManager(), ata, inis, upcominginis, recentinis);
         mViewPager.setAdapter(mTabsAdapter);
         ((LiqoidApplication) getApplication()).statusLine = ((TextView) findViewById(R.id.statusline));
@@ -75,7 +74,7 @@ public class LiqoidMainActivity extends FragmentActivity implements RefreshInisL
     public void onResume() {
         super.onResume();
 
-    //    refreshLists(false);
+        refreshLists(false);
 
     }
 
@@ -163,10 +162,11 @@ public class LiqoidMainActivity extends FragmentActivity implements RefreshInisL
                     //Sometimes it is not attached anymore
                     progressDialog = null;
                 }
-           //     inis.onFinishOk();
+               // if (get)
+                inis.onFinishOk();
              //   ata.onFinishOk();
-               // upcominginis.onFinishOk();
-               // recentinis.onFinishOk();
+                upcominginis.onFinishOk();
+                recentinis.onFinishOk();
             }
             if (ralt.currentInstance != null) {
                 if ((progressDialog != null) && (!ralt.currentInstance.pauseDownload)) {
@@ -183,10 +183,10 @@ public class LiqoidMainActivity extends FragmentActivity implements RefreshInisL
 
     public void finishedRefreshInisList(MultiInstanceInitiativen newInis) {
  
-        inis.finishedRefreshInisList(newInis);
-        ata.finishedRefreshInisList(newInis);
-        upcominginis.finishedRefreshInisList(newInis);
-        recentinis.finishedRefreshInisList(newInis);
+        inis.finishedRefreshInisList((MultiInstanceInitiativen)newInis.clone());
+        ata.finishedRefreshInisList((MultiInstanceInitiativen)newInis.clone());
+        upcominginis.finishedRefreshInisList((MultiInstanceInitiativen)newInis.clone());
+        recentinis.finishedRefreshInisList((MultiInstanceInitiativen)newInis.clone());
 
     }
 
