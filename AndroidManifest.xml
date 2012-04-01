@@ -26,26 +26,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="UpcomingTabActivity"
-                  android:label="@string/app_name"
-                  android:configChanges="orientation|keyboardHidden"
-                  android:theme="@android:style/Theme.NoTitleBar"
-         />
-        <activity android:name="RecentTabActivity"
-                  android:label="@string/app_name"
-                  android:configChanges="orientation|keyboardHidden"
-                  android:theme="@android:style/Theme.NoTitleBar"
-          />
-        <activity android:name="InitiativesTabActivity"
-                  android:label="@string/app_name"
-                  android:configChanges="orientation|keyboardHidden"
-                  android:theme="@android:style/Theme.NoTitleBar"
-          />
-        <activity android:name="AreasTabActivity"
-                  android:label="@string/app_name"
-                  android:theme="@android:style/Theme.NoTitleBar"
-                  android:configChanges="orientation|keyboardHidden"
-          />
+   
         <activity android:name="GlobalPrefsActivity"/>
     </application>
 </manifest> 

@@ -19,22 +19,19 @@ import de.quadrillenschule.liquidroid.model.MultiInstanceInitiativen;
  * @author andi
  */
 public class UpcomingTabActivity extends InitiativesTabActivity {
-  @Override
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-      v = inflater.inflate(R.layout.upcomingtab, container, false);
-         final ListView listview = getListView();
-        if (inisListAdapter == null) {
-            inisListAdapter = getInitiativenListAdapter();
+        v = inflater.inflate(R.layout.upcomingtab, container, false);
 
-        }
-        listview.setAdapter(inisListAdapter);
         return v;
     }
+
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-      //     ((TextView) getActivity().findViewById(R.id.tabinis_title)).setText(R.string.tab_upcoming);
+        //     ((TextView) getActivity().findViewById(R.id.tabinis_title)).setText(R.string.tab_upcoming);
 
     }
 
@@ -62,8 +59,9 @@ public class UpcomingTabActivity extends InitiativesTabActivity {
         } catch (NullPointerException e) {
         }
     }
+
     @Override
- public void finishedRefreshInisList(MultiInstanceInitiativen newInis) {
+    public void finishedRefreshInisList(MultiInstanceInitiativen newInis) {
 
         allInis = newInis;
         inisListAdapter = getInitiativenListAdapter();
@@ -71,8 +69,12 @@ public class UpcomingTabActivity extends InitiativesTabActivity {
         sortList();
         inisListAdapter.notifyDataSetChanged();
     }
+
     @Override
     public InitiativenListAdapter getInitiativenListAdapter() {
+        if (mainActivity == null) {
+            mainActivity = getActivity();
+        }
         return new UpcomingInitiativenListAdapter(mainActivity, allInis);
     }
 }

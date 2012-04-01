@@ -24,16 +24,12 @@ public class RecentTabActivity extends InitiativesTabActivity {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.recenttab, container, false);
-        final ListView listview = getListView();
-        if (inisListAdapter == null) {
-            inisListAdapter = getInitiativenListAdapter();
 
-        }
-        listview.setAdapter(inisListAdapter);
         return v;
     }
-   @Override
- public void finishedRefreshInisList(MultiInstanceInitiativen newInis) {
+
+    @Override
+    public void finishedRefreshInisList(MultiInstanceInitiativen newInis) {
 
         allInis = newInis;
         inisListAdapter = getInitiativenListAdapter();
@@ -41,6 +37,7 @@ public class RecentTabActivity extends InitiativesTabActivity {
         sortList();
         inisListAdapter.notifyDataSetChanged();
     }
+
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
@@ -74,6 +71,10 @@ public class RecentTabActivity extends InitiativesTabActivity {
 
     @Override
     public InitiativenListAdapter getInitiativenListAdapter() {
+        if (mainActivity == null) {
+            mainActivity = getActivity();
+
+        }
         return new RecentInitiativenListAdapter(mainActivity, allInis);
     }
 }

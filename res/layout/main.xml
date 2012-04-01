@@ -1,31 +1,38 @@
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:padding="0dp"
         >
-             <RelativeLayout
+    <RelativeLayout
     android:layout_width="fill_parent"
     android:layout_height="wrap_content">
-            <LinearLayout
+        <LinearLayout
         android:orientation="horizontal"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:padding="0dp"
         >
-                <TextView
+            <TextView
             android:id="@+id/statusline"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:textSize="6pt"
+            android:textSize="10sp"
             android:text="Liqoid - Liquidfeedback for your Android"
-            android:textColor="#30ff80"/>
-            </LinearLayout>
-        </RelativeLayout>
+            android:textColor="#009010"/>
+        </LinearLayout>
+    </RelativeLayout>
+    <com.viewpagerindicator.TitlePageIndicator
+        android:id="@+id/indicator"
+        android:padding="10dip"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
    
-        <android.support.v4.view.ViewPager
+        />
+    <android.support.v4.view.ViewPager
         android:id="@+id/pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
        
-    </LinearLayout>
+</LinearLayout>

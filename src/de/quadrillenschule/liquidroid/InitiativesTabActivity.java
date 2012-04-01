@@ -47,12 +47,7 @@ public class InitiativesTabActivity extends Fragment implements RefreshInisListT
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.initiativentab, container, false);
-        final ListView listview = getListView();
-        if (inisListAdapter == null) {
-            inisListAdapter = getInitiativenListAdapter();
 
-        }
-        listview.setAdapter(inisListAdapter);
         return v;
     }
 
@@ -60,7 +55,24 @@ public class InitiativesTabActivity extends Fragment implements RefreshInisListT
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
         allInis = new MultiInstanceInitiativen();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        final ListView listview = getListView();
+        if (inisListAdapter == null) {
+            inisListAdapter = getInitiativenListAdapter();
+
+        }
+        listview.setAdapter(inisListAdapter);
     }
 
     /*   @Override
@@ -109,13 +121,12 @@ public class InitiativesTabActivity extends Fragment implements RefreshInisListT
         } else {
             allInis.sort(Initiative.ISSUE_CREATED_COMP);
         }
-        if (inisListAdapter != null) {
-            inisListAdapter.notifyDataSetChanged();
-        }
-
     }
 
     public InitiativenListAdapter getInitiativenListAdapter() {
+        if (mainActivity == null) {
+            mainActivity = getActivity();
+        }
         return new InitiativenListAdapter(mainActivity, allInis);
     }
     private View contextMenuView;
@@ -205,19 +216,22 @@ public class InitiativesTabActivity extends Fragment implements RefreshInisListT
     }
 
     public ListView getListView() {
-        
+
         return (ListView) v.findViewById(R.id.initiativenList);
     }
 
     public void onFinishOk() {
-        inisListAdapter = getInitiativenListAdapter();
-        filterList();
-        sortList();
+        if (inisListAdapter == null) {
+            inisListAdapter = getInitiativenListAdapter();
+        }
+        /*   filterList();
+        sortList();*/
         try {
-          final ListView listview = getListView();
+            final ListView listview = getListView();
 
-        listview.setAdapter(inisListAdapter);
-        } catch (NullPointerException npe){}
+            listview.setAdapter(inisListAdapter);
+        } catch (NullPointerException npe) {
+        }
     }
 
     public String getDateFormat() {

@@ -21,6 +21,7 @@ public class InitiativenListAdapter extends ArrayAdapter<Initiative> {
 
 
     public InitiativenListAdapter( Activity activity, MultiInstanceInitiativen initiativen) {
+
         super(activity, NO_SELECTION, initiativen);
         this.initiativen = initiativen;
 

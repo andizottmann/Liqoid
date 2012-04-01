@@ -1,6 +1,7 @@
 package de.quadrillenschule.liquidroid;
 
 import android.app.Activity;
+import android.app.Application;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -18,6 +19,10 @@ import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TextView;
+import com.viewpagerindicator.PageIndicator;
+import com.viewpagerindicator.TabPageIndicator;
+import com.viewpagerindicator.TitlePageIndicator;
+import com.viewpagerindicator.TitleProvider;
 import de.quadrillenschule.liquidroid.model.LQFBInstances;
 import de.quadrillenschule.liquidroid.model.MultiInstanceInitiativen;
 import de.quadrillenschule.liquidroid.model.RefreshInisListThread;
@@ -30,6 +35,7 @@ public class LiqoidMainActivity extends FragmentActivity implements RefreshInisL
     ProgressDialog progressDialog;
     public RefreshInisListThread ralt;
     ViewPager mViewPager;
+    PageIndicator mIndicator;
     MyAdapter mTabsAdapter;
     AreasTabActivity ata;
     InitiativesTabActivity inis;
@@ -63,19 +69,35 @@ public class LiqoidMainActivity extends FragmentActivity implements RefreshInisL
         Resources res = getResources(); // Resource object to get Drawables
         mViewPager = (ViewPager) findViewById(R.id.pager);
 
-        mTabsAdapter = new MyAdapter(getSupportFragmentManager(), ata, inis, upcominginis, recentinis);
+        mTabsAdapter = new MyAdapter(getSupportFragmentManager(), this, ata, inis, upcominginis, recentinis);
         mViewPager.setAdapter(mTabsAdapter);
         ((LiqoidApplication) getApplication()).statusLine = ((TextView) findViewById(R.id.statusline));
 
+        mIndicator = (TitlePageIndicator) findViewById(R.id.indicator);
+        mIndicator.setViewPager(mViewPager);
 
     }
 
     @Override
     public void onResume() {
-        super.onResume();
 
+        ata.mainActivity = this;
+        inis.mainActivity = this;
+        upcominginis.mainActivity = this;
+        recentinis.mainActivity = this;
+        super.onResume();
         refreshLists(false);
 
+    }
+
+    @Override
+    protected void onStart() {
+
+        ata.mainActivity = this;
+        inis.mainActivity = this;
+        upcominginis.mainActivity = this;
+        recentinis.mainActivity = this;
+        super.onStart();
     }
 
     @Override
@@ -162,9 +184,9 @@ public class LiqoidMainActivity extends FragmentActivity implements RefreshInisL
                     //Sometimes it is not attached anymore
                     progressDialog = null;
                 }
-               // if (get)
+                // if (get)
                 inis.onFinishOk();
-             //   ata.onFinishOk();
+                //   ata.onFinishOk();
                 upcominginis.onFinishOk();
                 recentinis.onFinishOk();
             }
@@ -182,27 +204,30 @@ public class LiqoidMainActivity extends FragmentActivity implements RefreshInisL
     };
 
     public void finishedRefreshInisList(MultiInstanceInitiativen newInis) {
- 
-        inis.finishedRefreshInisList((MultiInstanceInitiativen)newInis.clone());
-        ata.finishedRefreshInisList((MultiInstanceInitiativen)newInis.clone());
-        upcominginis.finishedRefreshInisList((MultiInstanceInitiativen)newInis.clone());
-        recentinis.finishedRefreshInisList((MultiInstanceInitiativen)newInis.clone());
+
+        inis.finishedRefreshInisList((MultiInstanceInitiativen) newInis.clone());
+        ata.finishedRefreshInisList((MultiInstanceInitiativen) newInis.clone());
+        upcominginis.finishedRefreshInisList((MultiInstanceInitiativen) newInis.clone());
+        recentinis.finishedRefreshInisList((MultiInstanceInitiativen) newInis.clone());
 
     }
 
-    static class MyAdapter extends FragmentPagerAdapter {
+    static class MyAdapter extends FragmentPagerAdapter implements TitleProvider {
 
         AreasTabActivity ata;
         InitiativesTabActivity inis;
         UpcomingTabActivity upcominginis;
         RecentTabActivity recentinis;
+        Activity activity;
 
-        public MyAdapter(FragmentManager fm, AreasTabActivity ata, InitiativesTabActivity inis, UpcomingTabActivity upcominginis, RecentTabActivity recentinis) {
+        public MyAdapter(FragmentManager fm, Activity activity,
+                AreasTabActivity ata, InitiativesTabActivity inis, UpcomingTabActivity upcominginis, RecentTabActivity recentinis) {
             super(fm);
             this.ata = ata;
             this.inis = inis;
             this.upcominginis = upcominginis;
             this.recentinis = recentinis;
+            this.activity = activity;
         }
 
         @Override
@@ -212,6 +237,10 @@ public class LiqoidMainActivity extends FragmentActivity implements RefreshInisL
 
         @Override
         public Fragment getItem(int position) {
+             ata.mainActivity = activity;
+        inis.mainActivity = activity;
+        upcominginis.mainActivity = activity;
+        recentinis.mainActivity = activity;
             switch (position) {
                 case 0:
                     return upcominginis;
@@ -223,6 +252,22 @@ public class LiqoidMainActivity extends FragmentActivity implements RefreshInisL
                     return ata;
             }
             return null;
+        }
+
+        public String getTitle(int position) {
+
+
+            switch (position) {
+                case 0:
+                    return activity.getString(R.string.tab_upcoming);
+                case 1:
+                    return activity.getString(R.string.tab_recent);
+                case 2:
+                    return activity.getString(R.string.tab_inis);
+                case 3:
+                    return activity.getString(R.string.tab_areas);
+            }
+            return "";
         }
     }
 }
