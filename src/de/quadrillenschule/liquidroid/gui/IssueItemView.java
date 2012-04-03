@@ -55,7 +55,7 @@ public class IssueItemView extends LinearLayout {
         super(activity);
         this.activity = activity;
         this.initiative = initiative;
-
+        this.setBackgroundColor(Color.parseColor("#ffffffff"));
 
         RelativeLayout.LayoutParams rlp;
         RelativeLayout rl = new RelativeLayout(activity);

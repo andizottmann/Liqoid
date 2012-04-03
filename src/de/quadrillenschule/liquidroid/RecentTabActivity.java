@@ -20,13 +20,7 @@ import de.quadrillenschule.liquidroid.model.MultiInstanceInitiativen;
  */
 public class RecentTabActivity extends InitiativesTabActivity {
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
-        v = inflater.inflate(R.layout.recenttab, container, false);
-
-        return v;
-    }
+  
 
     @Override
     public void finishedRefreshInisList(MultiInstanceInitiativen newInis) {
@@ -44,11 +38,7 @@ public class RecentTabActivity extends InitiativesTabActivity {
         //  ((TextView) getActivity().findViewById(R.id.tabinis_title)).setText(R.string.tab_recent);
     }
 
-    @Override
-    public ListView getListView() {
-        return (ListView) v.findViewById(R.id.recentList);
-    }
-
+   
     @Override
     public void filterList() {
         if (filterOnlySelected) {

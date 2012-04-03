@@ -20,13 +20,7 @@ import de.quadrillenschule.liquidroid.model.MultiInstanceInitiativen;
  */
 public class UpcomingTabActivity extends InitiativesTabActivity {
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
-        v = inflater.inflate(R.layout.upcomingtab, container, false);
-
-        return v;
-    }
+   
 
     @Override
     public void onCreate(Bundle icicle) {
@@ -35,10 +29,7 @@ public class UpcomingTabActivity extends InitiativesTabActivity {
 
     }
 
-    @Override
-    public ListView getListView() {
-        return (ListView) v.findViewById(R.id.upcomingList);
-    }
+ 
 
     @Override
     public void filterList() {

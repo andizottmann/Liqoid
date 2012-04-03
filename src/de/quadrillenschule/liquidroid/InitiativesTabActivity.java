@@ -11,6 +11,7 @@ import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.ListFragment;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
@@ -32,7 +33,7 @@ import de.quadrillenschule.liquidroid.model.RefreshInisListThread;
  *
  * @author andi
  */
-public class InitiativesTabActivity extends Fragment implements RefreshInisListThread.RefreshInisListListener {
+public class InitiativesTabActivity extends ListFragment implements RefreshInisListThread.RefreshInisListListener {
 
     public InitiativenListAdapter inisListAdapter;
     public MultiInstanceInitiativen allInis;
@@ -42,14 +43,6 @@ public class InitiativesTabActivity extends Fragment implements RefreshInisListT
     public RefreshInisListThread ralt;
     public Activity mainActivity;
     View v;
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
-        v = inflater.inflate(R.layout.initiativentab, container, false);
-
-        return v;
-    }
 
     /** Called when the activity is first created. */
     @Override
@@ -67,12 +60,12 @@ public class InitiativesTabActivity extends Fragment implements RefreshInisListT
     @Override
     public void onResume() {
         super.onResume();
-        final ListView listview = getListView();
-        if (inisListAdapter == null) {
-            inisListAdapter = getInitiativenListAdapter();
 
+        if (inisListAdapter == null) {
+            // inisListAdapter = getInitiativenListAdapter();
+            createInisListAdapter();
         }
-        listview.setAdapter(inisListAdapter);
+        this.setListAdapter(inisListAdapter);
     }
 
     /*   @Override
@@ -95,8 +88,7 @@ public class InitiativesTabActivity extends Fragment implements RefreshInisListT
         inisListAdapter = getInitiativenListAdapter();
         filterList();
         sortList();
-        final ListView listView = getListView();
-        listView.setAdapter(inisListAdapter);
+        setListAdapter(inisListAdapter);
         inisListAdapter.notifyDataSetChanged();
     }
 
@@ -209,29 +201,22 @@ public class InitiativesTabActivity extends Fragment implements RefreshInisListT
     public void finishedRefreshInisList(MultiInstanceInitiativen newInis) {
 
         allInis = newInis;
+    //    createInisListAdapter();
         inisListAdapter = getInitiativenListAdapter();
         filterList();
         sortList();
         inisListAdapter.notifyDataSetChanged();
     }
 
-    public ListView getListView() {
-
-        return (ListView) v.findViewById(R.id.initiativenList);
-    }
-
     public void onFinishOk() {
         if (inisListAdapter == null) {
-            inisListAdapter = getInitiativenListAdapter();
+         //    inisListAdapter = getInitiativenListAdapter();
+            createInisListAdapter();
+           
         }
-        /*   filterList();
-        sortList();*/
-        try {
-            final ListView listview = getListView();
+        setListAdapter(inisListAdapter);
+        inisListAdapter.notifyDataSetChanged();
 
-            listview.setAdapter(inisListAdapter);
-        } catch (NullPointerException npe) {
-        }
     }
 
     public String getDateFormat() {

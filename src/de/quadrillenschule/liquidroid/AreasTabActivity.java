@@ -11,14 +11,11 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.text.Html;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -35,9 +32,6 @@ import de.quadrillenschule.liquidroid.model.LQFBInstance;
 import de.quadrillenschule.liquidroid.model.LQFBInstances;
 import de.quadrillenschule.liquidroid.model.MultiInstanceInitiativen;
 import de.quadrillenschule.liquidroid.model.RefreshInisListThread;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  *
@@ -52,7 +46,8 @@ public class AreasTabActivity extends Fragment implements LQFBInstanceChangeList
     //  private boolean pauseDownload = false;
     ArrayAdapter adapter;
     Activity mainActivity;
-View v;
+    View v;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
@@ -77,7 +72,7 @@ View v;
         });
         instanceSpinner.setAdapter(adapter);
         instanceSpinner.setOnItemSelectedListener(this);
-         int i = ((LiqoidApplication) getActivity().getApplication()).lqfbInstances.indexOf(((LiqoidApplication) getActivity().getApplication()).lqfbInstances.getSelectedInstance());
+        int i = ((LiqoidApplication) getActivity().getApplication()).lqfbInstances.indexOf(((LiqoidApplication) getActivity().getApplication()).lqfbInstances.getSelectedInstance());
         instanceSpinner.setSelection(i);
         return v;
     }
@@ -86,15 +81,14 @@ View v;
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-           
+
 
     }
-
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        if ((((LiqoidApplication)  getActivity().getApplication()).dataIntegrityCheck()) && (areasListAdapter == null)) {
+        if ((((LiqoidApplication) getActivity().getApplication()).dataIntegrityCheck()) && (areasListAdapter == null)) {
             onlyUpdateAreasListFromMemory();
         }
 
@@ -108,7 +102,7 @@ View v;
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         contextMenuView = v;
-        MenuInflater inflater =  getActivity().getMenuInflater();
+        MenuInflater inflater = getActivity().getMenuInflater();
         inflater.inflate(R.menu.areaslist_contextmenu, menu);
 
     }
@@ -119,8 +113,8 @@ View v;
             case R.id.open_browser:
 
                 String areaname = ((CheckBox) contextMenuView).getText().toString();
-                int areaid = ((LiqoidApplication)  getActivity().getApplication()).lqfbInstances.getSelectedInstance().areas.getByName(areaname).getId();
-                String url = ((LiqoidApplication)  getActivity().getApplication()).lqfbInstances.getSelectedInstance().getWebUrl() + "area/show/" + areaid + ".html";
+                int areaid = ((LiqoidApplication) getActivity().getApplication()).lqfbInstances.getSelectedInstance().areas.getByName(areaname).getId();
+                String url = ((LiqoidApplication) getActivity().getApplication()).lqfbInstances.getSelectedInstance().getWebUrl() + "area/show/" + areaid + ".html";
                 Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                 myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
                 startActivity(myIntent);
@@ -132,30 +126,30 @@ View v;
         }
     }
 
-  
-
     public void finishedRefreshInisList(MultiInstanceInitiativen newInis) {
         areasListAdapter = new AreasListAdapter(mainActivity, ((LiqoidApplication) mainActivity.getApplication()).lqfbInstances.getSelectedInstance().areas, R.id.areasList);
     }
-   
 
-     public void onFinishOk(){
-         final ListView listview = (ListView) v.findViewById(R.id.areasList);
-                listview.setAdapter(areasListAdapter);
+    public void onFinishOk() {
+        final ListView listview = (ListView) v.findViewById(R.id.areasList);
+        listview.setAdapter(areasListAdapter);
     }
 
     public void onlyUpdateAreasListFromMemory() {
         //  refreshAreasList(false);
-        areasListAdapter = new AreasListAdapter(mainActivity, ((LiqoidApplication)  mainActivity.getApplication()).lqfbInstances.getSelectedInstance().areas, R.id.areasList);
-        final ListView listview = (ListView)  v.findViewById(R.id.areasList);
+        areasListAdapter = new AreasListAdapter(mainActivity, ((LiqoidApplication) mainActivity.getApplication()).lqfbInstances.getSelectedInstance().areas, R.id.areasList);
+        final ListView listview = (ListView) v.findViewById(R.id.areasList);
         listview.setAdapter(areasListAdapter);
 
     }
 
     //Instances Spinner item selected
     public void onItemSelected(AdapterView<?> arg0, View arg1, int i, long arg3) {
-        LQFBInstances ls = ((LiqoidApplication)  mainActivity.getApplication()).lqfbInstances;
-        ls.setSelectedInstance(((LiqoidApplication)  mainActivity.getApplication()).lqfbInstances.get(i).getShortName());
-        ((LiqoidApplication)  mainActivity.getApplication()).fireLQFBInstanceChangedEvent();
+        if (mainActivity == null) {
+            mainActivity = getActivity();
+        }
+        LQFBInstances ls = ((LiqoidApplication) mainActivity.getApplication()).lqfbInstances;
+        ls.setSelectedInstance(((LiqoidApplication) mainActivity.getApplication()).lqfbInstances.get(i).getShortName());
+        ((LiqoidApplication) mainActivity.getApplication()).fireLQFBInstanceChangedEvent();
     }
 }
