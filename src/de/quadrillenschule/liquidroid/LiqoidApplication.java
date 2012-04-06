@@ -20,6 +20,7 @@ import de.quadrillenschule.liquidroid.model.Area;
 import de.quadrillenschule.liquidroid.model.CachedAPI1Queries;
 import de.quadrillenschule.liquidroid.model.LQFBInstance;
 import de.quadrillenschule.liquidroid.model.LQFBInstances;
+import de.quadrillenschule.liquidroid.model.RefreshInisListThread.RefreshInisListListener;
 import de.quadrillenschule.liquidroid.tools.CrashLog;
 import java.io.File;
 import java.util.ArrayList;
@@ -32,10 +33,13 @@ public class LiqoidApplication extends Application {
 
     public LQFBInstances lqfbInstances;
     ArrayList<LQFBInstanceChangeListener> lqfbInstanceChangeListeners;
+    public ArrayList<RefreshInisListListener> refreshInisListListeners;
     public CachedAPI1Queries cachedAPI1Queries;
 
     public LiqoidApplication() {
         super();
+        lqfbInstanceChangeListeners = new ArrayList<LQFBInstanceChangeListener>();
+        refreshInisListListeners = new ArrayList<RefreshInisListListener>();
 
     }
 
@@ -44,7 +48,6 @@ public class LiqoidApplication extends Application {
         Thread.setDefaultUncaughtExceptionHandler(new CrashLog(new File(getExternalFilesDir(null), "liqoid.log")));
         cachedAPI1Queries = new CachedAPI1Queries(getExternalCacheDir(), getGlobalPreferences());
         lqfbInstances = new LQFBInstances(this);
-        lqfbInstanceChangeListeners = new ArrayList<LQFBInstanceChangeListener>();
     }
 
     public void statusLineText(String text) {
@@ -66,6 +69,12 @@ public class LiqoidApplication extends Application {
         for (LQFBInstanceChangeListener l : lqfbInstanceChangeListeners) {
             l.onlyUpdateAreasListFromMemory();
 
+        }
+    }
+
+    void addRefreshInisListListener(RefreshInisListListener r) {
+        if (!refreshInisListListeners.contains(r)) {
+            refreshInisListListeners.add(r);
         }
     }
 

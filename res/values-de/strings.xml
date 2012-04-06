@@ -62,6 +62,7 @@
     <string name="initiatives">Initiativen</string>
     <string name="clearcachequestion">Willst Du den Cache wirklich löschen?</string>
     <string name="clearcache">Cache löschen</string>
+    <string name="readcache">Lade vom Cache:</string>
 
 
 </resources>

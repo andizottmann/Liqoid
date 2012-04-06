@@ -61,6 +61,7 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
         gestures.addOnGesturePerformedListener((LiqoidMainActivity) getParent());
 
         ((LiqoidApplication) getApplication()).addLQFBInstancesChangeListener(this);
+        ((LiqoidApplication) getApplication()).addRefreshInisListListener(this);
 
         final Spinner instanceSpinner = (Spinner) findViewById(R.id.instanceSelector);
         adapter = new LQFBInstancesListAdapter(this, ((LiqoidApplication) getApplication()).lqfbInstances, android.R.layout.simple_spinner_item, this);
@@ -176,7 +177,8 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
                 li.pauseDownload = false;
             }
         }
-        RefreshInisListThread rilt = new RefreshInisListThread(force, this, handler, ((LiqoidApplication) getApplication()));
+        ((LiqoidApplication) getApplication()).addRefreshInisListListener(this);
+        RefreshInisListThread rilt = new RefreshInisListThread(force, ((LiqoidApplication) getApplication()).refreshInisListListeners, handler, ((LiqoidApplication) getApplication()));
         rilt.start();
         //   RefreshAreasListThread ralt = new RefreshAreasListThread(force, this);
         //  ralt.start();
@@ -235,6 +237,9 @@ public class AreasTabActivity extends Activity implements LQFBInstanceChangeList
                 if (msg.what == RefreshInisListThread.DOWNLOAD_RETRY) {
                     progressDialog.setMessage(getApplicationContext().getString(R.string.downloading));
 
+                }
+                if (msg.what == RefreshInisListThread.READ_CACHE) {
+                    progressDialog.setMessage(getApplicationContext().getString(R.string.readcache));
                 }
             }
 

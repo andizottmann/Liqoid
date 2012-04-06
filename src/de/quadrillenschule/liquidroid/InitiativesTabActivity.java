@@ -56,6 +56,7 @@ public class InitiativesTabActivity extends Activity implements RefreshInisListT
         gestures.setGestureVisible(false);
         gestures.addOnGesturePerformedListener((LiqoidMainActivity) getParent());
         ((TextView) findViewById(R.id.tabinis_title)).setText(R.string.tab_inis);
+        ((LiqoidApplication) getApplication()).addRefreshInisListListener(this);
 
 
     }
@@ -107,7 +108,8 @@ public class InitiativesTabActivity extends Activity implements RefreshInisListT
 
     public void refreshInisList(boolean download) {
         LQFBInstances.selectionUpdatesForRefresh = false;
-        ralt = new RefreshInisListThread(download, this, handler, (LiqoidApplication) this.getApplication());
+        ((LiqoidApplication) getApplication()).addRefreshInisListListener(this);
+        ralt = new RefreshInisListThread(download, ((LiqoidApplication) getApplication()).refreshInisListListeners, handler, (LiqoidApplication) this.getApplication());
         ralt.start();
     }
     public Handler handler = new Handler() {
@@ -157,12 +159,15 @@ public class InitiativesTabActivity extends Activity implements RefreshInisListT
                 }
             }
             if (ralt.currentInstance != null) {
-                if ((progressDialog != null) && (!ralt.currentInstance.pauseDownload)) {
+                if ((progressDialog != null)) {
                     if (msg.what == RefreshInisListThread.DOWNLOAD_ERROR) {
                         progressDialog.setMessage(getApplicationContext().getString(R.string.download_error));
                     }
                     if (msg.what == RefreshInisListThread.DOWNLOAD_RETRY) {
                         progressDialog.setMessage(getApplicationContext().getString(R.string.downloading) + "\n" + ralt.currentlyDownloadedArea + " @ " + ralt.currentlyDownloadedInstance);
+                    }
+                    if (msg.what == RefreshInisListThread.READ_CACHE) {
+                        progressDialog.setMessage(getApplicationContext().getString(R.string.readcache) + "\n" + ralt.currentlyDownloadedArea + " @ " + ralt.currentlyDownloadedInstance);
                     }
                 }
             }

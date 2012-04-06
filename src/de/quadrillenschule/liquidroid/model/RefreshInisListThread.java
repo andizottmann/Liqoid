@@ -6,6 +6,7 @@ package de.quadrillenschule.liquidroid.model;
 
 import android.os.Handler;
 import de.quadrillenschule.liquidroid.LiqoidApplication;
+import java.util.ArrayList;
 
 /**
  *
@@ -14,18 +15,18 @@ import de.quadrillenschule.liquidroid.LiqoidApplication;
 public class RefreshInisListThread extends Thread {
 
     boolean download;
-    MultiInstanceInitiativen allInititiativen;
+    private MultiInstanceInitiativen allInititiativen;
     Handler progressHandler;
     LiqoidApplication app;
     public LQFBInstance currentInstance;
     public String currentlyDownloadedInstance = "", currentlyDownloadedArea = "";
     public long overallDataAge = 0;
     public boolean dataComplete = true;
-    public static int FINISH_OK = 0, DOWNLOADING = 1, DOWNLOAD_ERROR = -1, DOWNLOAD_RETRY = 2, UPDATING = 4, DOWNLOADING_INSTANCE = 5;
-    RefreshInisListListener mylistener;
+    public static int FINISH_OK = 0, DOWNLOADING = 1, DOWNLOAD_ERROR = -1, DOWNLOAD_RETRY = 2, UPDATING = 4, DOWNLOADING_INSTANCE = 5, READ_CACHE = 6;
+    ArrayList<RefreshInisListListener> refreshInisListListeners;
 
-    public RefreshInisListThread(boolean download, RefreshInisListListener mylistener, Handler progressHandler, LiqoidApplication app) {
-        this.mylistener = mylistener;
+    public RefreshInisListThread(boolean download, ArrayList<RefreshInisListListener> refreshInisListListeners, Handler progressHandler, LiqoidApplication app) {
+        this.refreshInisListListeners = refreshInisListListeners;
         this.download = download;
         this.app = app;
         this.progressHandler = progressHandler;
@@ -66,6 +67,8 @@ public class RefreshInisListThread extends Thread {
                 }
                 if (doesDownload) {
                     progressHandler.sendEmptyMessage(DOWNLOAD_RETRY);
+                } else {
+                    progressHandler.sendEmptyMessage(READ_CACHE);
                 }
             }
             if (retrycounter >= maxretries) {
@@ -82,9 +85,7 @@ public class RefreshInisListThread extends Thread {
         dataComplete = true;
         updateAreas();
         overallDataAge = System.currentTimeMillis();
-        //   inisListAdapter = null;
-        //  allInis = new Initiativen(getSharedPreferences(((LiqoidApplication) getApplication()).lqfbInstances.getSelectedInstance().getPrefsName(), RESULT_OK));
-
+    
         for (LQFBInstance myInstance : app.lqfbInstances) {
             currentlyDownloadedInstance = myInstance.getShortName();
 
@@ -97,6 +98,8 @@ public class RefreshInisListThread extends Thread {
                 }
                 if (doesDownload) {
                     progressHandler.sendEmptyMessage(DOWNLOAD_RETRY);
+                } else {
+                    progressHandler.sendEmptyMessage(READ_CACHE);
                 }
                 int retrycounter = 0;
                 int maxretries = 4;
@@ -118,7 +121,9 @@ public class RefreshInisListThread extends Thread {
                     }
                     if (doesDownload) {
                         progressHandler.sendEmptyMessage(DOWNLOAD_RETRY);
-                    }
+                    }else {
+                    progressHandler.sendEmptyMessage(READ_CACHE);
+                }
 
                 }
                 if (retrycounter >= maxretries) {
@@ -140,7 +145,9 @@ public class RefreshInisListThread extends Thread {
                 }
             }
         }
-        mylistener.finishedRefreshInisList(allInititiativen);
+        for (RefreshInisListListener r : refreshInisListListeners) {
+            r.finishedRefreshInisList((MultiInstanceInitiativen) allInititiativen.clone());
+        }
         progressHandler.sendEmptyMessage(FINISH_OK);
 
     }

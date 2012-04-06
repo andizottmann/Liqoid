@@ -63,6 +63,7 @@
     <string name="initiatives">Initiatives</string>
     <string name="clearcachequestion">Do you really want to clear the cache?</string>
     <string name="clearcache">Clear cache</string>
+    <string name="readcache">Reading from cache:</string>
 
     <string name="fullcredits">Hello this is Liqoid V 0.1.13!\n Developer: @andizottmann\n
     All CC-BY-SA 3.0 DE\n
