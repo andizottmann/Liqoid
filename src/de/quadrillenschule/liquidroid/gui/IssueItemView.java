@@ -46,7 +46,7 @@ public class IssueItemView extends LinearLayout {
     TextView statusLine, instanceView, areaView;
     LinearLayout expandView;
     ImageView colorView;
-    LinearLayout issueView;
+    RelativeLayout topLinesRelativeLayout;
     TextView colorIndicator;
     private boolean expandview = false;
 
@@ -56,10 +56,6 @@ public class IssueItemView extends LinearLayout {
         this.initiative = initiative;
 
 
-        RelativeLayout.LayoutParams rlp;
-        RelativeLayout rl = new RelativeLayout(activity);
-        rl.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
-        rl.setPadding(0, 0, 0, 0);
 
         colorIndicator = new Button(activity, null, android.R.attr.buttonStyleSmall);
         colorIndicator.setBackgroundColor(itemSpecificColorcode());
@@ -72,51 +68,18 @@ public class IssueItemView extends LinearLayout {
 
         this.addView(colorIndicator, lp);
 
-        statusLine = new TextView(activity);
-        rlp = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-        rlp.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-        rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-        statusLine.setText(Html.fromHtml(getStatusText()));
-        statusLine.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
-        statusLine.setTextColor(Color.parseColor("#108020"));
-        statusLine.setSingleLine();
-        statusLine.setPadding(2, 2, 2, 2);
-        statusLine.setId(2);
-        rl.addView(statusLine, rlp);
+        RelativeLayout.LayoutParams rlp;
+        topLinesRelativeLayout = new RelativeLayout(activity);
+        topLinesRelativeLayout.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
+        topLinesRelativeLayout.setPadding(0, 0, 0, 0);
 
-        instanceView = new TextView(activity);
-        rlp = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-        rlp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-        rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-        rlp.addRule(RelativeLayout.ALIGN_RIGHT);
-        rlp.addRule(RelativeLayout.ALIGN_TOP);
-        rlp.setMargins(0, 0, 5, 0);
-        instanceView.setText(Html.fromHtml("<b><font color=black>" + initiative.getLqfbInstance().getShortName() + "</font></b>"));
-        instanceView.setTextColor(Color.parseColor("#108020"));
-        instanceView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
-        instanceView.setSingleLine();
-        instanceView.setId(3);
-        rl.addView(instanceView, rlp);
-
-        areaView = new TextView(activity);
-        rlp = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-        rlp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-        rlp.addRule(RelativeLayout.ALIGN_RIGHT);
-        rlp.addRule(RelativeLayout.ALIGN_TOP);
-        rlp.addRule(RelativeLayout.BELOW, statusLine.getId());
-        rlp.addRule(RelativeLayout.BELOW, instanceView.getId());
-        rlp.setMargins(0, 0, 5, 0);
-        areaView.setText(Html.fromHtml("<b><font color=black>" + initiative.getArea().getName() + "</font></b>"));
-        areaView.setTextColor(Color.parseColor("#108020"));
-        areaView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
-        areaView.setSingleLine();
-        areaView.setId(31);
-        rl.addView(areaView, rlp);
-
-        issueView = new LinearLayout(activity);
-        issueView.setOrientation(HORIZONTAL);
 
         favStarCheckBox = new CheckBox(activity, null, android.R.attr.starStyle);
+        rlp = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        rlp.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+        rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+        rlp.addRule(RelativeLayout.ALIGN_LEFT);
+        rlp.addRule(RelativeLayout.ALIGN_TOP);
         favStarCheckBox.setTextColor(Color.BLACK);
         //   favStarCheckBox.setText("   ");
         favStarCheckBox.setChecked(initiative.getArea().getInitiativen().isIssueSelected(initiative.issue_id));
@@ -127,7 +90,54 @@ public class IssueItemView extends LinearLayout {
             }
         });
         favStarCheckBox.setId(4);
-        issueView.addView(favStarCheckBox, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+
+        topLinesRelativeLayout.addView(favStarCheckBox, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+
+        statusLine = new TextView(activity);
+        rlp = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+        rlp.addRule(RelativeLayout.ALIGN_LEFT);
+        rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+        rlp.addRule(RelativeLayout.RIGHT_OF, favStarCheckBox.getId());
+        statusLine.setText(Html.fromHtml(getStatusText()));
+        statusLine.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+        statusLine.setTextColor(Color.parseColor("#108020"));
+        statusLine.setSingleLine();
+        statusLine.setPadding(2, 2, 2, 2);
+        statusLine.setId(2);
+        topLinesRelativeLayout.addView(statusLine, rlp);
+
+        instanceView = new TextView(activity);
+        rlp = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        rlp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+        rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+        rlp.addRule(RelativeLayout.ALIGN_RIGHT);
+        rlp.addRule(RelativeLayout.ALIGN_TOP);
+        // rlp.addRule(RelativeLayout.RIGHT_OF, favStarCheckBox.getId());
+        rlp.setMargins(0, 0, 5, 0);
+        instanceView.setText(Html.fromHtml("<b><font color=black>" + initiative.getLqfbInstance().getShortName() + "</font></b>"));
+        instanceView.setTextColor(Color.parseColor("#108020"));
+        instanceView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+        instanceView.setSingleLine();
+        instanceView.setId(3);
+        topLinesRelativeLayout.addView(instanceView, rlp);
+
+        areaView = new TextView(activity);
+        rlp = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        //  rlp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+        rlp.addRule(RelativeLayout.ALIGN_LEFT);
+        rlp.addRule(RelativeLayout.ALIGN_TOP);
+        rlp.addRule(RelativeLayout.BELOW, statusLine.getId());
+        rlp.addRule(RelativeLayout.BELOW, instanceView.getId());
+        rlp.addRule(RelativeLayout.RIGHT_OF, favStarCheckBox.getId());
+       
+        areaView.setText(Html.fromHtml("<b><font color=black>" + initiative.getArea().getName() + "</font></b>"));
+        areaView.setTextColor(Color.parseColor("#108020"));
+        areaView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+        areaView.setSingleLine();
+        areaView.setId(31);
+        topLinesRelativeLayout.addView(areaView, rlp);
+
+
 
         issueButton = new ToggleButton(activity);//,null,android.R.attr.borderlessButtonStyle);
         issueButton.setTextColor(Color.BLACK);
@@ -142,29 +152,25 @@ public class IssueItemView extends LinearLayout {
         issueButton.setId(41);
         issueButton.setGravity(Gravity.LEFT);
         activity.registerForContextMenu(issueButton);
-        //   rl.addView(issueButton, rlp);
-
-        issueView.addView(issueButton, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 
         rlp = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
         rlp.addRule(RelativeLayout.BELOW, areaView.getId());
         rlp.addRule(RelativeLayout.ALIGN_TOP);
         rlp.addRule(RelativeLayout.ALIGN_LEFT);
-        issueView.setId(411);
-
-        rl.addView(issueView, rlp);
+        rlp.setMargins(2, 0, 2, 0);
+        topLinesRelativeLayout.addView(issueButton, rlp);
 
         expandView = new LinearLayout(activity);
         expandView.setOrientation(VERTICAL);
         rlp = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-        rlp.addRule(RelativeLayout.BELOW, issueView.getId());
+        rlp.addRule(RelativeLayout.BELOW, issueButton.getId());
         rlp.addRule(RelativeLayout.ALIGN_TOP);
         rlp.addRule(RelativeLayout.ALIGN_LEFT);
         rlp.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
         expandView.setId(5);
-        rl.addView(expandView, rlp);
+        topLinesRelativeLayout.addView(expandView, rlp);
         lp = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.FILL_PARENT, 1f);
-        this.addView(rl, lp);
+        this.addView(topLinesRelativeLayout, lp);
         this.forceLayout();
     }
 
@@ -208,7 +214,7 @@ public class IssueItemView extends LinearLayout {
     }
 
     public void issueButtonSetText() {
-        String text = "Thema: " + initiative.name + "<font color=\"#009010\"> / Inis: <b>" + ((int) 1 + initiative.getConcurrentInis().size()) + "</b></font>";
+        String text = "<b>Thema:</b> " + initiative.name + "<font color=\"#009010\"> / Inis: <b>" + ((int) 1 + initiative.getConcurrentInis().size()) + "</b></font>";
         issueButton.setText(Html.fromHtml(text));
         issueButton.setTextOff(Html.fromHtml(text));
         issueButton.setTextOn(Html.fromHtml(text));
@@ -283,7 +289,7 @@ public class IssueItemView extends LinearLayout {
         if (i.getQuorum() > i.supporter_count) {
             quorumcolor = "#d00010";//red
         }
-        retval.setText(Html.fromHtml("Ini: " + i.name + "<font color=\"#009010\"><br>" + activity.getString(R.string.supporter) + ":</font><font color=\"" + quorumcolor + "\"><b>" + i.supporter_count + " / " + i.getQuorum() + "</b></font>"));
+        retval.setText(Html.fromHtml("<b>Ini:</b> " + i.name + "<font color=\"#009010\"><br>" + activity.getString(R.string.supporter) + ":</font><font color=\"" + quorumcolor + "\"><b>" + i.supporter_count + " / " + i.getQuorum() + "</b></font>"));
         retval.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
         retval.setGravity(Gravity.LEFT);
         return retval;
