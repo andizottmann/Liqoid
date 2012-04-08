@@ -70,6 +70,7 @@ public class Issues extends MultiInstanceInitiativen {
         for (String s : selectedissues_str) {
           try {
                 if (Integer.parseInt(s) == myini.issue_id) {
+                   myini.getLqfbInstance().setHasSelectedInitiativen(true,  myini.getArea().getId());
                     return true;
                 }
             } catch (NumberFormatException nfe){
@@ -140,7 +141,7 @@ public class Issues extends MultiInstanceInitiativen {
         } else {
 
             if (ini.id==this.findByIssueID((Integer)ini.issue_id).get(0).id){
-                this.remove(this.findByIssueID((Integer)ini.issue_id).get(0));
+                super.remove(this.findByIssueID((Integer)ini.issue_id).get(0));
                   return super.add(ini);
             } else {
             this.findByIssueID((Integer)ini.issue_id).get(0).getConcurrentInis().add(ini);

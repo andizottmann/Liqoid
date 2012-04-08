@@ -109,23 +109,23 @@ public class LQFBInstance {
         SAXParserFactory factory = SAXParserFactory.newInstance();
         SAXParser saxparser;
 
-        //     area.getInitiativen().clear();
+        //  area.get.clear();
         iniParser = new InitiativenFromAPI1Parser(area, this);
         String[] states = {"new", "accepted", "frozen", "voting"};
-int retval=0;
+        int retval = 0;
 
         for (String state : states) {
             try {
                 saxparser = factory.newSAXParser();
                 saxparser.parse(cachedAPI1Queries.queryInputStream(this, area, "initiative", "&area_id=" + area.getId() + "&state=" + state, apiUrl, getDeveloperkey(), state, forceNetwork, noDownload), iniParser);
             } catch (ParserConfigurationException ex) {
-                retval= -1;
+                retval = -1;
             } catch (SAXException ex) {
-                 retval= -1;
+                retval = -1;
             } catch (IOException ex) {
-                 retval= -1;
+                retval = -1;
             } catch (IllegalArgumentException ex) {
-                 retval= -1;
+                retval = -1;
             }
         }
         return retval;
@@ -254,9 +254,6 @@ int retval=0;
      */
     public int getMaxIni() {
         return instancePrefs.getInt("max_ini", 0);
-
-
-
     }
 
     /**
@@ -267,5 +264,13 @@ int retval=0;
             instancePrefs.edit().putInt("max_ini", maxIni).commit();
 
         }
+    }
+
+    public boolean hasSelectedInititiativen(int areaid) {
+        return instancePrefs.getBoolean("hasselected" + areaid, false);
+    }
+
+    public void setHasSelectedInitiativen(boolean value, int areaid) {
+        instancePrefs.edit().putBoolean("hasselected" + areaid, value).commit();
     }
 }

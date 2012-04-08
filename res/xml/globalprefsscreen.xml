@@ -60,6 +60,14 @@
             android:entryValues="@array/limitInDaysValues"
         />
         <ListPreference
+            android:key="favdataage"
+            android:title="Favorites dataage"
+            android:summary="Data for areas with favorites will be updated when older than this value."
+            android:defaultValue="3600000"
+            android:entries="@array/limitInMins"
+            android:entryValues="@array/limitInMinsValues"
+        />
+         <ListPreference
             android:key="mindataage"
             android:title="Minimal dataage"
             android:summary="Data will not be downloaded if younger than this age."

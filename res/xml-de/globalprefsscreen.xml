@@ -60,6 +60,14 @@
             android:entries="@array/limitInDays"
             android:entryValues="@array/limitInDaysValues"
         />
+         <ListPreference
+            android:key="favdataage"
+            android:title="Favoriten Datenalter"
+            android:summary="Themengebiete mit Favoriten werden ab einem bestimmten Datenalter heruntergeladen."
+            android:defaultValue="3600000"
+            android:entries="@array/limitInMins"
+            android:entryValues="@array/limitInMinsValues"
+        />
         <ListPreference
             android:key="mindataage"
             android:title="Minimales Datenalter"

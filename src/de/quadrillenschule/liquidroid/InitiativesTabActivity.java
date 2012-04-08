@@ -56,15 +56,16 @@ public class InitiativesTabActivity extends Activity implements RefreshInisListT
         gestures.setGestureVisible(false);
         gestures.addOnGesturePerformedListener((LiqoidMainActivity) getParent());
         ((TextView) findViewById(R.id.tabinis_title)).setText(R.string.tab_inis);
-        ((LiqoidApplication) getApplication()).addRefreshInisListListener(this);
-
+  
 
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (((LiqoidApplication) getApplication()).dataIntegrityCheck() && (inisListAdapter == null)) {
+              ((LiqoidApplication) getApplication()).addRefreshInisListListener(this);
+
+        if (((LiqoidApplication) getApplication()).dataIntegrityCheck()) {
             createInisListAdapter();
 
         }
@@ -81,7 +82,7 @@ public class InitiativesTabActivity extends Activity implements RefreshInisListT
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        if (((LiqoidApplication) getApplication()).dataIntegrityCheck() && (inisListAdapter == null)) {
+        if (((LiqoidApplication) getApplication()).dataIntegrityCheck() ) {
             createInisListAdapter();
 
         }
@@ -246,7 +247,7 @@ public class InitiativesTabActivity extends Activity implements RefreshInisListT
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-        Initiative ini = ((IssueItemView) contextMenuView.getParent().getParent().getParent()).initiative;
+        Initiative ini = ((IssueItemView) contextMenuView.getParent().getParent()).initiative;
 
         switch (item.getItemId()) {
 
@@ -311,6 +312,13 @@ public class InitiativesTabActivity extends Activity implements RefreshInisListT
     public static final int GREY_COLOR = 0, ORANGE_COLOR = 1, RED_COLOR = 2, YELLOW_COLOR = 3;
 
     public void finishedRefreshInisList(MultiInstanceInitiativen newInis) {
+        for (LQFBInstance l : ((LiqoidApplication) getApplication()).lqfbInstances) {
+            for (Area a : l.areas) {
+                l.setHasSelectedInitiativen(false, a.getId());
+                
+            }
+        }
+        allInis.clear();
         allInis = newInis;
         inisListAdapter = getInitiativenListAdapter();
         filterList();

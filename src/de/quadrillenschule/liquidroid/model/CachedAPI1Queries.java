@@ -16,8 +16,6 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringWriter;
 import java.io.Writer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.xml.parsers.ParserConfigurationException;
@@ -69,9 +67,12 @@ public class CachedAPI1Queries {
         }
     }
 
+
+
+
     public void storeInCache(InputStream is, String url) {
 
-        File myfile = new File(cacheFolder, url.hashCode() + ".xml");
+        File myfile = getCacheFile(url);
 
         String endswith = ">";
         if (api.equals("area")) {
@@ -83,7 +84,8 @@ public class CachedAPI1Queries {
         try {
             String string = convertStreamToString(is);
             if (string.contains(endswith)) {
-
+                myfile.delete();
+               
                 FileOutputStream fos = new FileOutputStream(myfile);
                 fos.write(string.getBytes("UTF-8"));
                 fos.close();
@@ -96,10 +98,13 @@ public class CachedAPI1Queries {
     }
 
     public boolean cacheExists(String purl) {
-        File myfile = new File(cacheFolder, purl.hashCode() + ".xml");
-        return myfile.exists();
+     
+        return getCacheFile(purl).exists();
     }
 
+     public File getCacheFile(String purl){
+        return new File(cacheFolder, Integer.toHexString(purl.hashCode()) + ".xml");
+    }
     public String getApiURL(String api, String parameters, String apiUrl, String developerkey) {
         return apiUrl + api + ".html?key=" + developerkey + parameters;
     }
@@ -114,19 +119,19 @@ public class CachedAPI1Queries {
 
     public boolean needsDownload(String apiUrl, LQFBInstance instance, Area area, String state) {
         long now = System.currentTimeMillis();
-        File cachefile = new File(cacheFolder, apiUrl.hashCode() + ".xml");
+        File cachefile = getCacheFile(apiUrl);
         if (!cachefile.exists()) {
             return true;
         }
         if (now - cachefile.lastModified() > Long.parseLong(globalPrefs.getString("maxdataage", "432000000"))) {
             return true;
         }
-        if (now - cachefile.lastModified() < Long.parseLong(globalPrefs.getString("mindataage", "180000"))) {
+        if ((now - cachefile.lastModified()) < Long.parseLong(globalPrefs.getString("mindataage", "180000"))) {
             return false;
         }
 
         if (area != null) {
-            if (area.hasSelectedInititiativen(instance.areas)) {
+            if ((instance.hasSelectedInititiativen(area.getId())) && ((now - cachefile.lastModified()) > Long.parseLong(globalPrefs.getString("favdataage", "3600000")))) {
                 return true;
             }
             for (Initiative i : area.getInitiativen()) {
@@ -135,7 +140,7 @@ public class CachedAPI1Queries {
                 }
             }
         }
-        if ((state.equals("new") && hasNewerInis(instance.getMaxIni(), instance, apiUrl))) {
+        if ((state.equals("new"))&&hasNewerInis(instance.getMaxIni(), instance, api)) {
             return true;
         }
         return false;
@@ -195,7 +200,7 @@ public class CachedAPI1Queries {
     }
 
     private InputStream cacheInputStream(String purl) throws FileNotFoundException {
-        File myfile = new File(cacheFolder, purl.hashCode() + ".xml");
+        File myfile = getCacheFile(purl);
         dataage = myfile.lastModified();
         FileInputStream fis = new FileInputStream(myfile);
 

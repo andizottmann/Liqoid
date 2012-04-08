@@ -138,12 +138,5 @@ public class Area {
         this.initiativen = initiativen;
     }
 
-    public boolean hasSelectedInititiativen(Areas areas) {
-        for (Initiative i : getInitiativen().getSelectedIssues()) {
-            if (i.getArea().name.equals(this.name)) {
-                return true;
-            }
-        }
-        return false;
-    }
+  
 }
