@@ -65,9 +65,9 @@
     <string name="clearcache">Clear cache</string>
     <string name="readcache">Reading from cache:</string>
 
-    <string name="fullcredits">Hello this is Liqoid V 0.1.13!\n Developer: @andizottmann\n
+    <string name="fullcredits">Hello this is Liqoid V 0.1.15!\n Developer: @andizottmann\n
     All CC-BY-SA 3.0 DE\n
     Thanks to:\n@nlohmann @darkbln @viirus42 @LarsUlrich92 @Bocki_NBG  @threehoursleep @PiratenCup @mockfrog @Iceman
-    @bridgerdier @hubx @larswestphal @Piratonym Tokamak  @mon3yp3nny @RedDog
+    @bridgerdier @hubx @larswestphal @Piratonym Tokamak  @mon3yp3nny @RedDog @levudev
     </string>
 </resources>
