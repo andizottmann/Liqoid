@@ -42,7 +42,7 @@ public class RefreshInisListThread extends Thread {
         for (LQFBInstance myInstance : app.lqfbInstances) {
             currentInstance = myInstance;
             boolean doesDownload = false;
-            if (myInstance.willDownloadAreas(app.cachedAPI1Queries, download)) {
+            if (myInstance.willDownloadAreas(app.cachedAPI1Queries, download,myInstance.getApiversion())) {
                 currentlyDownloadedInstance = myInstance.getShortName();
                 progressHandler.sendEmptyMessage(DOWNLOADING_INSTANCE);
                 doesDownload = true;
@@ -92,7 +92,7 @@ public class RefreshInisListThread extends Thread {
             for (Area a : myInstance.areas.getSelectedAreas()) {
                 currentlyDownloadedArea = a.getName();
                 boolean doesDownload = false;
-                if (myInstance.willDownloadInitiativen(a, app.cachedAPI1Queries, download)) {
+                if (myInstance.willDownloadInitiativen(a, app.cachedAPI1Queries, download,myInstance.getApiversion())) {
                     progressHandler.sendEmptyMessage(DOWNLOADING);
                     doesDownload = true;
                 }

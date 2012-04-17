@@ -13,14 +13,14 @@ import org.xml.sax.helpers.DefaultHandler;
  *
  * @author andi
  */
-public class AreasFromAPIParser extends DefaultHandler {
+public class AreasFromAPI1Parser extends DefaultHandler {
 
     Area currentArea = null;
     public Areas areas;
     StringBuffer charBuff;
     SharedPreferences instancePrefs;
 
-    public AreasFromAPIParser(SharedPreferences instancePrefs) {
+    public AreasFromAPI1Parser(SharedPreferences instancePrefs) {
         charBuff = new StringBuffer();
         areas = new Areas(instancePrefs);
         this.instancePrefs = instancePrefs;

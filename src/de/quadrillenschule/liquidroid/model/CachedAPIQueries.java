@@ -22,6 +22,8 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
@@ -35,19 +37,19 @@ import org.xml.sax.SAXException;
  *
  * @author andi
  */
-public class CachedAPI1Queries {
+public class CachedAPIQueries {
 
     File cacheFolder;
     public String url, api;
     public long dataage = 0;
     SharedPreferences globalPrefs;
 
-    public CachedAPI1Queries(File cacheFolder, SharedPreferences globalPrefs) {
+    public CachedAPIQueries(File cacheFolder, SharedPreferences globalPrefs) {
         this.cacheFolder = cacheFolder;
         this.globalPrefs = globalPrefs;
     }
 
-    private String convertStreamToString(InputStream is) throws IOException {
+    public String convertStreamToString(InputStream is) throws IOException {
         if (is != null) {
             Writer writer = new StringWriter();
             char[] buffer = new char[1024];
@@ -67,9 +69,6 @@ public class CachedAPI1Queries {
         }
     }
 
-
-
-
     public void storeInCache(InputStream is, String url) {
 
         File myfile = getCacheFile(url);
@@ -81,11 +80,13 @@ public class CachedAPI1Queries {
         if (api.equals("initiative")) {
             endswith = "</initiative_list>";
         }
+
         try {
             String string = convertStreamToString(is);
-            if (string.contains(endswith)) {
+
+            if (string.contains(endswith) || (string.contains("status") && (string.contains("ok")))) {
                 myfile.delete();
-               
+
                 FileOutputStream fos = new FileOutputStream(myfile);
                 fos.write(string.getBytes("UTF-8"));
                 fos.close();
@@ -98,15 +99,12 @@ public class CachedAPI1Queries {
     }
 
     public boolean cacheExists(String purl) {
-     
+
         return getCacheFile(purl).exists();
     }
 
-     public File getCacheFile(String purl){
+    public File getCacheFile(String purl) {
         return new File(cacheFolder, Integer.toHexString(purl.hashCode()) + ".xml");
-    }
-    public String getApiURL(String api, String parameters, String apiUrl, String developerkey) {
-        return apiUrl + api + ".html?key=" + developerkey + parameters;
     }
 
     public boolean willDownload(String apiUrl, boolean forceNetwork) throws FileNotFoundException {
@@ -140,7 +138,7 @@ public class CachedAPI1Queries {
                 }
             }
         }
-        if ((state.equals("new"))&&hasNewerInis(instance.getMaxIni(), instance, api)) {
+        if ((instance.getApiversion().equals(LQFBInstance.API1)) && (state.equals("new")) && hasNewerInis(instance.getMaxIni(), instance, api)) {
             return true;
         }
         return false;
@@ -179,8 +177,17 @@ public class CachedAPI1Queries {
 
     }
 
+    public String getApiURL(String api, String parameters, String apiUrl, String developerkey, String apiversion) {
+        if (apiversion.equals(LQFBInstance.API1)) {
+            return apiUrl + api + ".html?key=" + developerkey + parameters;
+        } else {
+            return apiUrl + api;
+        }
+    }
+
     public InputStream queryInputStream(LQFBInstance instance, Area area, String api, String parameters, String apiUrl, String developerkey, String state, boolean forceNetwork, boolean noDownload) throws IOException, FileNotFoundException {
-        url = apiUrl + api + ".html?key=" + developerkey + parameters;
+        url = getApiURL(api, parameters, apiUrl, developerkey, instance.getApiversion());
+        //  url = apiUrl + api + ".html?key=" + developerkey + parameters;
         this.api = api;
         if ((forceNetwork) && (needsDownload(url, instance, area, state))) {
             try {
@@ -208,7 +215,7 @@ public class CachedAPI1Queries {
     }
 
     private InputStream networkInputStream(String url) throws IOException {
-        DefaultHttpClient httpClient;
+        HttpClient httpClient;
 
         if (url.startsWith("https")) {
             HostnameVerifier hostnameVerifier = org.apache.http.conn.ssl.SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER;
@@ -221,12 +228,15 @@ public class CachedAPI1Queries {
             httpClient = new DefaultHttpClient(mgr, client.getParams());
             HttpsURLConnection.setDefaultHostnameVerifier(hostnameVerifier);
         } else {
+
             httpClient = new DefaultHttpClient();
         }
-        HttpPost httpPost = new HttpPost(url);
-        HttpResponse response = (HttpResponse) httpClient.execute(httpPost);
-        dataage = System.currentTimeMillis();
 
+     //   HttpPost httpPost = new HttpPost(url);
+        HttpGet httpGet = new HttpGet(url);
+
+        HttpResponse response = (HttpResponse) httpClient.execute(httpGet);
+        dataage = System.currentTimeMillis();
         storeInCache(response.getEntity().getContent(), url);
         return cacheInputStream(url);
     }

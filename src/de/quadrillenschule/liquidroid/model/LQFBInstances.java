@@ -63,33 +63,38 @@ public class LQFBInstances extends ArrayList<LQFBInstance> {
                 "Piraten Bund",
                 "https://lqfb.piratenpartei.de/pp/api/",
                 "https://lqfb.piratenpartei.de/pp/",
-                "6Bw8HGL8Bp2z4wK6L3Zw", "1.x"));
+                "6Bw8HGL8Bp2z4wK6L3Zw", LQFBInstance.API1));
         this.add(new LQFBInstance(liqoidApplication, "PP Berlin", "DE_PIRATEN_BE",
                 "Piraten Berlin",
                 "https://lqpp.de/be/api/",
-                "https://lqpp.de/be/", "Y5jJ3mzf9MN23Q7zRpWs", "1.x"));
+                "https://lqpp.de/be/", "Y5jJ3mzf9MN23Q7zRpWs", LQFBInstance.API1));
 // "MjXNjRD3qSYbgjKrhYgC"
         this.add(new LQFBInstance(liqoidApplication, "PP MV", "DE_PIRATEN_MV",
                 "Piraten Mecklenburg-Vorpommern",
                 "https://lqpp.de/mv/api/",
                 "https://lqpp.de/mv/",
-                "VpmyJGYbqTQPcc9wyzzk", "1.x"));
+                "VpmyJGYbqTQPcc9wyzzk", LQFBInstance.API1));
 
         this.add(new LQFBInstance(liqoidApplication, "PP SA", "DE_PIRATEN_SA",
                 "Piraten Sachsen-Anhalt",
                 "http://lqfb.piraten-lsa.de/lsa/api/",
                 "http://lqfb.piraten-lsa.de/lsa/",
-                "jXKWm5rFLQXQ8f6LMf92", "1.x"));
-   this.add(new LQFBInstance(liqoidApplication, "PP HH", "HH",
+                "jXKWm5rFLQXQ8f6LMf92", LQFBInstance.API1));
+        this.add(new LQFBInstance(liqoidApplication, "PP HH", "HH",
                 "Piraten Hamburg",
                 "https://lqpp.de/hh/api/",
                 "https://lqpp.de/hh/",
-                "", "1.x"));
+                "", LQFBInstance.API1));
         this.add(new LQFBInstance(liqoidApplication, "PP NDS", "DE_PIRATEN_NDS",
                 "Piraten NDS",
                 "https://lqpp.de/ni/api/",
                 "https://lqpp.de/ni/",
-                "", "1.x"));
+                "", LQFBInstance.API1));
+        this.add(new LQFBInstance(liqoidApplication, "Test LF2", "DE_LF_TEST_2",
+                "LQFB Test 2",
+                "http://apitest.liquidfeedback.org:25520/",
+                "http://dev.liquidfeedback.org/lf2/",
+                "anonymous", LQFBInstance.API2));
 
     }
 

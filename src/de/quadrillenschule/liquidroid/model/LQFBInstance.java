@@ -7,12 +7,14 @@ package de.quadrillenschule.liquidroid.model;
 import android.app.Application;
 import android.content.SharedPreferences;
 import de.quadrillenschule.liquidroid.LiqoidApplication;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+import org.json.JSONException;
 import org.xml.sax.SAXException;
 
 /**
@@ -28,11 +30,12 @@ public class LQFBInstance {
     public Areas areas;
     private String apiversion = "";
     private String shortName = "";
-    private AreasFromAPIParser areaParser;
+    private AreasFromAPI1Parser areaParser;
     private InitiativenFromAPI1Parser iniParser;
     public static final String AREA_API = "area";
     public boolean pauseDownload = false;
     SharedPreferences instancePrefs;
+    public static final String API1 = "1.x", API2 = "2.x";
 
     public LQFBInstance(LiqoidApplication la, String shortName, String prefsName, String name, String apiUrl, String webUrl, String developerkey, String apiversion) {
         this.prefsName = prefsName;
@@ -55,36 +58,50 @@ public class LQFBInstance {
         return name;
     }
 
-    public boolean willDownloadAreas(CachedAPI1Queries cachedAPI1Queries, boolean forceNetwork) {
-        return !cachedAPI1Queries.cacheExists(cachedAPI1Queries.getApiURL("area", "", apiUrl, getDeveloperkey()));
+    public boolean willDownloadAreas(CachedAPIQueries cachedAPI1Queries, boolean forceNetwork,String apiversion) {
+        return !cachedAPI1Queries.cacheExists(cachedAPI1Queries.getApiURL("area", "", apiUrl, getDeveloperkey(),apiversion));
 
     }
 
-    public int downloadAreas(CachedAPI1Queries cachedAPI1Queries, boolean forceNetwork, boolean noDownload) {
-        SAXParserFactory factory = SAXParserFactory.newInstance();
-        SAXParser saxparser;
+    public int downloadAreas(CachedAPIQueries cachedAPI1Queries, boolean forceNetwork, boolean noDownload) {
 
-        areaParser = new AreasFromAPIParser(instancePrefs);
-        try {
-            //   try {
-            saxparser = factory.newSAXParser();
+        if (apiversion.equals(API1)) {
+            SAXParserFactory factory = SAXParserFactory.newInstance();
+            SAXParser saxparser;
 
-            saxparser.parse(cachedAPI1Queries.queryInputStream(this, null, "area", "", apiUrl, getDeveloperkey(), "", forceNetwork, noDownload), areaParser);
-        } catch (SAXException ex) {
-            return -1;
-        } catch (IOException ex) {
-            return -1;
-        } catch (ParserConfigurationException ex) {
-            return -1;
-        } catch (IllegalArgumentException ex) {
-            return -1;
+            areaParser = new AreasFromAPI1Parser(instancePrefs);
+            try {
+                saxparser = factory.newSAXParser();
+                saxparser.parse(cachedAPI1Queries.queryInputStream(this, null, "area", "", apiUrl, getDeveloperkey(), "", forceNetwork, noDownload), areaParser);
+            } catch (SAXException ex) {
+                return -1;
+            } catch (IOException ex) {
+                return -1;
+            } catch (ParserConfigurationException ex) {
+                return -1;
+            } catch (IllegalArgumentException ex) {
+                return -1;
+            }
+            areas = areaParser.areas;
         }
-        areas = areaParser.areas;
+        if (apiversion.equals(API2)) {
+            try {
+                AreasFromAPI2Parser parser = new AreasFromAPI2Parser(instancePrefs);
 
+                parser.parse(cachedAPI1Queries.convertStreamToString(cachedAPI1Queries.queryInputStream(this, null, "area", "", apiUrl, getDeveloperkey(), "", forceNetwork, noDownload)));
+                areas = parser.areas;
+            } catch (JSONException ex) {
+                return -1;
+
+            } catch (IOException ex) {
+                return -1;
+            }
+
+        }
         return 0;
     }
 
-    public boolean willDownloadInitiativen(Area area, CachedAPI1Queries cachedAPI1Queries, boolean forceNetwork) {
+    public boolean willDownloadInitiativen(Area area, CachedAPIQueries cachedAPI1Queries, boolean forceNetwork,String apiversion) {
         String[] states = {"new", "accepted", "frozen", "voting"};
 
 
@@ -93,7 +110,7 @@ public class LQFBInstance {
 
         for (String state : states) {
 
-            if (!cachedAPI1Queries.cacheExists(cachedAPI1Queries.getApiURL("initiative", "&area_id=" + area.getId() + "&state=" + state, apiUrl, getDeveloperkey()))) {
+            if (!cachedAPI1Queries.cacheExists(cachedAPI1Queries.getApiURL("initiative", "&area_id=" + area.getId() + "&state=" + state, apiUrl, getDeveloperkey(),apiversion))) {
                 retval = true;
 
 
@@ -105,27 +122,26 @@ public class LQFBInstance {
 
     }
 
-    public int downloadInitiativen(Area area, CachedAPI1Queries cachedAPI1Queries, boolean forceNetwork, boolean noDownload) {
-        SAXParserFactory factory = SAXParserFactory.newInstance();
-        SAXParser saxparser;
-
-        //  area.get.clear();
-        iniParser = new InitiativenFromAPI1Parser(area, this);
-        String[] states = {"new", "accepted", "frozen", "voting"};
+    public int downloadInitiativen(Area area, CachedAPIQueries cachedAPI1Queries, boolean forceNetwork, boolean noDownload) {
         int retval = 0;
-
-        for (String state : states) {
-            try {
-                saxparser = factory.newSAXParser();
-                saxparser.parse(cachedAPI1Queries.queryInputStream(this, area, "initiative", "&area_id=" + area.getId() + "&state=" + state, apiUrl, getDeveloperkey(), state, forceNetwork, noDownload), iniParser);
-            } catch (ParserConfigurationException ex) {
-                retval = -1;
-            } catch (SAXException ex) {
-                retval = -1;
-            } catch (IOException ex) {
-                retval = -1;
-            } catch (IllegalArgumentException ex) {
-                retval = -1;
+        if (apiversion.equals(API1)) {
+            SAXParserFactory factory = SAXParserFactory.newInstance();
+            SAXParser saxparser;
+            iniParser = new InitiativenFromAPI1Parser(area, this);
+            String[] states = {"new", "accepted", "frozen", "voting"};
+            for (String state : states) {
+                try {
+                    saxparser = factory.newSAXParser();
+                    saxparser.parse(cachedAPI1Queries.queryInputStream(this, area, "initiative", "&area_id=" + area.getId() + "&state=" + state, apiUrl, getDeveloperkey(), state, forceNetwork, noDownload), iniParser);
+                } catch (ParserConfigurationException ex) {
+                    retval = -1;
+                } catch (SAXException ex) {
+                    retval = -1;
+                } catch (IOException ex) {
+                    retval = -1;
+                } catch (IllegalArgumentException ex) {
+                    retval = -1;
+                }
             }
         }
         return retval;

@@ -21,6 +21,7 @@ public class Area {
     private boolean active = false;
     private Issues initiativen;
     SharedPreferences instancePrefs;
+    private int unit_id = -1;
 
     public Area(SharedPreferences instancePrefs) {
         initiativen = new Issues(instancePrefs);
@@ -138,5 +139,17 @@ public class Area {
         this.initiativen = initiativen;
     }
 
-  
+    /**
+     * @return the unit_id
+     */
+    public int getUnit_id() {
+        return unit_id;
+    }
+
+    /**
+     * @param unit_id the unit_id to set
+     */
+    public void setUnit_id(int unit_id) {
+        this.unit_id = unit_id;
+    }
 }
