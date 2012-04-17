@@ -26,7 +26,7 @@ public class Initiative {
     public long issue_verification_time = 0;
     public long issue_voting_time = 0;
     public int supporter_count = 0;//,issue_voter_count=-1,positive_votes=-1,negative_voters=-1;
-    public int policy_issue_quorum_num=10;
+    public int policy_issue_quorum_num = 10;
     public Date revoked;
     public Date created;
     public Date issue_created;
@@ -58,7 +58,7 @@ public class Initiative {
         if (revoked != null) {
             return lastRevoked;
         }
-        if (getState().equals("finished")) {
+        if (getState().startsWith("finished")) {
             return lastVotingEnded;
         }
         if (issue_closed != null) {
@@ -137,17 +137,51 @@ public class Initiative {
     public static String nextEingefroren = "->Eingefroren", nextAbstimmung = "->Abstimmung", nextAbstimmungsende = "->Abstimmungsende", nextAkzeptiert = "->Akzeptiert";
 
     public String nextEvent() {
-        if (getState().equals("new")) {
-            return nextAkzeptiert;
+        if (getLqfbInstance().getApiversion().equals(LQFBInstance.API1)) {
+            if (getState().equals("new")) {
+                return nextAkzeptiert;
+            }
+            if (getState().equals("accepted")) {
+                return nextEingefroren;
+            }
+            if (getState().equals("frozen")) {
+                return nextAbstimmung;
+            }
+            if (getState().equals("voting")) {
+                return nextAbstimmungsende;
+            }
         }
-        if (getState().equals("accepted")) {
-            return nextEingefroren;
-        }
-        if (getState().equals("frozen")) {
-            return nextAbstimmung;
-        }
-        if (getState().equals("voting")) {
-            return nextAbstimmungsende;
+        /*
+         * admission,discussion verification voting canceled_revoked_before_accepted
+
+canceled_issue_not_accepted
+
+canceled_after_revocation_during_discussion
+
+canceled_after_revocation_during_verification
+
+calculation
+
+canceled_no_initiative_admitted
+
+finished_without_winner
+
+finished_with_winner
+         *
+         */
+        if (getLqfbInstance().getApiversion().equals(LQFBInstance.API2)) {
+            if (getState().equals("admission")) {
+                return nextAkzeptiert;
+            }
+            if (getState().equals("discussion")) {
+                return nextEingefroren;
+            }
+            if (getState().equals("verification")) {
+                return nextAbstimmung;
+            }
+            if (getState().equals("voting")||getState().equals("calculation")) {
+                return nextAbstimmungsende;
+            }
         }
         return "";
     }
@@ -171,7 +205,7 @@ public class Initiative {
     public Date getDateForNextEvent() {
         Calendar cal = Calendar.getInstance();
 
-        Date retval = null;// = new Date((cal.getTimeInMillis()) + issue_discussion_time * 1000 + issue_verification_time * 1000 + issue_voting_time * 1000);
+        Date retval  = new Date((cal.getTimeInMillis()) + issue_discussion_time * 1000 + issue_verification_time * 1000 + issue_voting_time * 1000);
         if (nextEvent().equals(nextAkzeptiert)) {
             cal.setTime(issue_created);
             retval = new Date((cal.getTimeInMillis()) + issue_admission_time * 1000);
@@ -240,6 +274,18 @@ public class Initiative {
         if (getState().equals("voting")) {
             return R.string.voting;
         }
+          if (getState().equals("admission")) {
+                 return R.string.new_;
+            }
+            if (getState().equals("discussion")) {
+               return R.string.accepted;
+            }
+            if (getState().equals("verification")) {
+                 return R.string.frozen;
+            }
+            if (getState().equals("voting")||getState().equals("calculation")) {
+                return R.string.voting;
+            }
         return R.string.unknown;
     }
 
@@ -250,7 +296,7 @@ public class Initiative {
         this.state = state;
     }
 
-    public int getQuorum(){
-    return (int)(Math.round((policy_issue_quorum_num/100.0)*area.getMember_weight()));
+    public int getQuorum() {
+        return (int) (Math.round((policy_issue_quorum_num / 100.0) * area.getMember_weight()));
     }
 }

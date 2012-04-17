@@ -181,7 +181,7 @@ public class CachedAPIQueries {
         if (apiversion.equals(LQFBInstance.API1)) {
             return apiUrl + api + ".html?key=" + developerkey + parameters;
         } else {
-            return apiUrl + api;
+            return apiUrl + api +parameters;
         }
     }
 

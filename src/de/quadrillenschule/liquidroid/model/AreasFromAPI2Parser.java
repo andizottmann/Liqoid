@@ -27,7 +27,7 @@ public class AreasFromAPI2Parser {
     public void parse(String jsonstring) throws JSONException {
         JSONObject jsonObject = new JSONObject(jsonstring);
         JSONArray result = jsonObject.getJSONArray("result");
-      //  result
+    
         for (int i = 0; i < result.length(); i++) {
             JSONObject a = result.getJSONObject(i);
 

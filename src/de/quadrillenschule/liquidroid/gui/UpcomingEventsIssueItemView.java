@@ -28,23 +28,31 @@ public class UpcomingEventsIssueItemView extends IssueItemView {
         return "<b><font color=black> ->" + activity.getString(initiative.nextEventIntlResId()) + "</font> - <font color=blue>" + formatter.format(initiative.getDateForNextEvent()) + "</font></b>";
     }
 
-     @Override
+    @Override
     protected long itemSpecificDelta() {
-        return initiative.getDateForNextEvent().getTime() - System.currentTimeMillis();
+        try {
+            return initiative.getDateForNextEvent().getTime() - System.currentTimeMillis();
+        } catch (NullPointerException npe) {
+            return 0;
+        }
     }
+
     @Override
     protected int itemSpecificColorcode() {
-        long delta = initiative.getDateForNextEvent().getTime() - System.currentTimeMillis();
-        long oneday = 1000 * 60 * 60 * 24;
-        SharedPreferences gp = ((LiqoidApplication) activity.getApplication()).getGlobalPreferences();
-        if (delta < Long.parseLong(gp.getString(LiqoidApplication.REDLIMIT_PREF, oneday + ""))) {
-            return Color.argb(255, 255, 100, 100);
-        }
-        if (delta < Long.parseLong(gp.getString(LiqoidApplication.ORANGELIMIT_PREF, oneday * 3 + ""))) {
-            return Color.argb(255, 255, 140, 100);
-        }
-        if (delta < Long.parseLong(gp.getString(LiqoidApplication.YELLOWLIMIT_PREF, oneday * 5 + ""))) {
-            return Color.argb(255, 255, 255, 160);
+        try {
+            long delta = initiative.getDateForNextEvent().getTime() - System.currentTimeMillis();
+            long oneday = 1000 * 60 * 60 * 24;
+            SharedPreferences gp = ((LiqoidApplication) activity.getApplication()).getGlobalPreferences();
+            if (delta < Long.parseLong(gp.getString(LiqoidApplication.REDLIMIT_PREF, oneday + ""))) {
+                return Color.argb(255, 255, 100, 100);
+            }
+            if (delta < Long.parseLong(gp.getString(LiqoidApplication.ORANGELIMIT_PREF, oneday * 3 + ""))) {
+                return Color.argb(255, 255, 140, 100);
+            }
+            if (delta < Long.parseLong(gp.getString(LiqoidApplication.YELLOWLIMIT_PREF, oneday * 5 + ""))) {
+                return Color.argb(255, 255, 255, 160);
+            }
+        } catch (NullPointerException npe) {
         }
         return Color.LTGRAY;
     }

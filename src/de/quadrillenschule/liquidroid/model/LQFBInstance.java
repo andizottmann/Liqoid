@@ -58,8 +58,8 @@ public class LQFBInstance {
         return name;
     }
 
-    public boolean willDownloadAreas(CachedAPIQueries cachedAPI1Queries, boolean forceNetwork,String apiversion) {
-        return !cachedAPI1Queries.cacheExists(cachedAPI1Queries.getApiURL("area", "", apiUrl, getDeveloperkey(),apiversion));
+    public boolean willDownloadAreas(CachedAPIQueries cachedAPI1Queries, boolean forceNetwork, String apiversion) {
+        return !cachedAPI1Queries.cacheExists(cachedAPI1Queries.getApiURL("area", "", apiUrl, getDeveloperkey(), apiversion));
 
     }
 
@@ -101,7 +101,7 @@ public class LQFBInstance {
         return 0;
     }
 
-    public boolean willDownloadInitiativen(Area area, CachedAPIQueries cachedAPI1Queries, boolean forceNetwork,String apiversion) {
+    public boolean willDownloadInitiativen(Area area, CachedAPIQueries cachedAPI1Queries, boolean forceNetwork, String apiversion) {
         String[] states = {"new", "accepted", "frozen", "voting"};
 
 
@@ -110,7 +110,7 @@ public class LQFBInstance {
 
         for (String state : states) {
 
-            if (!cachedAPI1Queries.cacheExists(cachedAPI1Queries.getApiURL("initiative", "&area_id=" + area.getId() + "&state=" + state, apiUrl, getDeveloperkey(),apiversion))) {
+            if (!cachedAPI1Queries.cacheExists(cachedAPI1Queries.getApiURL("initiative", "&area_id=" + area.getId() + "&state=" + state, apiUrl, getDeveloperkey(), apiversion))) {
                 retval = true;
 
 
@@ -137,6 +137,24 @@ public class LQFBInstance {
                     retval = -1;
                 } catch (SAXException ex) {
                     retval = -1;
+                } catch (IOException ex) {
+                    retval = -1;
+                } catch (IllegalArgumentException ex) {
+                    retval = -1;
+                }
+            }
+        }
+        if (apiversion.equals(API2)) {
+
+            InitiativenFromAPI2Parser parser = new InitiativenFromAPI2Parser(area, this);
+            String[] states = {"admission","discussion","verification","voting"};
+            for (String state : states) {
+                try {
+
+                    parser.parse(cachedAPI1Queries.convertStreamToString(cachedAPI1Queries.queryInputStream(this, area, "initiative", "?area_id=" + area.getId() + "&issue_state=" + state, apiUrl, getDeveloperkey(), state, forceNetwork, noDownload)),cachedAPI1Queries.convertStreamToString(cachedAPI1Queries.queryInputStream(this, area, "issue", "?area_id=" + area.getId() + "&issue_state=" + state, apiUrl, getDeveloperkey(), state, forceNetwork, noDownload)));
+                } catch (JSONException ex) {
+                    retval = -1;
+
                 } catch (IOException ex) {
                     retval = -1;
                 } catch (IllegalArgumentException ex) {

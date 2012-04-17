@@ -46,11 +46,15 @@ public class MultiInstanceInitiativen extends ArrayList<Initiative> {
         public int compare(Initiative o1, Initiative o2) {
 
             long retval = 0;
+            try {
             if (orderNormal) {
                 retval = (o1.getDateForNextEvent().getTime() - o2.getDateForNextEvent().getTime());
             } else {
                 retval = (o2.getDateForNextEvent().getTime() - o1.getDateForNextEvent().getTime());
 
+            }
+            } catch (NullPointerException npe){
+            retval=-1;
             }
             if (retval > 0) {
                 return 1;
@@ -71,11 +75,14 @@ public class MultiInstanceInitiativen extends ArrayList<Initiative> {
             long retval = 0;
             Date o1date = o1.dateForLastEvent();
             Date o2date = o2.dateForLastEvent();
+            try {
             if (orderNormal) {
                 retval = (o2date.getTime() - o1date.getTime());
             } else {
                 retval = (o1date.getTime() - o2date.getTime());
 
+            }} catch (NullPointerException npe){
+            retval=-1;
             }
             if (retval > 0) {
                 return 1;
