@@ -46,7 +46,7 @@ public class InitiativenFromAPI2Parser {
 //"discussion_time":{"days":15},"verification_time":{"days":8},"voting_time":{"days":15},
 //"snapshot":"2012-04-17T18:25:23.093Z","latest_snapshot_event":"periodic","population":19,
 //"voter_count":null,"status_quo_schulze_rank":null},
-    public void parse(String jsonstringini, String jsonstringissue) throws JSONException {
+    public void parse(String jsonstringini, String jsonstringissue, String jsonstringdraft) throws JSONException {
         JSONObject jsonObject = new JSONObject(jsonstringissue);
         JSONArray issuesresult = jsonObject.getJSONArray("result");
         Issues helperIssues = new Issues(lqfbInstance.instancePrefs);
@@ -67,6 +67,19 @@ public class InitiativenFromAPI2Parser {
             helperIssues.add(ini);
         }
 
+        jsonObject = new JSONObject(jsonstringdraft);
+        issuesresult = jsonObject.getJSONArray("result");
+        Issues helperDrafts = new Issues(lqfbInstance.instancePrefs);
+        for (int i = 0; i < issuesresult.length(); i++) {
+            Initiative ini = new Initiative(area, lqfbInstance);
+            JSONObject a = issuesresult.getJSONObject(i);
+            ini.id = a.getInt("initiative_id");
+            ini.current_draft_content = a.getString("content");
+            ini.created = myDateParser(a.getString("created"));
+
+            helperDrafts.add(ini);
+        }
+
         jsonObject = new JSONObject(jsonstringini);
         JSONArray result = jsonObject.getJSONArray("result");
 
@@ -79,16 +92,24 @@ public class InitiativenFromAPI2Parser {
             ini.created = myDateParser(a.getString("created"));
             ini.current_draft_created = ini.created;
             ini.supporter_count = a.getInt("supporter_count");
-            Initiative helperIni = helperIssues.findByIssueID(ini.issue_id).get(0);
-            ini.issue_discussion_time = helperIni.issue_discussion_time;
-            ini.issue_verification_time = helperIni.issue_verification_time;
-            ini.issue_voting_time = helperIni.issue_voting_time;
-            ini.issue_created = helperIni.issue_created;
-            ini.issue_accepted = helperIni.issue_accepted;
-            ini.issue_half_frozen = helperIni.issue_half_frozen;
-            ini.issue_fully_frozen = helperIni.issue_fully_frozen;
-            ini.issue_closed = helperIni.issue_closed;
-            inis.add(ini);
+            try {
+                Initiative helperIni = helperIssues.findByIssueID(ini.issue_id).get(0);
+                Initiative helperDraftIni = helperDrafts.findByIniID(ini.id).get(0);
+                ini.issue_discussion_time = helperIni.issue_discussion_time;
+                ini.issue_verification_time = helperIni.issue_verification_time;
+                ini.issue_voting_time = helperIni.issue_voting_time;
+                ini.issue_created = helperIni.issue_created;
+                ini.issue_accepted = helperIni.issue_accepted;
+                ini.issue_half_frozen = helperIni.issue_half_frozen;
+                ini.issue_fully_frozen = helperIni.issue_fully_frozen;
+                ini.issue_closed = helperIni.issue_closed;
+                ini.setState(helperIni.getState());
+                ini.current_draft_created = helperDraftIni.created;
+                ini.current_draft_content = helperDraftIni.current_draft_content;
+
+                inis.add(ini);
+            } catch (IndexOutOfBoundsException ioe) {
+            }
         }
     }
 

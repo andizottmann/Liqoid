@@ -154,19 +154,19 @@ public class Initiative {
         /*
          * admission,discussion verification voting canceled_revoked_before_accepted
 
-canceled_issue_not_accepted
+        canceled_issue_not_accepted
 
-canceled_after_revocation_during_discussion
+        canceled_after_revocation_during_discussion
 
-canceled_after_revocation_during_verification
+        canceled_after_revocation_during_verification
 
-calculation
+        calculation
 
-canceled_no_initiative_admitted
+        canceled_no_initiative_admitted
 
-finished_without_winner
+        finished_without_winner
 
-finished_with_winner
+        finished_with_winner
          *
          */
         if (getLqfbInstance().getApiversion().equals(LQFBInstance.API2)) {
@@ -179,7 +179,7 @@ finished_with_winner
             if (getState().equals("verification")) {
                 return nextAbstimmung;
             }
-            if (getState().equals("voting")||getState().equals("calculation")) {
+            if (getState().equals("voting") || getState().equals("calculation")) {
                 return nextAbstimmungsende;
             }
         }
@@ -187,6 +187,7 @@ finished_with_winner
     }
 
     public int nextEventIntlResId() {
+         if (getLqfbInstance().getApiversion().equals(LQFBInstance.API1)) {
         if (getState().equals("new")) {
             return R.string.accepted;
         }
@@ -199,13 +200,28 @@ finished_with_winner
         if (getState().equals("voting")) {
             return R.string.votingends;
         }
+    }
+         if (getLqfbInstance().getApiversion().equals(LQFBInstance.API2)) {
+            if (getState().equals("admission")) {
+             return R.string.accepted;
+            }
+            if (getState().equals("discussion")) {
+                return R.string.frozen;
+            }
+            if (getState().equals("verification")) {
+                 return R.string.voting;
+            }
+            if (getState().equals("voting") || getState().equals("calculation")) {
+                 return R.string.votingends;
+            }
+        }
         return R.string.unknown;
     }
 
     public Date getDateForNextEvent() {
         Calendar cal = Calendar.getInstance();
 
-        Date retval  = new Date((cal.getTimeInMillis()) + issue_discussion_time * 1000 + issue_verification_time * 1000 + issue_voting_time * 1000);
+        Date retval = new Date((cal.getTimeInMillis()) + issue_discussion_time * 1000 + issue_verification_time * 1000 + issue_voting_time * 1000);
         if (nextEvent().equals(nextAkzeptiert)) {
             cal.setTime(issue_created);
             retval = new Date((cal.getTimeInMillis()) + issue_admission_time * 1000);
@@ -274,18 +290,21 @@ finished_with_winner
         if (getState().equals("voting")) {
             return R.string.voting;
         }
-          if (getState().equals("admission")) {
-                 return R.string.new_;
-            }
-            if (getState().equals("discussion")) {
-               return R.string.accepted;
-            }
-            if (getState().equals("verification")) {
-                 return R.string.frozen;
-            }
-            if (getState().equals("voting")||getState().equals("calculation")) {
-                return R.string.voting;
-            }
+        if (getState().equals("admission")) {
+            return R.string.new_;
+        }
+        if (getState().equals("discussion")) {
+            return R.string.accepted;
+        }
+        if (getState().equals("verification")) {
+            return R.string.frozen;
+        }
+         if (getState().startsWith("finish")) {
+            return R.string.finished;
+        }
+        if (getState().equals("voting") || getState().equals("calculation")) {
+            return R.string.voting;
+        }
         return R.string.unknown;
     }
 

@@ -172,7 +172,15 @@ public class Issues extends MultiInstanceInitiativen {
         }
         return retval;
     }
-
+  public Issues findByIniID(int find) {
+        Issues retval = new Issues(instancePrefs);
+        for (Initiative i : this) {
+            if (i.id == find) {
+                retval.add(i);
+            }
+        }
+        return retval;
+    }
     public Issues findByName(String name) {
         Issues retval = new Issues(instancePrefs);
         for (Initiative i : this) {

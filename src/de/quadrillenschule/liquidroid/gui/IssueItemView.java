@@ -32,6 +32,7 @@ import de.quadrillenschule.liquidroid.tools.Utils;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import de.quadrillenschule.liquidroid.R;
+import de.quadrillenschule.liquidroid.model.LQFBInstance;
 
 /**
  *
@@ -262,7 +263,14 @@ public class IssueItemView extends LinearLayout {
 
             public void onClick(View arg0) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-                builder.setMessage("Status: " + activity.getString(i.getIntlStateResId()) + "\n\n" + i.current_draft_content).setNeutralButton(R.string.open_browser, new android.content.DialogInterface.OnClickListener() {
+                String strcontent="";
+                if (i.getLqfbInstance().getApiversion().equals(LQFBInstance.API1)){
+                strcontent="<b>Status: " + activity.getString(i.getIntlStateResId()) + "</b><br><br>\n\n" + i.current_draft_content;
+                }
+                 if (i.getLqfbInstance().getApiversion().equals(LQFBInstance.API2)){
+                strcontent="<b>Status: " + activity.getString(i.getIntlStateResId()) + "</b><br><br>\n\n" + i.current_draft_content;
+                }
+                builder.setMessage(Html.fromHtml(strcontent)).setNeutralButton(R.string.open_browser, new android.content.DialogInterface.OnClickListener() {
 
                     public void onClick(DialogInterface arg0, int arg1) {
                         Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(i.getLqfbInstance().getWebUrl() + "initiative/show/" + i.id + ".html"));

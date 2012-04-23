@@ -151,7 +151,9 @@ public class LQFBInstance {
             for (String state : states) {
                 try {
 
-                    parser.parse(cachedAPI1Queries.convertStreamToString(cachedAPI1Queries.queryInputStream(this, area, "initiative", "?area_id=" + area.getId() + "&issue_state=" + state, apiUrl, getDeveloperkey(), state, forceNetwork, noDownload)),cachedAPI1Queries.convertStreamToString(cachedAPI1Queries.queryInputStream(this, area, "issue", "?area_id=" + area.getId() + "&issue_state=" + state, apiUrl, getDeveloperkey(), state, forceNetwork, noDownload)));
+                    parser.parse(cachedAPI1Queries.convertStreamToString(cachedAPI1Queries.queryInputStream(this, area, "initiative", "?area_id=" + area.getId() + "&issue_state=" + state, apiUrl, getDeveloperkey(), state, forceNetwork, noDownload)),
+                            cachedAPI1Queries.convertStreamToString(cachedAPI1Queries.queryInputStream(this, area, "issue", "?area_id=" + area.getId() + "&issue_state=" + state, apiUrl, getDeveloperkey(), state, forceNetwork, noDownload)),
+                            cachedAPI1Queries.convertStreamToString(cachedAPI1Queries.queryInputStream(this, area, "draft", "?area_id=" + area.getId() + "&render_content=html&issue_state=" + state, apiUrl, getDeveloperkey(), state, forceNetwork, noDownload)));
                 } catch (JSONException ex) {
                     retval = -1;
 
@@ -160,6 +162,7 @@ public class LQFBInstance {
                 } catch (IllegalArgumentException ex) {
                     retval = -1;
                 }
+
             }
         }
         return retval;
