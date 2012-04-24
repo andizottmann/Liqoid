@@ -45,25 +45,29 @@ public class InitiativesTabActivity extends Activity implements RefreshInisListT
     protected boolean sortNewestFirst = true;
     protected boolean filterOnlySelected = false;
     public RefreshInisListThread ralt;
+    int listViewId;
 
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle icicle) {
+        listViewId = R.id.initiativenList;
         super.onCreate(icicle);
+        postOnCreate();
+    }
+
+    public void postOnCreate() {
         allInis = new MultiInstanceInitiativen();
         setContentView(R.layout.initiativentab);
         GestureOverlayView gestures = (GestureOverlayView) findViewById(R.id.allinisgestures);
         gestures.setGestureVisible(false);
         gestures.addOnGesturePerformedListener((LiqoidMainActivity) getParent());
         ((TextView) findViewById(R.id.tabinis_title)).setText(R.string.tab_inis);
-  
-
     }
 
     @Override
     public void onResume() {
         super.onResume();
-              ((LiqoidApplication) getApplication()).addRefreshInisListListener(this);
+        ((LiqoidApplication) getApplication()).addRefreshInisListListener(this);
 
         if (((LiqoidApplication) getApplication()).dataIntegrityCheck()) {
             createInisListAdapter();
@@ -82,7 +86,7 @@ public class InitiativesTabActivity extends Activity implements RefreshInisListT
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        if (((LiqoidApplication) getApplication()).dataIntegrityCheck() ) {
+        if (((LiqoidApplication) getApplication()).dataIntegrityCheck()) {
             createInisListAdapter();
 
         }
@@ -100,11 +104,9 @@ public class InitiativesTabActivity extends Activity implements RefreshInisListT
         inisListAdapter = getInitiativenListAdapter();
         filterList();
         sortList();
-        final ListView listView = (ListView) findViewById(R.id.initiativenList);
+        final ListView listView = (ListView) findViewById(listViewId);
         listView.setAdapter(inisListAdapter);
         inisListAdapter.notifyDataSetChanged();
-
-
     }
 
     public void refreshInisList(boolean download) {
@@ -152,9 +154,9 @@ public class InitiativesTabActivity extends Activity implements RefreshInisListT
                     //Sometimes it is not attached anymore
                     progressDialog = null;
                 }
-                final ListView listview = (ListView) findViewById(R.id.initiativenList);
+                final ListView listview = (ListView) findViewById(listViewId);
                 listview.setAdapter(inisListAdapter);
-                findViewById(R.id.initiativenList).refreshDrawableState();
+                findViewById(listViewId).refreshDrawableState();
                 if (allInis.size() == 0) {
                     ((LiqoidApplication) getApplication()).toast(getApplicationContext(), getString(R.string.noareasselected));
                 }
@@ -179,6 +181,17 @@ public class InitiativesTabActivity extends Activity implements RefreshInisListT
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.inislist_options, menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onSearchRequested() {
+        Intent intent;
+        intent = new Intent().setClass(this.getApplicationContext(), SearchActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+
+        startActivity(intent);
 
         return true;
     }
@@ -232,7 +245,7 @@ public class InitiativesTabActivity extends Activity implements RefreshInisListT
     }
 
     public InitiativenListAdapter getInitiativenListAdapter() {
-        return new InitiativenListAdapter(this, allInis, R.id.initiativenList);
+        return new InitiativenListAdapter(this, allInis, listViewId);
     }
     private View contextMenuView;
 
@@ -315,7 +328,7 @@ public class InitiativesTabActivity extends Activity implements RefreshInisListT
         for (LQFBInstance l : ((LiqoidApplication) getApplication()).lqfbInstances) {
             for (Area a : l.areas) {
                 l.setHasSelectedInitiativen(false, a.getId());
-                
+
             }
         }
         allInis.clear();

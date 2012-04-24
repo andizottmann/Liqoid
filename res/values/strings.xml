@@ -64,6 +64,9 @@
     <string name="clearcachequestion">Do you really want to clear the cache?</string>
     <string name="clearcache">Clear cache</string>
     <string name="readcache">Reading from cache:</string>
+    <string name="search">Search</string>
+    <string name="fulltextsearch">Fulltext Search</string>
+<string name="casetextsearch">Case sensitive</string>
 
     <string name="fullcredits">Hello this is Liqoid V 0.2.0!\n Developer: @andizottmann\n
     All CC-BY-SA 3.0 DE\n

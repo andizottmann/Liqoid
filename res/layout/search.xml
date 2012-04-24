@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:orientation="vertical"
+        android:background="#fff5f5f5"
+	xmlns:android="http://schemas.android.com/apk/res/android">
+    <TextView
+        android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+        android:text="@string/search"
+        android:textColor="#009010"
+         android:gravity="center_vertical|center_horizontal"
+        android:textStyle="bold"
+        android:textSize="18dp"
+                />
+    <LinearLayout
+	
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:orientation="horizontal"
+        android:background="#ff000000"
+	>
+      
+       
+        <EditText
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+              android:id="@+id/searchText"
+              android:editable="true"
+
+              />
+    </LinearLayout>
+    <LinearLayout
+
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:orientation="horizontal"
+        android:background="#ff000000"
+	android:paddingBottom="5dp">
+
+        <CheckBox
+            android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+            android:checked="false"
+            android:text="@string/fulltextsearch"
+           
+            android:textSize="12dp"
+            android:id="@+id/searchFull"/>
+        <CheckBox
+            android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+            android:checked="false"
+            android:text="@string/casetextsearch"
+           
+            android:textSize="12dp"
+            android:id="@+id/searchCase"/>
+    </LinearLayout>
+    <ListView
+     android:id="@+id/searchList"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+        android:drawSelectorOnTop="true"
+       android:layout_weight="1"
+        android:cacheColorHint="#fff5f5f5"
+        android:background="#fff5f5f5"
+/>
+    
+</LinearLayout>

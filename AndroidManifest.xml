@@ -46,6 +46,11 @@
                   android:theme="@android:style/Theme.NoTitleBar"
                   android:configChanges="orientation|keyboardHidden"
           />
+            <activity android:name="SearchActivity"
+                  android:label="@string/app_name"
+                  android:theme="@android:style/Theme.NoTitleBar"
+                  android:configChanges="orientation|keyboardHidden"
+          />
         <activity android:name="GlobalPrefsActivity"/>
     </application>
 </manifest> 

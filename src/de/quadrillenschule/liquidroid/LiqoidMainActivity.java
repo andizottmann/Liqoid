@@ -44,6 +44,7 @@ public class LiqoidMainActivity extends TabActivity implements GestureOverlayVie
         spec = tabHost.newTabSpec("upcoming").setIndicator(res.getString(R.string.tab_upcoming)).setContent(intent);
         tabHost.addTab(spec);
 
+     
         intent = new Intent().setClass(this, RecentTabActivity.class);
         spec = tabHost.newTabSpec("recent").setIndicator(res.getString(R.string.tab_recent)).setContent(intent);
         tabHost.addTab(spec);

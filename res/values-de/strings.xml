@@ -63,6 +63,10 @@
     <string name="clearcachequestion">Willst Du den Cache wirklich löschen?</string>
     <string name="clearcache">Cache löschen</string>
     <string name="readcache">Lade vom Cache:</string>
+    <string name="search">Suchen</string>
+    <string name="fulltextsearch">Volltextsuche</string>
+    <string name="casetextsearch">Groß-/Kleinschr. beachten</string>
+
 
 
 </resources>

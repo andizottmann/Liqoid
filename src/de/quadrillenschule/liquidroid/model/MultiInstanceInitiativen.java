@@ -47,14 +47,14 @@ public class MultiInstanceInitiativen extends ArrayList<Initiative> {
 
             long retval = 0;
             try {
-            if (orderNormal) {
-                retval = (o1.getDateForNextEvent().getTime() - o2.getDateForNextEvent().getTime());
-            } else {
-                retval = (o2.getDateForNextEvent().getTime() - o1.getDateForNextEvent().getTime());
+                if (orderNormal) {
+                    retval = (o1.getDateForNextEvent().getTime() - o2.getDateForNextEvent().getTime());
+                } else {
+                    retval = (o2.getDateForNextEvent().getTime() - o1.getDateForNextEvent().getTime());
 
-            }
-            } catch (NullPointerException npe){
-            retval=-1;
+                }
+            } catch (NullPointerException npe) {
+                retval = -1;
             }
             if (retval > 0) {
                 return 1;
@@ -76,13 +76,14 @@ public class MultiInstanceInitiativen extends ArrayList<Initiative> {
             Date o1date = o1.dateForLastEvent();
             Date o2date = o2.dateForLastEvent();
             try {
-            if (orderNormal) {
-                retval = (o2date.getTime() - o1date.getTime());
-            } else {
-                retval = (o1date.getTime() - o2date.getTime());
+                if (orderNormal) {
+                    retval = (o2date.getTime() - o1date.getTime());
+                } else {
+                    retval = (o1date.getTime() - o2date.getTime());
 
-            }} catch (NullPointerException npe){
-            retval=-1;
+                }
+            } catch (NullPointerException npe) {
+                retval = -1;
             }
             if (retval > 0) {
                 return 1;
@@ -133,5 +134,61 @@ public class MultiInstanceInitiativen extends ArrayList<Initiative> {
             }
         }
         removeAll(removeList);
+    }
+
+    public MultiInstanceInitiativen searchResult(String searchtext, boolean searchcontent, boolean searchcase) {
+        MultiInstanceInitiativen retval = new MultiInstanceInitiativen();
+        for (Initiative i : this) {
+            if (i.name.contains(searchtext)) {
+                if (!retval.contains(i)) {
+                    retval.add(i);
+                }
+            }
+
+            if (i.current_draft_content.contains(searchtext) && searchcontent) {
+                if (!retval.contains(i)) {
+                    retval.add(i);
+                }
+            }
+
+            if (!searchcase) {
+                if (i.name.toUpperCase().contains(searchtext.toUpperCase())) {
+                    if (!retval.contains(i)) {
+                        retval.add(i);
+                    }
+                }
+                if (i.current_draft_content.toUpperCase().contains(searchtext.toUpperCase()) && searchcontent) {
+                    if (!retval.contains(i)) {
+                        retval.add(i);
+                    }
+                }
+            }
+            for (Initiative j : i.getConcurrentInis()) {
+                if (j.name.contains(searchtext)) {
+                    if (!retval.contains(i)) {
+                        retval.add(i);
+                    }
+                }
+                if (i.current_draft_content.contains(searchtext) && searchcontent) {
+                    if (!retval.contains(i)) {
+                        retval.add(i);
+                    }
+                }
+                if (!searchcase) {
+                    if (j.name.toUpperCase().contains(searchtext.toUpperCase())) {
+                        if (!retval.contains(i)) {
+                            retval.add(i);
+                        }
+                    }
+                    if (j.current_draft_content.toUpperCase().contains(searchtext.toUpperCase()) && searchcontent) {
+                        if (!retval.contains(i)) {
+                            retval.add(i);
+                        }
+                    }
+                }
+
+            }
+        }
+        return retval;
     }
 }
