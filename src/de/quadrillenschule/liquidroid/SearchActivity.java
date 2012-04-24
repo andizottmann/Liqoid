@@ -40,7 +40,7 @@ public class SearchActivity extends InitiativesTabActivity {
         listViewId = R.id.searchList;
         allInis = new MultiInstanceInitiativen();
         setContentView(R.layout.search);
-      
+
         EditText et = (EditText) findViewById(R.id.searchText);
         et.setOnKeyListener(new View.OnKeyListener() {
 
@@ -97,7 +97,7 @@ public class SearchActivity extends InitiativesTabActivity {
         EditText et = (EditText) findViewById(R.id.searchText);
         CheckBox fulltextcb = (CheckBox) findViewById(R.id.searchFull);
         CheckBox casetextcb = (CheckBox) findViewById(R.id.searchCase);
-        return new RecentInitiativenListAdapter(this, allInis.searchResult(et.getText().toString(), fulltextcb.isChecked(), casetextcb.isChecked()), R.id.searchList);
+        return new InitiativenListAdapter(this, allInis, R.id.searchList);
     }
 
     @Override
@@ -110,6 +110,10 @@ public class SearchActivity extends InitiativesTabActivity {
                 }
             }
         }
+        EditText et = (EditText) findViewById(R.id.searchText);
+        CheckBox fulltextcb = (CheckBox) findViewById(R.id.searchFull);
+        CheckBox casetextcb = (CheckBox) findViewById(R.id.searchCase);
+        allInis = allInis.searchResult(et.getText().toString(), fulltextcb.isChecked(), casetextcb.isChecked());
         inisListAdapter = getInitiativenListAdapter();
         filterList();
         sortList();
