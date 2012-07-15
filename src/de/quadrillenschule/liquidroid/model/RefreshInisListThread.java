@@ -24,6 +24,7 @@ public class RefreshInisListThread extends Thread {
     public boolean dataComplete = true;
     public static int FINISH_OK = 0, DOWNLOADING = 1, DOWNLOAD_ERROR = -1, DOWNLOAD_RETRY = 2, UPDATING = 4, DOWNLOADING_INSTANCE = 5, READ_CACHE = 6;
     ArrayList<RefreshInisListListener> refreshInisListListeners;
+    public static boolean running = false;
 
     public RefreshInisListThread(boolean download, ArrayList<RefreshInisListListener> refreshInisListListeners, Handler progressHandler, LiqoidApplication app) {
         this.refreshInisListListeners = refreshInisListListeners;
@@ -42,7 +43,7 @@ public class RefreshInisListThread extends Thread {
         for (LQFBInstance myInstance : app.lqfbInstances) {
             currentInstance = myInstance;
             boolean doesDownload = false;
-            if (myInstance.willDownloadAreas(app.cachedAPI1Queries, download,myInstance.getApiversion())) {
+            if (myInstance.willDownloadAreas(app.cachedAPI1Queries, download, myInstance.getApiversion())) {
                 currentlyDownloadedInstance = myInstance.getShortName();
                 progressHandler.sendEmptyMessage(DOWNLOADING_INSTANCE);
                 doesDownload = true;
@@ -81,18 +82,22 @@ public class RefreshInisListThread extends Thread {
     @Override
     public void run() {
 
+        if (running) {
+            return;
+        }
+        running = true;
         progressHandler.sendEmptyMessage(UPDATING);
         dataComplete = true;
         updateAreas();
         overallDataAge = System.currentTimeMillis();
-    
+
         for (LQFBInstance myInstance : app.lqfbInstances) {
             currentlyDownloadedInstance = myInstance.getShortName();
 
             for (Area a : myInstance.areas.getSelectedAreas()) {
                 currentlyDownloadedArea = a.getName();
                 boolean doesDownload = false;
-                if (myInstance.willDownloadInitiativen(a, app.cachedAPI1Queries, download,myInstance.getApiversion())) {
+                if (myInstance.willDownloadInitiativen(a, app.cachedAPI1Queries, download, myInstance.getApiversion())) {
                     progressHandler.sendEmptyMessage(DOWNLOADING);
                     doesDownload = true;
                 }
@@ -121,9 +126,9 @@ public class RefreshInisListThread extends Thread {
                     }
                     if (doesDownload) {
                         progressHandler.sendEmptyMessage(DOWNLOAD_RETRY);
-                    }else {
-                    progressHandler.sendEmptyMessage(READ_CACHE);
-                }
+                    } else {
+                        progressHandler.sendEmptyMessage(READ_CACHE);
+                    }
 
                 }
                 if (retrycounter >= maxretries) {
@@ -149,7 +154,7 @@ public class RefreshInisListThread extends Thread {
             r.finishedRefreshInisList((MultiInstanceInitiativen) allInititiativen.clone());
         }
         progressHandler.sendEmptyMessage(FINISH_OK);
-
+        running = false;
     }
 
     public interface RefreshInisListListener {

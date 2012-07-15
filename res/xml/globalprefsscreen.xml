@@ -1,9 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="Data age limits"
+        android:key="updatecycles">
+        <ListPreference
+            android:key="maxdataage"
+            android:title="Maximal dataage"
+            android:summary="Download is forced when you refresh."
+            android:defaultValue="432000000"
+            android:entries="@array/limitInDays"
+            android:entryValues="@array/limitInDaysValues"
+        />
+        <ListPreference
+            android:key="favdataage"
+            android:title="Favorites dataage"
+            android:summary="Data for areas with favorites will be updated when older than this value."
+            android:defaultValue="3600000"
+            android:entries="@array/limitInMins"
+            android:entryValues="@array/limitInMinsValues"
+        />
+        <ListPreference
+            android:key="mindataage"
+            android:title="Minimal dataage"
+            android:summary="Data will not be downloaded if younger than this age."
+            android:defaultValue="180000"
+            android:entries="@array/limitInMins"
+            android:entryValues="@array/limitInMinsValues"
+        />
+    </PreferenceCategory>
 
     <PreferenceCategory
+        android:title="Background update service"
+        android:key="services">
+
+        <CheckBoxPreference
+            android:key="serviceenabled"
+            android:summary="Enable or disable background update service"
+            android:title="Enable service"
+            android:defaultValue="true"
+        />
+         <CheckBoxPreference
+            android:key="serviceiconenabled"
+            android:summary="Enable or disable background update service notifications"
+            android:title="Enable service notifications"
+            android:defaultValue="true"
+        />
+        <ListPreference
+            android:key="serviceintervall"
+            android:title="Update intervall"
+            android:summary="Intervall in which the background service will be recalled."
+            android:defaultValue="3600000"
+            android:entries="@array/limitInMins10"
+            android:entryValues="@array/limitInMinsValues10"
+        />
+    </PreferenceCategory>
+    <PreferenceCategory
         android:title="User Interface"
-        android:key="first_category">
+        android:key="userinterface">
 
         <CheckBoxPreference
             android:key="vibrate"
@@ -46,34 +99,6 @@
             android:defaultValue="432000000"
             android:entries="@array/limitInDays"
             android:entryValues="@array/limitInDaysValues"
-        />
-    </PreferenceCategory>
-    <PreferenceCategory
-        android:title="Update cycles"
-        android:key="updatecycles">
-        <ListPreference
-            android:key="maxdataage"
-            android:title="Maximal dataage"
-            android:summary="Download is forced when you refresh."
-            android:defaultValue="432000000"
-            android:entries="@array/limitInDays"
-            android:entryValues="@array/limitInDaysValues"
-        />
-        <ListPreference
-            android:key="favdataage"
-            android:title="Favorites dataage"
-            android:summary="Data for areas with favorites will be updated when older than this value."
-            android:defaultValue="3600000"
-            android:entries="@array/limitInMins"
-            android:entryValues="@array/limitInMinsValues"
-        />
-         <ListPreference
-            android:key="mindataage"
-            android:title="Minimal dataage"
-            android:summary="Data will not be downloaded if younger than this age."
-            android:defaultValue="180000"
-            android:entries="@array/limitInMins"
-            android:entryValues="@array/limitInMinsValues"
         />
     </PreferenceCategory>
     

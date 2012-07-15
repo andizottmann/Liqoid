@@ -66,6 +66,8 @@
     <string name="search">Suchen</string>
     <string name="fulltextsearch">Volltextsuche</string>
     <string name="casetextsearch">Groß-/Kleinschr. beachten</string>
+    <string name="servicestarted">Service gestartet</string>
+    <string name="refreshedcontent">Service pausiert</string>
 
 
 

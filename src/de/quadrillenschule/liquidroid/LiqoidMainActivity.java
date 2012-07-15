@@ -1,6 +1,10 @@
 package de.quadrillenschule.liquidroid;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import de.quadrillenschule.liquidroid.service.LiqoidService;
 import android.app.TabActivity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.gesture.Gesture;
@@ -15,7 +19,10 @@ import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.TabHost;
 import android.widget.TextView;
+import de.quadrillenschule.liquidroid.service.UpdateAlarmReceiver;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.TimeZone;
 
 public class LiqoidMainActivity extends TabActivity implements GestureOverlayView.OnGesturePerformedListener, TabHost.OnTabChangeListener {
 
@@ -44,7 +51,7 @@ public class LiqoidMainActivity extends TabActivity implements GestureOverlayVie
         spec = tabHost.newTabSpec("upcoming").setIndicator(res.getString(R.string.tab_upcoming)).setContent(intent);
         tabHost.addTab(spec);
 
-     
+
         intent = new Intent().setClass(this, RecentTabActivity.class);
         spec = tabHost.newTabSpec("recent").setIndicator(res.getString(R.string.tab_recent)).setContent(intent);
         tabHost.addTab(spec);
@@ -69,6 +76,58 @@ public class LiqoidMainActivity extends TabActivity implements GestureOverlayVie
         tabHost.setOnTabChangedListener(this);
 
         ((LiqoidApplication) getApplication()).statusLine = ((TextView) findViewById(R.id.statusline));
+
+        //    Intent serviceintent;
+        //  serviceintent = new Intent().setClass(this.getApplicationContext(), LiqoidService.class);
+        //serviceintent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+
+        //startService(serviceintent);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        cancelRecurringAlarm();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (((LiqoidApplication) getApplication()).getGlobalPreferences().getBoolean("serviceenabled", true)) {
+            setRecurringAlarm();
+        }
+
+    }
+    PendingIntent recurringDownload;
+
+    private void setRecurringAlarm() {
+        Context context = this.getApplicationContext();
+
+        Intent downloader = new Intent(context, UpdateAlarmReceiver.class);
+        recurringDownload = PendingIntent.getBroadcast(context,
+                0, downloader, PendingIntent.FLAG_CANCEL_CURRENT);
+        AlarmManager alarms = (AlarmManager) this.getSystemService(
+                Context.ALARM_SERVICE);
+        alarms.setInexactRepeating(AlarmManager.RTC_WAKEUP,
+                System.currentTimeMillis()+ Long.parseLong(((LiqoidApplication) getApplication()).getGlobalPreferences().getString("serviceintervall", "900000")),
+                Long.parseLong(((LiqoidApplication) getApplication()).getGlobalPreferences().getString("serviceintervall", "900000")), recurringDownload);
+
+    }
+
+    private void cancelRecurringAlarm() {
+        Context context = this.getApplicationContext();
+
+        Intent downloader = new Intent(context, UpdateAlarmReceiver.class);
+        if (recurringDownload == null) {
+            recurringDownload = PendingIntent.getBroadcast(context,
+                    0, downloader, PendingIntent.FLAG_CANCEL_CURRENT);
+        }
+        AlarmManager alarms = (AlarmManager) this.getSystemService(
+                Context.ALARM_SERVICE);
+
+        alarms.cancel(recurringDownload);
+
+
     }
     private long ANIMATION_DURATION = 600;
 

@@ -1,6 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+        <PreferenceCategory
+        android:title="Maximales/Minimales Datenalter"
+        android:key="updatecycles">
+        <ListPreference
+            android:key="maxdataage"
+            android:title="Maximales Datenalter"
+            android:summary="Download erzwingen ab einem bestimmten Datenalter."
+            android:defaultValue="432000000"
+            android:entries="@array/limitInDays"
+            android:entryValues="@array/limitInDaysValues"
+        />
+         <ListPreference
+            android:key="favdataage"
+            android:title="Favoriten Datenalter"
+            android:summary="Themengebiete mit Favoriten werden ab einem bestimmten Datenalter heruntergeladen."
+            android:defaultValue="3600000"
+            android:entries="@array/limitInMins"
+            android:entryValues="@array/limitInMinsValues"
+        />
+        <ListPreference
+            android:key="mindataage"
+            android:title="Minimales Datenalter"
+            android:summary="Jüngere Daten werden nicht heruntergeladen."
+            android:defaultValue="180000"
+            android:entries="@array/limitInMins"
+            android:entryValues="@array/limitInMinsValues"
+        />
+    </PreferenceCategory>
+ <PreferenceCategory
+        android:title="Hintergrunddienst"
+        android:key="services">
 
+        <CheckBoxPreference
+            android:key="serviceenabled"
+            android:summary="Hintergrund service ein- und ausschalten"
+            android:title="Service starten"
+            android:defaultValue="true"
+        />
+         <CheckBoxPreference
+            android:key="serviceiconenabled"
+            android:summary="Service Benachrichtigungen anzeigen"
+            android:title="Service Benachrichtigungen anzeigen"
+            android:defaultValue="true"
+        />
+        <ListPreference
+            android:key="serviceintervall"
+            android:title="Update intervall"
+            android:summary="Intervall, in dem aktualisiert wird."
+            android:defaultValue="3600000"
+            android:entries="@array/limitInMins10"
+            android:entryValues="@array/limitInMinsValues10"
+        />
+    </PreferenceCategory>
     <PreferenceCategory
         android:title="User Interface"
         android:key="first_category">
@@ -49,33 +101,6 @@
             android:entryValues="@array/limitInDaysValues"
         />
     </PreferenceCategory>
-    <PreferenceCategory
-        android:title="Aktualisieren"
-        android:key="updatecycles">
-        <ListPreference
-            android:key="maxdataage"
-            android:title="Maximales Datenalter"
-            android:summary="Download erzwingen ab einem bestimmten Datenalter."
-            android:defaultValue="432000000"
-            android:entries="@array/limitInDays"
-            android:entryValues="@array/limitInDaysValues"
-        />
-         <ListPreference
-            android:key="favdataage"
-            android:title="Favoriten Datenalter"
-            android:summary="Themengebiete mit Favoriten werden ab einem bestimmten Datenalter heruntergeladen."
-            android:defaultValue="3600000"
-            android:entries="@array/limitInMins"
-            android:entryValues="@array/limitInMinsValues"
-        />
-        <ListPreference
-            android:key="mindataage"
-            android:title="Minimales Datenalter"
-            android:summary="Jüngere Daten werden nicht heruntergeladen."
-            android:defaultValue="180000"
-            android:entries="@array/limitInMins"
-            android:entryValues="@array/limitInMinsValues"
-        />
-    </PreferenceCategory>
+
     
 </PreferenceScreen>
