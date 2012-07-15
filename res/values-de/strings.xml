@@ -24,6 +24,7 @@
     <string name="noareasselected">Um Themen anzuzeigen,\nmusst Du vorher\nThemengebiete auswählen.</string>
     <string name="prefs">Einstellungen</string>
     <string name="dateformat">dd.MM.yy HH:mm</string>
+    <string name="dateformatnear">HH:mm</string>
     <string name="projecthome">Projektseite</string>
     <string name="projecthomeurl">http://wiki.piratenpartei.de/Benutzer:Andizo/Liqoid</string>
     <string name="userguide">Userguide</string>
@@ -67,7 +68,7 @@
     <string name="fulltextsearch">Volltextsuche</string>
     <string name="casetextsearch">Groß-/Kleinschr. beachten</string>
     <string name="servicestarted">Service gestartet</string>
-    <string name="refreshedcontent">Service pausiert</string>
+    <string name="refreshedcontent">Service pausiert, nächster Lauf: </string>
 
 
 

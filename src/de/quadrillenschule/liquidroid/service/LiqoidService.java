@@ -16,9 +16,10 @@ import de.quadrillenschule.liquidroid.LiqoidApplication;
 import de.quadrillenschule.liquidroid.LiqoidMainActivity;
 import de.quadrillenschule.liquidroid.R;
 import de.quadrillenschule.liquidroid.model.RefreshInisListThread;
-import de.quadrillenschule.liquidroid.model.RefreshInisListThread.RefreshInisListListener;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  *
@@ -57,7 +58,10 @@ public class LiqoidService extends IntentService {
         ralt.start();
         try {
             ralt.join(1000 * 60 * 15);
-            notification(getString(R.string.refreshedcontent));
+            DateFormat df=new SimpleDateFormat(getString(R.string.dateformatnear));
+            long l=System.currentTimeMillis()+Long.parseLong(la.getGlobalPreferences().getString("serviceintervall", "3600000"));
+           
+            notification(getString(R.string.refreshedcontent)+ df.format(new Date(l)));
 
         } catch (InterruptedException ex) {
             //    notification("interrupted");

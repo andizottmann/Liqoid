@@ -24,6 +24,7 @@
     <string name="noareasselected">To view issues, you have to select areas first.</string>
     <string name="prefs">Settings</string>
     <string name="dateformat">yy-MM-dd HH:mm</string>
+    <string name="dateformatnear">HH:mm</string>
     <string name="projecthome">To project home</string>
     <string name="projecthomeurl">http://wiki.piratenpartei.de/Benutzer:Andizo/Liqoid</string>
     <string name="userguide">To guided tour</string>
@@ -68,7 +69,7 @@
     <string name="fulltextsearch">Fulltext Search</string>
     <string name="casetextsearch">Case sensitive</string>
     <string name="servicestarted">Service started</string>
-    <string name="refreshedcontent">Service paused</string>
+    <string name="refreshedcontent">Service paused. Next run:</string>
 
     <string name="fullcredits">Hello this is Liqoid V 0.3.0!\n Developer: @andizottmann\n
     All CC-BY-SA 3.0 DE\n
