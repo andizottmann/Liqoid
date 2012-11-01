@@ -233,6 +233,9 @@ public class InitiativesTabActivity extends Activity implements RefreshInisListT
                 filterOnlySelected = !filterOnlySelected;
                 refreshInisList(false);
                 return true;
+            case R.id.showsearch:
+                onSearchRequested();
+                return true;
             case R.id.about:
                 ((LiqoidApplication) getApplication()).aboutDialog(this).show();
                 return true;

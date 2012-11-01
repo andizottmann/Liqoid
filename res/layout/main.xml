@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:textSize="6pt"
             android:text="Liqoid - Liquidfeedback for your Android"
-            android:textColor="#30ff80"/>
+            android:textColor="#FF8C00"/>
             </LinearLayout>
         </RelativeLayout>
    

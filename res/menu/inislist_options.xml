@@ -9,6 +9,9 @@
     <item android:id="@+id/toggleselectedfilter"
           android:icon="@drawable/ic_menu_star"
           android:title="@string/filterfavorites"/>
+    <item android:id="@+id/showsearch"
+          android:icon="@android:drawable/ic_menu_search"
+          android:title="@string/search"/>
     <item android:id="@+id/prefs"
           android:icon="@android:drawable/ic_menu_manage"
           android:title="@string/prefs"/>
