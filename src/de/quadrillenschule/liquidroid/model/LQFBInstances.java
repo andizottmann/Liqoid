@@ -68,12 +68,13 @@ public class LQFBInstances extends ArrayList<LQFBInstance> {
         "Piraten Bund (alt)",
         "https://lqfb.piratenpartei.de/pp/api/",
         "https://lqfb.piratenpartei.de/pp/",
-        "6Bw8HGL8Bp2z4wK6L3Zw", LQFBInstance.API1));
-        this.add(new LQFBInstance(liqoidApplication, "PP Österreich", "AT_PIRATEN_BUND",
-        "Piraten Österreich",
-        "https://lqpp.de/int/at/api/",
-        "https://lqpp.de/int/at/",
-        "V5CKBY8jpSvsx8PSGkt9", LQFBInstance.API1));
+        "6Bw8HGL8Bp2z4wK6L3Zw", LQFBInstance.API1));*/
+        this.add(new LQFBInstance(liqoidApplication, "PP Österreich", "AT_PIRATEN_BUND_2",
+                "Piraten Österreich",
+                "http://88.198.24.116:25520/",
+                "http://lqfb.piratenpartei.at/",
+                "anonymous", LQFBInstance.API2));
+        /*
         this.add(new LQFBInstance(liqoidApplication, "PP Berlin", "DE_PIRATEN_BE",
         "Piraten Berlin",
         "https://lqpp.de/be/api/",
@@ -91,22 +92,22 @@ public class LQFBInstances extends ArrayList<LQFBInstance> {
                 "https://lqfb.piratenpartei-hessen.de/", "B8xrGhySfKXTFXpqJxYZ", LQFBInstance.API1));
 // "MjXNjRD3qSYbgjKrhYgC"
      /*   this.add(new LQFBInstance(liqoidApplication, "PP MV", "DE_PIRATEN_MV",
-                "Piraten Mecklenburg-Vorpommern",
-                "https://lqpp.de/mv/api/",
-                "https://lqpp.de/mv/",
-                "VpmyJGYbqTQPcc9wyzzk", LQFBInstance.API2));*/
+        "Piraten Mecklenburg-Vorpommern",
+        "https://lqpp.de/mv/api/",
+        "https://lqpp.de/mv/",
+        "VpmyJGYbqTQPcc9wyzzk", LQFBInstance.API2));*/
 
-    /*    this.add(new LQFBInstance(liqoidApplication, "PP NRW", "DE_PIRATEN_NRW",
-                "Piraten Nordrhein-Westfalen",
-                "https://lqpp.de/nw/api/",
-                "https://lqpp.de/nw/",
-                "pxzcNHJWMNKRs5Kr3HnX", LQFBInstance.API1));*/
+        /*    this.add(new LQFBInstance(liqoidApplication, "PP NRW", "DE_PIRATEN_NRW",
+        "Piraten Nordrhein-Westfalen",
+        "https://lqpp.de/nw/api/",
+        "https://lqpp.de/nw/",
+        "pxzcNHJWMNKRs5Kr3HnX", LQFBInstance.API1));*/
         /*
-        this.add(new LQFBInstance(liqoidApplication, "PP SA 2", "DE_PIRATEN_SA_2",
-                "Piraten Sachsen-Anhalt 2",
-                "http://api.lqfb.piraten-lsa.de/",
-                "http://lqfb.piraten-lsa.de/lsa/",
-                "anonymous", LQFBInstance.API2));*/
+        this.add(new LQFBInstance(liqoidApplication, "PP LSA", "DE_PIRATEN_LSA",
+        "Piraten Sachsen-Anhalt 2",
+        "http://api.lqfb.piraten-lsa.de/",
+        "http://lqfb.piraten-lsa.de/lsa/",
+        "anonymous", LQFBInstance.API2));*/
 
         this.add(new LQFBInstance(liqoidApplication, "PP HH", "HH",
                 "Piraten Hamburg",
@@ -120,10 +121,10 @@ public class LQFBInstances extends ArrayList<LQFBInstance> {
                 "", LQFBInstance.API1));
         //YJNdCRv64rRyb3DkW8XH
       /*  this.add(new LQFBInstance(liqoidApplication, "HSG Potsdam", "DE_HSG_Potsdam",
-                "Hochschulgr. Potsdam",
-                "http://potsdam.lquni.de/api/",
-                "http://potsdam.lquni.de/",
-                "YJNdCRv64rRyb3DkW8XH", LQFBInstance.API1));*/
+        "Hochschulgr. Potsdam",
+        "http://potsdam.lquni.de/api/",
+        "http://potsdam.lquni.de/",
+        "YJNdCRv64rRyb3DkW8XH", LQFBInstance.API1));*/
         this.add(new LQFBInstance(liqoidApplication, "Test LF2", "DE_LF_TEST_2",
                 "LQFB Test 2",
                 "http://apitest.liquidfeedback.org:25520/",
