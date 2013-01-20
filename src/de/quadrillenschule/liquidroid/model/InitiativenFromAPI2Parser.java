@@ -55,6 +55,7 @@ public class InitiativenFromAPI2Parser {
             JSONObject a = issuesresult.getJSONObject(i);
             ini.issue_id = a.getInt("id");
             ini.setState(a.getString("state"));
+            ini.issue_admission_time = myTimeParser(a.getJSONObject("admission_time"));
             ini.issue_discussion_time = myTimeParser(a.getJSONObject("discussion_time"));
             ini.issue_verification_time = myTimeParser(a.getJSONObject("verification_time"));
             ini.issue_voting_time = myTimeParser(a.getJSONObject("voting_time"));
@@ -95,6 +96,8 @@ public class InitiativenFromAPI2Parser {
             try {
                 Initiative helperIni = helperIssues.findByIssueID(ini.issue_id).get(0);
                 Initiative helperDraftIni = helperDrafts.findByIniID(ini.id).get(0);
+
+                ini.issue_admission_time = helperIni.issue_admission_time;
                 ini.issue_discussion_time = helperIni.issue_discussion_time;
                 ini.issue_verification_time = helperIni.issue_verification_time;
                 ini.issue_voting_time = helperIni.issue_voting_time;

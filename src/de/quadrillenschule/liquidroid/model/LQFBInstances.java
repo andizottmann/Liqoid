@@ -69,6 +69,11 @@ public class LQFBInstances extends ArrayList<LQFBInstance> {
         "https://lqfb.piratenpartei.de/pp/api/",
         "https://lqfb.piratenpartei.de/pp/",
         "6Bw8HGL8Bp2z4wK6L3Zw", LQFBInstance.API1));*/
+        this.add(new LQFBInstance(liqoidApplication, "PP Deutschland", "DE_PIRATEN_BUND_2",
+                "Piraten Deutschland",
+                "https://lqfb.piratenpartei.de/api/",
+                "https://lqfb.piratenpartei.de/lf/",
+                "anonymous", LQFBInstance.API2));
         this.add(new LQFBInstance(liqoidApplication, "PP Österreich", "AT_PIRATEN_BUND_2",
                 "Piraten Österreich",
                 "http://88.198.24.116:25520/",
@@ -81,11 +86,11 @@ public class LQFBInstances extends ArrayList<LQFBInstance> {
         "https://lqpp.de/be/", "Y5jJ3mzf9MN23Q7zRpWs", LQFBInstance.API1));
          */
 
-        this.add(new LQFBInstance(liqoidApplication, "PP BB", "DE_PIRATEN_BB",
+  /*      this.add(new LQFBInstance(liqoidApplication, "PP BB", "DE_PIRATEN_BB",
                 "Piraten Brandenburg",
                 "https://lqpp.de/bb/api/",
                 "https://lqpp.de/bb/", "5vvw7LD6P5FShL4yFNQK", LQFBInstance.API1));
-
+*/
         this.add(new LQFBInstance(liqoidApplication, "PP HS", "DE_PIRATEN_HS",
                 "Piraten Hessen",
                 "https://lqfb.piratenpartei-hessen.de/api/",
